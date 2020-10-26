@@ -135,7 +135,7 @@ void game_draw_dim(void *param, SDL_Renderer *renderer)
 
 void menu_set_default_style(menu *p_menu)
 {
-  p_menu->o_style.margin = 10;
+  p_menu->o_style.padding = 10;
   p_menu->o_style.x = 20;
   p_menu->o_style.y = 20;
   SDL_Color border = {.r = 200, .g = 200, .b = 200, .a = 255};
@@ -224,7 +224,7 @@ void notification(const char *text, game *p_game, SDL_Renderer *renderer)
   o_dialog.text = text;
   o_dialog.p_fontmap = p_game->p_fontmap;
   style o_style;
-  o_style.margin = 5;
+  o_style.padding = 5;
   o_style.x = 10;
   o_style.y = 10;
   SDL_Color color_border = {155, 150, 250};
