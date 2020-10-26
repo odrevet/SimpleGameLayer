@@ -154,26 +154,3 @@ char shape_rotate(shape *p_shape, char dir)
   else
     return 0;
 }
-
-char shape_move(shape *p_shape, int x, int y)
-{
-  for (int i = 0; i < SHAPE_SIZE; i++)
-  {
-    for (int j = 0; j < SHAPE_SIZE; j++)
-    {
-      if (p_shape->layout[j][i] >= 1)
-      {
-        if (level_get_at(p_shape->y + j + y,
-                         p_shape->x + i + x) >= 1 ||
-            p_shape->x + i + x < 0 ||
-            p_shape->x + i + x >= LEVEL_WIDTH ||
-            p_shape->y + j + y >= LEVEL_HEIGHT)
-        {
-          return 0;
-        }
-      }
-    }
-  }
-
-  return 1;
-}

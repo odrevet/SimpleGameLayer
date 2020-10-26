@@ -19,6 +19,7 @@ typedef struct t_game
   int score;
   int state[STATE_NUM]; //count completed lines (single, double, triple, tetris)
   fontmap *p_fontmap;
+  char level[LEVEL_HEIGHT][LEVEL_WIDTH];
 } game;
 
 #endif

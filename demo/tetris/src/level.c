@@ -1,19 +1,20 @@
 #include "level.h"
 
-void level_init(void)
+void level_init(char p_level[][LEVEL_WIDTH])
 {
   for (int i = 0; i < LEVEL_HEIGHT; i++)
   {
-    memset(level[i], 0, LEVEL_WIDTH);
+    memset(p_level[i], 0, LEVEL_WIDTH);
   }
 }
 
-void level_draw(SDL_Renderer *renderer,
+void level_draw(char p_level[][LEVEL_WIDTH],
+		SDL_Renderer *renderer,
                 struct t_shape *p_shape,
                 image *p_image_block)
 {
   char tmp[LEVEL_HEIGHT][LEVEL_WIDTH];
-  memcpy(tmp, level, sizeof(char) * LEVEL_HEIGHT * LEVEL_WIDTH);
+  memcpy(tmp, p_level, sizeof(char) * LEVEL_HEIGHT * LEVEL_WIDTH);
 
   if (p_shape)
   {
@@ -44,26 +45,26 @@ void level_draw(SDL_Renderer *renderer,
   }
 }
 
-char level_check_game_over(void)
+char level_check_game_over(char p_level[][LEVEL_WIDTH])
 {
   int i;
   for (i = 0; i < LEVEL_WIDTH; i++)
   {
-    if (level[0][i] >= 1)
+    if (p_level[0][i] >= 1)
       return 1;
   }
   return 0;
 }
 
-void level_remove_line(int line_nb)
+void level_remove_line(char p_level[][LEVEL_WIDTH], int line_nb)
 {
   for (int i = line_nb; i > 0; i--)
   {
-    memmove(level + i, level + i - 1, LEVEL_WIDTH);
+    memmove(p_level + i, p_level + i - 1, LEVEL_WIDTH);
   }
 }
 
-int level_check_line(int *rem_tab)
+int level_check_line(char p_level[][LEVEL_WIDTH], int *rem_tab)
 {
   int completed_line = 0;
 
@@ -72,7 +73,7 @@ int level_check_line(int *rem_tab)
     int i = 0;
     while (i < LEVEL_WIDTH)
     {
-      if (level[j][i] != 0)
+      if (p_level[j][i] != 0)
       {
         i++;
       }
@@ -92,7 +93,7 @@ int level_check_line(int *rem_tab)
   return completed_line;
 }
 
-void level_add_shape(struct t_shape *p_shape)
+void level_add_shape(char p_level[][LEVEL_WIDTH], struct t_shape *p_shape)
 {
   for (int i = 0; i < p_shape->len; i++)
   {
@@ -100,16 +101,16 @@ void level_add_shape(struct t_shape *p_shape)
     {
       if (p_shape->y + j >= 0 && p_shape->layout[j][i] != 0)
       {
-        level[p_shape->y + j][p_shape->x + i] = p_shape->layout[j][i];
+        p_level[p_shape->y + j][p_shape->x + i] = p_shape->layout[j][i];
       }
     }
   }
 }
 
-int level_get_at(int x, int y)
+int level_get_at(char p_level[][LEVEL_WIDTH], int x, int y)
 {
   if (x < 0)
     return 0;
   else
-    return level[x][y];
+    return p_level[x][y];
 }

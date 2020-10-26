@@ -19,13 +19,39 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game);
 game_state state_paused(SDL_Renderer *renderer);
 game_state state_game_over(SDL_Renderer *renderer, game *p_game);
 
-void blink(SDL_Renderer *renderer, int *lines, int line_nb, image *p_image_block, image *p_image_background);
+void blink(char *p_level, SDL_Renderer *renderer, int *lines, int line_nb, image *p_image_block, image *p_image_background);
 
 int WINDOW_HEIGHT = 480;
 int WINDOW_WIDTH = 640;
 
 int SCREEN_WIDTH = 280;
 int SCREEN_HEIGHT = 240;
+
+SDL_Joystick *joystick;
+int joystick_repeat_delay;
+
+char shape_move(char *p_level[], shape *p_shape, int x, int y)
+{
+  for (int i = 0; i < SHAPE_SIZE; i++)
+  {
+    for (int j = 0; j < SHAPE_SIZE; j++)
+    {
+      if (p_shape->layout[j][i] >= 1)
+      {
+        if (level_get_at(p_level, p_shape->y + j + y,
+                         p_shape->x + i + x) >= 1 ||
+            p_shape->x + i + x < 0 ||
+            p_shape->x + i + x >= LEVEL_WIDTH ||
+            p_shape->y + j + y >= LEVEL_HEIGHT)
+        {
+          return 0;
+        }
+      }
+    }
+  }
+
+  return 1;
+}
 
 int main(int argc, char **argv)
 {
@@ -94,7 +120,7 @@ int main(int argc, char **argv)
 
 game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 {
-	image o_image_block; 
+	image o_image_block;
 	image_load(&o_image_block, "res/gfx.png", renderer, NULL);
 
 	image o_image_background;
@@ -113,7 +139,7 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 	int level_cur = 0;
 	int level_max = 10;
 
-	level_init();
+	level_init(p_game->level);
 
 	//declare two shapes, one controled by the player, the other to indicates the next shape
 	shape o_falling_shape, o_preview_shape;
@@ -145,7 +171,7 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 		shape_draw(&o_preview_shape, &o_image_block, renderer);
 
 		//draw the level (empty blocks and alderly placed shapes)
-		level_draw(renderer, &o_falling_shape, &o_image_block);
+		level_draw(p_game->level, renderer, &o_falling_shape, &o_image_block);
 
 		int game_speed = level_max * 100 - level_cur * 100;
 
@@ -194,22 +220,22 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 				switch (event.key.keysym.sym)
 				{
 				case SDLK_RIGHT:
-					if (shape_move(&o_falling_shape, 1, 0))
+				  if (shape_move(p_game->level, &o_falling_shape, 1, 0))
 						o_falling_shape.x++;
 					break;
 				case SDLK_LEFT:
-					if (shape_move(&o_falling_shape, -1, 0))
+				  if (shape_move(p_game->level, &o_falling_shape, -1, 0))
 						o_falling_shape.x--;
 					break;
 				case SDLK_DOWN:
-					if (shape_move(&o_falling_shape, 0, 1))
+				  if (shape_move(p_game->level, &o_falling_shape, 0, 1))
 					{
 						o_falling_shape.y++;
 						timelastcall = SDL_GetTicks() + game_speed;
 					}
 					break;
 				case SDLK_SPACE:
-					while (shape_move(&o_falling_shape, 0, 1))
+				  while (shape_move(p_game->level, &o_falling_shape, 0, 1))
 						o_falling_shape.y++;
 					timelastcall = SDL_GetTicks() + game_speed;
 					break;
@@ -230,7 +256,7 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 				switch (event.jbutton.button)
 				{
 				case 0:
-					while (shape_move(&o_falling_shape, 0, 1))
+				  while (shape_move(p_game->level, &o_falling_shape, 0, 1))
 						o_falling_shape.y++;
 					timelastcall = SDL_GetTicks() + game_speed;
 					break;
@@ -258,7 +284,7 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 		if (SDL_GetTicks() - timelastcall > game_speed)
 		{
 			//check if the falling shape can move
-			if (shape_move(&o_falling_shape, 0, 1))
+		  if (shape_move(p_game->level, &o_falling_shape, 0, 1))
 			{
 				//update coord
 				o_falling_shape.y++;
@@ -267,12 +293,12 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 			{
 				//the shape can not move
 				int i;
-				level_add_shape(&o_falling_shape);
+				level_add_shape(p_game->level, &o_falling_shape);
 
 				int lines_in_a_row = 0;
 				//tab of line index to remove
 				int rem_tab[SHAPE_SIZE];
-				int line_nb = level_check_line(rem_tab);
+				int line_nb = level_check_line(p_game->level, rem_tab);
 
 				for (i = 1; i < line_nb; i++)
 				{
@@ -285,10 +311,10 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 				if (line_nb)
 				{
 					//blink completed line(s)
-					blink(renderer, rem_tab, line_nb, &o_image_block, &o_image_background);
+				  blink(p_game->level, renderer, rem_tab, line_nb, &o_image_block, &o_image_background);
 
 					for (i = 0; i < line_nb; i++)
-						level_remove_line(rem_tab[i]);				 //remove completed line(s)
+					  level_remove_line(p_game->level, rem_tab[i]);				 //remove completed line(s)
 					p_game->score += line_nb * (lines_in_a_row + 1); //update score
 					p_game->state[lines_in_a_row]++;				 //update game states
 					if (line_nb == 2 && lines_in_a_row == 0)
@@ -299,7 +325,7 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 						level_cur = level_max;
 				}
 
-				if (level_check_game_over())
+				if (level_check_game_over(p_game->level))
 				{
 					done = 1;
 					ret_code = GAME_OVER;
@@ -437,7 +463,7 @@ game_state state_game_over(SDL_Renderer *renderer, game *p_game)
 	return IN_GAME;
 }
 
-void blink(SDL_Renderer *renderer, int *lines, int line_nb, image *p_image_block, image *p_image_background)
+void blink(char *p_level, SDL_Renderer *renderer, int *lines, int line_nb, image *p_image_block, image *p_image_background)
 {
 	bool done = false;
 	timer o_timer;
@@ -468,7 +494,7 @@ void blink(SDL_Renderer *renderer, int *lines, int line_nb, image *p_image_block
 				show = (blink_cur % 2 == 0) ? 1 : 0;
 				for (i = 0; i < line_nb; i++)
 				{
-					memset(level + lines[i], show, sizeof(char) * LEVEL_WIDTH);
+					memset(p_level + lines[i], show, sizeof(char) * LEVEL_WIDTH);
 				}
 				blink_cur++;
 				o_timer.start_ticks = SDL_GetTicks();
@@ -479,7 +505,7 @@ void blink(SDL_Renderer *renderer, int *lines, int line_nb, image *p_image_block
 		SDL_RenderClear(renderer);
 		SDL_SetRenderDrawColor(renderer, 0, 42, 0, 255);
 		image_draw(p_image_background, renderer, 0, 0);
-		level_draw(renderer, NULL, p_image_block);
+		level_draw(p_level, renderer, NULL, p_image_block);
 
 		SDL_RenderPresent(renderer);
 	}
