@@ -28,8 +28,8 @@ int menu_draw(menu *p_menu, SDL_Renderer *renderer, fontmap *p_fontmap, char *cu
                          p_menu->o_style.bgcolor.b,
                          p_menu->o_style.bgcolor.a);
   SDL_Rect rect = {.x = p_menu->o_style.x,
-                   .y = p_menu->o_style.y - p_menu->o_style.margin,
-                   .h = p_menu->entries_count * p_fontmap->character_size + (p_menu->o_style.margin * (p_menu->entries_count + 1)),
+                   .y = p_menu->o_style.y - p_menu->o_style.padding,
+                   .h = p_menu->entries_count * p_fontmap->character_size + (p_menu->o_style.padding * (p_menu->entries_count + 1)),
                    .w = 100};
   SDL_RenderFillRect(renderer, &rect);
 
@@ -46,7 +46,7 @@ int menu_draw(menu *p_menu, SDL_Renderer *renderer, fontmap *p_fontmap, char *cu
   {
     fontmap_print(p_fontmap,
                   p_fontmap->character_size + p_menu->o_style.x,
-                  p_menu->o_style.y + i * p_fontmap->character_size + i * p_menu->o_style.margin,
+                  p_menu->o_style.y + i * p_fontmap->character_size + i * p_menu->o_style.padding,
                   renderer,
                   p_menu->p_entries[i].text);
   }
@@ -54,7 +54,7 @@ int menu_draw(menu *p_menu, SDL_Renderer *renderer, fontmap *p_fontmap, char *cu
   //curor character at current choice
   fontmap_print(p_fontmap,
                 p_menu->o_style.x,
-                p_menu->o_style.y + p_menu->index_choice * p_fontmap->character_size + p_menu->index_choice * p_menu->o_style.margin,
+                p_menu->o_style.y + p_menu->index_choice * p_fontmap->character_size + p_menu->index_choice * p_menu->o_style.padding,
                 renderer,
                 cursor);
 
