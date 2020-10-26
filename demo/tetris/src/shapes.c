@@ -144,7 +144,7 @@ char shape_rotate(shape *p_shape, char dir)
     }
   }
 
-  if (shape_move(&tmp_shape, 0, 0))
+  /*if (shape_move(&tmp_shape, 0, 0))
   {
     memcpy(p_shape->layout,
            tmp_shape.layout,
@@ -152,5 +152,5 @@ char shape_rotate(shape *p_shape, char dir)
     return 1;
   }
   else
-    return 0;
+  return 0;*/
 }
