@@ -61,8 +61,6 @@ int main(int argc, char **argv)
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 
-  assign_callbacks();
-
   //create a new game
   game o_game;
   o_game.has_key = false;
@@ -74,6 +72,10 @@ int main(int argc, char **argv)
   SDL_Color color_transparancy = {255, 0, 255};
   image_load(o_fontmap.p_image, "res/font.png", renderer, &color_transparancy);
   o_game.p_fontmap = &o_fontmap;
+
+  // assign user callbacks
+  o_game.on_click[0] = callback_user_click_desk;
+  o_game.on_click[1] = callback_user_click_bedroom_door;
 
   //game states
   while (ret_code != QUIT)

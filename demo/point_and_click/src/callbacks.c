@@ -12,7 +12,7 @@ void callback_link(hotspot *p_hotspot, void *param, SDL_Renderer *renderer)
   place_free(p_game->p_place);
   char dest[256];
   sprintf(dest, "res/%s", id);
-  place_init_from_file(p_game->p_place, dest, renderer);
+  place_init_from_file(p_game->p_place, p_game->on_click, dest, renderer);
 }
 
 void callback_text(hotspot *p_hotspot, void *param, SDL_Renderer *renderer)

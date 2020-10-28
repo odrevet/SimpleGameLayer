@@ -37,7 +37,7 @@ void place_init(place *p_place);
    F (function) PARAMS: FUNCTION_ID (integer)
    T (text) PARAMS: TEXT TO DISPLAY
  */
-void place_init_from_file(place *p_place, char *filepath, SDL_Renderer *renderer);
+void place_init_from_file(place *p_place, hotspot_on_click* callbacks_user[], char *filepath, SDL_Renderer *renderer);
 
 /**
    Draw all the pictures

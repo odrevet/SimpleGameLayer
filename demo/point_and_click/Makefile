@@ -1,7 +1,7 @@
 SGLDIR=../../src
 EXEC=target
 CC=gcc
-CFLAGS= -Wall -std=c11 -fcommon `sdl2-config --cflags` -I$(SGLDIR)
+CFLAGS= -Wall -std=c11 `sdl2-config --cflags` -I$(SGLDIR)
 LDFLAGS= `sdl2-config --libs` -lSDL2_image -lSDL2_mixer
 
 TARGET := $(notdir $(CURDIR))

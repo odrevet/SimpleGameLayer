@@ -41,8 +41,8 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
   place o_place;
   place_init(&o_place);
   strcpy(o_place.id, "start");
-  place_init_from_file(&o_place, "res/start", renderer);
   p_game->p_place = &o_place;
+  place_init_from_file(p_game->p_place, p_game->on_click, "res/start", renderer);
 
   while (!done)
   {
@@ -64,7 +64,7 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
           place_free(p_game->p_place);
           char dest[256];
           sprintf(dest, "res/%s", p_game->p_place->id);
-          place_init_from_file(p_game->p_place, dest, renderer);
+          place_init_from_file(p_game->p_place, p_game->on_click ,dest, renderer);
           break;
 #endif
         }

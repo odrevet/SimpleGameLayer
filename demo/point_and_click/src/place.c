@@ -9,7 +9,7 @@ void place_init(place *p_place)
   p_place->hotspot_count = 0;
 }
 
-void place_init_from_file(place *p_place, char *filepath, SDL_Renderer *renderer)
+void place_init_from_file(place *p_place, hotspot_on_click* callbacks_user[], char *filepath, SDL_Renderer *renderer)
 {
 #ifdef DEBUG
   printf("LOADING PLACE %s\n", filepath);

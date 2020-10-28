@@ -8,9 +8,8 @@
 #include "hotspot.h"
 
 #define CALLBACK_USER_COUNT 2
-void (*callbacks_user[CALLBACK_USER_COUNT]) (hotspot *p_hotspot, void *param, SDL_Renderer *renderer);
 
-
-void assign_callbacks();
+void callback_user_click_bedroom_door(hotspot *p_hotspot, void *param, SDL_Renderer *renderer);
+void callback_user_click_desk(hotspot *p_hotspot, void *param, SDL_Renderer *renderer);
 
 #endif

@@ -13,12 +13,13 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 200
 
+#include "callbacks_user.h"
+
 typedef struct t_game
 {
   fontmap *p_fontmap;
   place *p_place;
-
-  // Variables for the game story
+  hotspot_on_click on_click[CALLBACK_USER_COUNT]; //array of all user defined callbacks
   bool has_key;
 } game;
 

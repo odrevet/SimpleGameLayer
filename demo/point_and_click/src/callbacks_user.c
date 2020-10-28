@@ -29,9 +29,3 @@ void callback_user_click_bedroom_door(hotspot *p_hotspot, void *param, SDL_Rende
     callback_link(p_hotspot, p_game, renderer);
   }
 }
-
-void assign_callbacks()
-{
-  callbacks_user[0] = callback_user_click_desk;
-  callbacks_user[1] = callback_user_click_bedroom_door;
-}
