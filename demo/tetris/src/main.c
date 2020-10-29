@@ -30,29 +30,6 @@ int SCREEN_HEIGHT = 240;
 SDL_Joystick *joystick;
 int joystick_repeat_delay;
 
-char shape_move(char *p_level[], shape *p_shape, int x, int y)
-{
-  for (int i = 0; i < SHAPE_SIZE; i++)
-  {
-    for (int j = 0; j < SHAPE_SIZE; j++)
-    {
-      if (p_shape->layout[j][i] >= 1)
-      {
-        if (level_get_at(p_level, p_shape->y + j + y,
-                         p_shape->x + i + x) >= 1 ||
-            p_shape->x + i + x < 0 ||
-            p_shape->x + i + x >= LEVEL_WIDTH ||
-            p_shape->y + j + y >= LEVEL_HEIGHT)
-        {
-          return 0;
-        }
-      }
-    }
-  }
-
-  return 1;
-}
-
 int main(int argc, char **argv)
 {
 	int flags = 0;
@@ -240,10 +217,10 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 					timelastcall = SDL_GetTicks() + game_speed;
 					break;
 				case SDLK_f:
-					shape_rotate(&o_falling_shape, 0);
+					shape_rotate(p_game->level, &o_falling_shape, 0);
 					break;
 				case SDLK_d:
-					shape_rotate(&o_falling_shape, 1);
+					shape_rotate(p_game->level, &o_falling_shape, 1);
 					break;
 				case SDLK_q:
 					exit(EXIT_SUCCESS);
@@ -261,10 +238,10 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 					timelastcall = SDL_GetTicks() + game_speed;
 					break;
 				case 2:
-					shape_rotate(&o_falling_shape, 1);
+					shape_rotate(p_game->level, &o_falling_shape, 1);
 					break;
 				case 3:
-					shape_rotate(&o_falling_shape, 0);
+					shape_rotate(p_game->level, &o_falling_shape, 0);
 					break;
 				case 6:
 					done = true;

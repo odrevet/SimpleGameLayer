@@ -38,7 +38,6 @@ typedef struct t_shape
 void shape_set(shape *p_shape, shape_type type);
 void shape_default_coord(shape *p_shape);
 void shape_draw(shape *p_shape, image *p_image_block, SDL_Renderer *renderer);
-char shape_rotate(shape *p_shape, char dir);
 char check_shape_level(shape *p_shape);
 
 #endif
