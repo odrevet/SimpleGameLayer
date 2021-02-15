@@ -58,16 +58,18 @@ bool game_check_NPC_collid(game *p_game)
   return false;
 }
 
-bool game_check_tile_walkable(tile_property ***p_tile_properties, tilemap *p_map, int x, int y)
+bool game_check_tile_walkable(tile_property ***p_tile_properties, tilemap *p_map, int x, int y, int z)
 {
   int index_x = x / p_map->tile_width;
   int index_y = y / p_map->tile_height;
+
+  // check boundaries
   if (x < 0 || y < 0 || index_x < 0 || index_y < 0 || index_x >= p_map->width || index_y >= p_map->height)
   {
     return false;
   }
 
-  return p_tile_properties[0][index_y][index_x].walkable;
+  return p_tile_properties[z][index_y][index_x].walkable;
 }
 
 void game_center_camera_on_hero(game *p_game)
@@ -111,14 +113,21 @@ void game_update(game *p_game)
     sprite_update_frame(p_hero_sprite);
 
     // check if next tiles are walkable
+    bool walkable = true;
     int next_x = p_hero_sprite->bounding_box.x + p_hero_sprite->vel_x;
     int next_y = p_hero_sprite->bounding_box.y + p_hero_sprite->vel_y;
     tilemap *p_map = p_game->p_level->p_map;
     tile_property ***p_tile_properties = p_game->p_level->p_tile_properties;
-    bool walkable = game_check_tile_walkable(p_tile_properties, p_map, next_x, next_y) &&
-                    game_check_tile_walkable(p_tile_properties, p_map, next_x + p_hero_sprite->bounding_box.w, next_y) &&
-                    game_check_tile_walkable(p_tile_properties, p_map, next_x + p_hero_sprite->bounding_box.w, next_y + p_hero_sprite->bounding_box.h) &&
-                    game_check_tile_walkable(p_tile_properties, p_map, next_x, next_y + p_hero_sprite->bounding_box.h);
+
+    int z= 0;
+    do
+    {
+      walkable = game_check_tile_walkable(p_tile_properties, p_map, next_x, next_y, z) &&
+                 game_check_tile_walkable(p_tile_properties, p_map, next_x + p_hero_sprite->bounding_box.w, next_y, z) &&
+                 game_check_tile_walkable(p_tile_properties, p_map, next_x + p_hero_sprite->bounding_box.w, next_y + p_hero_sprite->bounding_box.h, z) &&
+                 game_check_tile_walkable(p_tile_properties, p_map, next_x, next_y + p_hero_sprite->bounding_box.h, z);
+      z++;
+    } while (z < p_map->nb_layer && walkable == true);
 
     // update hero position if map walkable and no collision with NPCs
     if (walkable && !game_check_NPC_collid(p_game))
