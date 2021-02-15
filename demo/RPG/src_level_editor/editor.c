@@ -171,7 +171,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
     return ret_code;
 }
 
-editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
+editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 {
     bool done = false;
     tilemap *p_map = p_editor->p_level->p_map;
