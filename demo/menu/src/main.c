@@ -62,7 +62,7 @@ int menu_entry_two_callback(void *param_menu, void *param_entry, SDL_Renderer *r
 
 void menu_set_default_style(menu *p_menu)
 {
-  p_menu->o_style.margin = 10;
+  p_menu->o_style.padding = 10;
   p_menu->o_style.x = SCREEN_WIDTH / 2;
   p_menu->o_style.y = SCREEN_HEIGHT / 2;
   SDL_Color border = {.r = 200, .g = 200, .b = 200, .a = 255};
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     switch (c)
     {
     case 'h':
-      printf("Tilemap display\n");
+      printf("Menu Demo\n");
       printf("h: print this menu and exit\n");
       printf("f: launch in fullscreen\n");
       return EXIT_SUCCESS;
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
   menu_set_default_style(&o_menu);
   o_menu.o_style.x = 50;
   o_menu.o_style.y = 50;
-  o_menu.o_style.margin = 10;
+  o_menu.o_style.padding = 10;
 
   menu_add_entry(&o_menu, "ENTRY 1", menu_entry_one_callback, &param);
   menu_add_entry(&o_menu, "ENTRY 2", menu_entry_two_callback, NULL);
