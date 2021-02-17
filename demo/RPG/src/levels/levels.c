@@ -25,7 +25,7 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   music_play(p_game->p_level->p_music);
 
   // NPCs
-  int NPC_count = 1;
+  int NPC_count = 2;
   NPC *p_NPC = calloc(NPC_count, sizeof(NPC));
   p_game->p_level->NPC_count = NPC_count;
   p_game->p_level->p_NPC = p_NPC;
@@ -41,6 +41,10 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   p_NPC[0].p_on_action_callback = NPC_show_dialog_on_action;
   p_NPC[0].p_sprite->x = 5 * p_game->p_level->p_map->tile_width;
   p_NPC[0].p_sprite->y = 6 * p_game->p_level->p_map->tile_height;
+
+  p_NPC[1].p_sprite->x = 7 * p_game->p_level->p_map->tile_width;
+  p_NPC[1].p_sprite->y = 6 * p_game->p_level->p_map->tile_height;
+  p_NPC[1].p_on_action_callback = NULL;
 
   // events
   const int event_count = 3;
