@@ -18,7 +18,6 @@
 #include "hero.h"
 #include "level.h"
 #include "levels/levels.h"
-#include "warp.h"
 
 #define DOWN 0
 #define UP 1
@@ -139,17 +138,37 @@ int main(int argc, char **argv)
   return EXIT_SUCCESS;
 }
 
-void game_check_warp(game *p_game, int hero_current_tile_index_x,
-                     int hero_current_tile_index_y, SDL_Renderer *renderer)
+void game_check_auto_event(game *p_game, int hero_current_tile_index_x,
+                           int hero_current_tile_index_y, SDL_Renderer *renderer)
 {
-  for (int index_warp = 0; index_warp < p_game->p_level->warp_cout;
-       index_warp++)
+  for (int index_event = 0; index_event < p_game->p_level->event_count;
+       index_event++)
   {
-    warp *p_warp = p_game->p_level->p_warp + index_warp;
-    if (p_warp->index_src_x == hero_current_tile_index_x &&
-        p_warp->index_src_y == hero_current_tile_index_y)
+    event *p_event = p_game->p_level->p_event + index_event;
+    if (p_event->index_src_x == hero_current_tile_index_x &&
+        p_event->index_src_y == hero_current_tile_index_y &&
+        p_event->o_event_trigger == ON_TILE_ENTER &&
+        !p_event->has_triggered)
     {
-      warp_exec(p_warp, p_game, renderer);
+      p_event->has_triggered = true;
+      switch (p_event->o_event_type)
+      {
+      case EVENT_TYPE_FUNCTION:
+      {
+        event_callback p_event_callback = (event_callback)p_event->p_param;
+        p_event_callback(p_game, renderer);
+      }
+      break;
+      case EVENT_TYPE_TEXT:
+        event_text_exec(p_event, p_game, renderer);
+        break;
+      case EVENT_TYPE_WARP:
+        event_warp_exec(p_event, p_game, renderer);
+        break;
+
+      default:
+        break;
+      }
     }
   }
 }
@@ -180,7 +199,7 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
   if (hero_front_x >= 0 && hero_front_x < p_game->p_level->p_map->width * p_game->p_level->p_map->tile_width &&
       hero_front_y >= 0 && hero_front_y < p_game->p_level->p_map->height * p_game->p_level->p_map->tile_height)
   {
-    for (int index_NPC = 0; index_NPC < p_game->p_level->NPC_cout;
+    for (int index_NPC = 0; index_NPC < p_game->p_level->NPC_count;
          index_NPC++)
     {
       NPC *p_NPC = p_game->p_level->p_NPC + index_NPC;
@@ -283,8 +302,7 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
 
     // update logic
     game_update(p_game);
-    // check if the hero walk on a warp
-    game_check_warp(p_game, hero_current_tile_index_x, hero_current_tile_index_y, renderer);
+    game_check_auto_event(p_game, hero_current_tile_index_x, hero_current_tile_index_y, renderer);
 
     // update display
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);

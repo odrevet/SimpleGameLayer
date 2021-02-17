@@ -16,7 +16,7 @@
 
 // forward declaration
 typedef struct t_warp warp;
-//typedef struct t_NPC NPC;
+typedef struct t_event event;
 
 typedef struct t_level
 {
@@ -29,11 +29,11 @@ typedef struct t_level
     char *path_music;
     Mix_Music *p_music;
 
-    int warp_cout;
-    warp *p_warp;
-
-    int NPC_cout;
+    int NPC_count;
     NPC *p_NPC;
+
+    int event_count;
+    event *p_event;
 } level;
 
 void level_init(level *p_level);

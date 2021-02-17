@@ -15,7 +15,7 @@ int compar_sprite_depth(const void *a, const void *b)
 
 void game_sort_sprites(game *p_game, int nb_sprites_to_draw, sprite **v_sprites_to_draw)
 {
-  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_cout; NPC_index++)
+  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count; NPC_index++)
   {
     v_sprites_to_draw[NPC_index] = p_game->p_level->p_NPC[NPC_index].p_sprite;
   }
@@ -26,7 +26,7 @@ void game_sort_sprites(game *p_game, int nb_sprites_to_draw, sprite **v_sprites_
 void game_draw(game *p_game, SDL_Renderer *renderer)
 {
   // sort sprite by y for the drawing order
-  const int nb_sprites_to_draw = p_game->p_level->NPC_cout + 1;
+  const int nb_sprites_to_draw = p_game->p_level->NPC_count + 1;
   sprite *v_sprites_to_draw[nb_sprites_to_draw];
   game_sort_sprites(p_game, nb_sprites_to_draw, &v_sprites_to_draw);
 
@@ -47,7 +47,7 @@ bool game_check_NPC_collid(game *p_game)
   hero_bounding_box.x += p_game->p_hero->p_sprite->vel_x;
   hero_bounding_box.y += p_game->p_hero->p_sprite->vel_y;
 
-  for (int index_NPC = 0; index_NPC < p_game->p_level->NPC_cout; index_NPC++)
+  for (int index_NPC = 0; index_NPC < p_game->p_level->NPC_count; index_NPC++)
   {
     NPC *p_NPC = p_game->p_level->p_NPC + index_NPC;
     if (SDL_HasIntersection(&p_NPC->p_sprite->bounding_box, &hero_bounding_box))
@@ -148,7 +148,7 @@ void game_update(game *p_game)
   // NPCs bouding box
   const int NPC_bouding_box_margin_x = 0;
   const int NPC_bouding_box_margin_y = 12;
-  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_cout;
+  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count;
        NPC_index++)
   {
     p_game->p_level->p_NPC[NPC_index].p_sprite->bounding_box.x = p_game->p_level->p_NPC[NPC_index].p_sprite->x + NPC_bouding_box_margin_x;

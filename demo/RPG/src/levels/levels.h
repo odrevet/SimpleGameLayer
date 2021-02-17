@@ -10,8 +10,8 @@
 #include "../game.h"
 #include "../hero.h"
 #include "../level.h"
-#include "../warp.h"
 #include "../dialog_box.h"
+#include "../event.h"
 
 void level_overworld(game *p_game, SDL_Renderer *renderer);
 void level_cave(game *p_game, SDL_Renderer *renderer);
