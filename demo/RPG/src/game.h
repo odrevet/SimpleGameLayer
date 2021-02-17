@@ -10,6 +10,7 @@
 
 #include <init.h>
 #include <image.h>
+#include <tileset.h>
 #include <sprite.h>
 #include <tilemap.h>
 #include <fontmap.h>
@@ -28,7 +29,7 @@ typedef struct t_game
   level *p_level;
   level_addr p_level_addr;
   hero *p_hero;
-  image *p_image_NPC;
+  tileset *p_tileset_NPC;
   fontmap *p_fontmap;
 } game;
 

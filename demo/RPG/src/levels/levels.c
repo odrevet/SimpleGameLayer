@@ -32,7 +32,7 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 
   for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count; NPC_index++)
   {
-    NPC_init(p_NPC + NPC_index, p_game->p_image_NPC, renderer);
+    NPC_init(p_NPC + NPC_index, p_game->p_tileset_NPC, renderer);
   }
 
   char *text = "HELLO !";

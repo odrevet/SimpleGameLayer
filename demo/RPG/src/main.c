@@ -93,7 +93,34 @@ int main(int argc, char **argv)
 
   image o_image_NPC;
   image_load(&o_image_NPC, "gfx/NPC_test.png", renderer, NULL);
-  o_game.p_image_NPC = &o_image_NPC;
+  tileset o_tileset_NPC;
+  o_tileset_NPC.p_image = &o_image_NPC;
+  tileset_init(&o_tileset_NPC, 3, 4, 0, 4);
+
+  animation_init(o_tileset_NPC.v_animation + DOWN, false, 4, 10, 0);
+  tileset_set_frame(&o_tileset_NPC, DOWN, 0, 00, 0, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, DOWN, 1, 14, 0, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, DOWN, 2, 00, 0, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, DOWN, 3, 28, 0, 14, 21);
+
+  animation_init(o_tileset_NPC.v_animation + UP, false, 4, 10, 0);
+  tileset_set_frame(&o_tileset_NPC, UP, 0, 00, 42, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, UP, 1, 14, 42, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, UP, 2, 00, 42, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, UP, 3, 28, 42, 14, 21);
+
+  animation_init(o_tileset_NPC.v_animation + LEFT, false, 4, 10, 0);
+  tileset_set_frame(&o_tileset_NPC, LEFT, 0, 00, 64, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, LEFT, 1, 14, 64, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, LEFT, 2, 00, 63, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, LEFT, 3, 28, 64, 14, 21);
+
+  animation_init(o_tileset_NPC.v_animation + RIGHT, false, 4, 10, 0);
+  tileset_set_frame(&o_tileset_NPC, RIGHT, 0, 00, 21, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, RIGHT, 1, 14, 21, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, RIGHT, 2, 00, 21, 14, 21);
+  tileset_set_frame(&o_tileset_NPC, RIGHT, 3, 28, 21, 14, 21);
+  o_game.p_tileset_NPC = &o_tileset_NPC;
 
   // hero
   hero o_hero;

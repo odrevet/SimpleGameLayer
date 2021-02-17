@@ -21,7 +21,7 @@ typedef struct t_NPC
     void *p_on_action_param;
 } NPC;
 
-void NPC_init(NPC *p_NPC, image *p_image_NPC, SDL_Renderer *renderer);
+void NPC_init(NPC *p_NPC, tileset *p_tileset_NPC, SDL_Renderer *renderer);
 
 void NPC_free(NPC *p_NPC);
 
