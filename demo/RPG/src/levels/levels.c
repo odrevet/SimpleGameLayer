@@ -12,7 +12,7 @@ void level_overworld_NPC_0_on_action(NPC *p_NPC, game *p_game, SDL_Renderer *ren
   dialog_box_show(p_game, "YOU NEED THE CAVE KEY TO ENTER HERE", renderer);
 }
 
-void level_overworld_event_0(game *p_game, SDL_Renderer *renderer)
+void level_overworld_event_callback(game *p_game, SDL_Renderer *renderer)
 {
   printf("%s", "CALLBACK!\n");
 }
@@ -43,7 +43,7 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   p_NPC[0].p_sprite->y = 6 * p_game->p_level->p_map->tile_height;
 
   // events
-  const int event_count = 2;
+  const int event_count = 3;
   event *p_event = calloc(event_count, sizeof(event));
 
   event_param_warp *p_event_param_warp = malloc(sizeof(event_param_warp));
@@ -63,6 +63,13 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   p_event[1].has_triggered = false;
   p_event[1].index_src_x = 2;
   p_event[1].index_src_y = 5;
+
+  p_event[2].p_param = level_overworld_event_callback;
+  p_event[2].o_event_trigger = ON_TILE_ENTER;
+  p_event[2].o_event_type = EVENT_TYPE_FUNCTION;
+  p_event[2].has_triggered = false;
+  p_event[2].index_src_x = 3;
+  p_event[2].index_src_y = 5;
 
   p_game->p_level->event_count = event_count;
   p_game->p_level->p_event = p_event;
