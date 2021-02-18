@@ -5,9 +5,12 @@ int compar_sprite_depth(const void *a, const void *b)
   sprite *sprite_a = *(sprite **)a;
   sprite *sprite_b = *(sprite **)b;
 
-  if (sprite_a->y < sprite_b->y)
+  int sprite_a_bottom_y = sprite_a->bounding_box.y + sprite_a->bounding_box.h;
+  int sprite_b_bottom_y = sprite_b->bounding_box.y + sprite_b->bounding_box.h;
+
+  if (sprite_a_bottom_y < sprite_b_bottom_y)
     return -1;
-  else if (sprite_a->y > sprite_b->y)
+  else if (sprite_a_bottom_y > sprite_b_bottom_y)
     return 1;
   else
     return 0;
@@ -119,7 +122,7 @@ void game_update(game *p_game)
     tilemap *p_map = p_game->p_level->p_map;
     tile_property ***p_tile_properties = p_game->p_level->p_tile_properties;
 
-    int z= 0;
+    int z = 0;
     do
     {
       walkable = game_check_tile_walkable(p_tile_properties, p_map, next_x, next_y, z) &&
