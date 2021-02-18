@@ -15,10 +15,6 @@ void level_overworld_event_callback(game *p_game, SDL_Renderer *renderer)
 void level_overworld(game *p_game, SDL_Renderer *renderer)
 {
   level_load(p_game->p_level, "data/overworld.map", &p_game->path_tileset, &p_game->path_music, renderer);
-  
-  // Music
-  p_game->p_level->p_music = music_load(p_game->path_music);
-  music_play(p_game->p_level->p_music);
 
   // NPCs
   int NPC_count = 1;
@@ -75,10 +71,6 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 void level_cave(game *p_game, SDL_Renderer *renderer)
 {
   level_load(p_game->p_level, "data/cave.map", &p_game->path_tileset, &p_game->path_music, renderer);
-
-  // Music
-  p_game->p_level->p_music = music_load(p_game->path_music);
-  music_play(p_game->p_level->p_music);
 
   // Events
   const int event_count = 1;

@@ -49,6 +49,8 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
     free(*current_path_music);
     *current_path_music = calloc(strlen(buffer) + 1, sizeof(char));
     strcpy(*current_path_music, buffer);
+    p_level->p_music = music_load(*current_path_music);
+    music_play(p_level->p_music);
   }
 
   // line break

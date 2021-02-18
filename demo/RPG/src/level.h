@@ -7,6 +7,7 @@
 #include <SDL_mixer.h>
 
 #include <image.h>
+#include <sound.h>
 #include <fontmap.h>
 #include <tilemap.h>
 #include <animation.h>
