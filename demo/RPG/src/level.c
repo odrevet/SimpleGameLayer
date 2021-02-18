@@ -2,8 +2,6 @@
 
 void level_init(level *p_level)
 {
-  p_level->path_tileset = NULL;
-  p_level->path_music = NULL;
   p_level->path_tile_property = NULL;
   p_level->p_music = NULL;
   p_level->p_event = NULL;
@@ -13,7 +11,7 @@ void level_init(level *p_level)
   p_level->p_tile_properties = NULL;
 }
 
-bool level_load(level *p_level, const char *pathfile, SDL_Renderer *renderer)
+bool level_load(level *p_level, const char *pathfile, char **current_path_tileset, char **current_path_music, SDL_Renderer *renderer)
 {
   tilemap *p_map = p_level->p_map;
 
@@ -27,9 +25,14 @@ bool level_load(level *p_level, const char *pathfile, SDL_Renderer *renderer)
 
   // tileset
   fscanf(fp, "%s", buffer);
-  p_level->path_tileset = calloc(strlen(buffer) + 1, sizeof(char));
-  strcpy(p_level->path_tileset, buffer);
-  image_load(p_map->p_image, p_level->path_tileset, renderer, NULL);
+  if (*current_path_tileset == NULL || strcmp(buffer, current_path_tileset) != 0)
+  {
+    free(*current_path_tileset);
+    *current_path_tileset = calloc(strlen(buffer) + 1, sizeof(char));
+    strcpy(*current_path_tileset, buffer);
+    image_free(p_map->p_image);
+    image_load(p_map->p_image, *current_path_tileset, renderer, NULL);
+  }
 
   // tile properties
   fscanf(fp, "%s", buffer);
@@ -41,8 +44,12 @@ bool level_load(level *p_level, const char *pathfile, SDL_Renderer *renderer)
 
   // music
   fscanf(fp, "%s", buffer);
-  p_level->path_music = calloc(strlen(buffer) + 1, sizeof(char));
-  strcpy(p_level->path_music, buffer);
+  if (*current_path_music == NULL || strcmp(buffer, *current_path_music))
+  {
+    free(*current_path_music);
+    *current_path_music = calloc(strlen(buffer) + 1, sizeof(char));
+    strcpy(*current_path_music, buffer);
+  }
 
   // line break
   fgetc(fp);
@@ -176,8 +183,6 @@ void level_free(level *p_level)
     free(p_level->p_tile_properties[index_layer]);
   }
   free(p_level->p_tile_properties);
-
-  image_free(p_level->p_map->p_image);
   map_tiles_free(p_level->p_map);
 
   for (int index_NPC = 0; index_NPC < p_level->NPC_count; index_NPC++)
@@ -185,9 +190,6 @@ void level_free(level *p_level)
     NPC_free(p_level->p_NPC + index_NPC);
   }
   free(p_level->p_NPC);
-  free(p_level->p_event); 
-  free(p_level->path_music);
-  free(p_level->path_tileset);
+  free(p_level->p_event);
   free(p_level->path_tile_property);
-  Mix_FreeMusic(p_level->p_music);
 }

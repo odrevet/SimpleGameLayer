@@ -13,9 +13,11 @@ void level_overworld_event_callback(game *p_game, SDL_Renderer *renderer)
 }
 
 void level_overworld(game *p_game, SDL_Renderer *renderer)
-{ 
-  level_load(p_game->p_level, "data/overworld.map", renderer);
-  p_game->p_level->p_music = music_load(p_game->p_level->path_music);
+{
+  level_load(p_game->p_level, "data/overworld.map", &p_game->path_tileset, &p_game->path_music, renderer);
+  
+  // Music
+  p_game->p_level->p_music = music_load(p_game->path_music);
   music_play(p_game->p_level->p_music);
 
   // NPCs
@@ -72,8 +74,10 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 // CAVE
 void level_cave(game *p_game, SDL_Renderer *renderer)
 {
-  level_load(p_game->p_level, "data/cave.map", renderer);
-  p_game->p_level->p_music = music_load(p_game->p_level->path_music);
+  level_load(p_game->p_level, "data/cave.map", &p_game->path_tileset, &p_game->path_music, renderer);
+
+  // Music
+  p_game->p_level->p_music = music_load(p_game->path_music);
   music_play(p_game->p_level->p_music);
 
   // Events
@@ -90,7 +94,6 @@ void level_cave(game *p_game, SDL_Renderer *renderer)
   p_event[0].has_triggered = false;
   p_event[0].index_src_x = 3;
   p_event[0].index_src_y = 5;
-
   p_game->p_level->event_count = event_count;
   p_game->p_level->p_event = p_event;
 }

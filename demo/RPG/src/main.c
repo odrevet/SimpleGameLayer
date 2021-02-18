@@ -90,6 +90,8 @@ int main(int argc, char **argv)
   o_game.p_level = &o_level;
   o_game.p_level->p_map = &o_tilemap;
   o_game.p_level->p_map->p_image = &o_image_tilemap;
+  o_game.path_music = NULL;
+  o_game.path_tileset = NULL;
 
   image o_image_NPC;
   image_load(&o_image_NPC, "gfx/NPC_test.png", renderer, NULL);

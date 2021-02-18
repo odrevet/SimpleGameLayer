@@ -31,6 +31,8 @@ typedef struct t_game
   hero *p_hero;
   tileset *p_tileset_NPC;
   fontmap *p_fontmap;
+  char *path_tileset;
+  char *path_music;
 } game;
 
 void game_draw(game *p_game, SDL_Renderer *renderer);
