@@ -10,7 +10,6 @@ void level_init(level *p_level)
   p_level->event_count = 0;
   p_level->p_NPC = NULL;
   p_level->NPC_count = 0;
-  p_level->p_map = NULL;
   p_level->p_tile_properties = NULL;
 }
 
@@ -30,7 +29,7 @@ bool level_load(level *p_level, const char *pathfile, SDL_Renderer *renderer)
   fscanf(fp, "%s", buffer);
   p_level->path_tileset = calloc(strlen(buffer) + 1, sizeof(char));
   strcpy(p_level->path_tileset, buffer);
-  image_load(p_level->p_map->p_image, p_level->path_tileset, renderer, NULL);
+  image_load(p_map->p_image, p_level->path_tileset, renderer, NULL);
 
   // tile properties
   fscanf(fp, "%s", buffer);
@@ -178,13 +177,15 @@ void level_free(level *p_level)
   }
   free(p_level->p_tile_properties);
 
+  image_free(p_level->p_map->p_image);
   map_tiles_free(p_level->p_map);
+
   for (int index_NPC = 0; index_NPC < p_level->NPC_count; index_NPC++)
   {
     NPC_free(p_level->p_NPC + index_NPC);
   }
   free(p_level->p_NPC);
-  free(p_level->p_event);  //TODO free each event
+  free(p_level->p_event); 
   free(p_level->path_music);
   free(p_level->path_tileset);
   free(p_level->path_tile_property);

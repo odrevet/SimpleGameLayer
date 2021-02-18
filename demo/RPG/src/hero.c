@@ -8,8 +8,8 @@ void hero_init(hero *p_hero, SDL_Renderer *renderer)
     tileset_init(p_tileset, 17, 8, 0, 4);
 
     sprite *p_sprite = malloc(sizeof(sprite));
-    p_sprite->x = 16;
-    p_sprite->y = 42;
+    p_sprite->x = 64;
+    p_sprite->y = 61;
     p_sprite->vel_x = 0;
     p_sprite->vel_y = 0;
     p_sprite->p_tileset = p_tileset;

@@ -7,25 +7,19 @@ void NPC_show_dialog_on_action(NPC *p_NPC, game *p_game, SDL_Renderer *renderer)
 }
 
 // OVERWORLD
-void level_overworld_NPC_0_on_action(NPC *p_NPC, game *p_game, SDL_Renderer *renderer)
-{
-  dialog_box_show(p_game, "YOU NEED THE CAVE KEY TO ENTER HERE", renderer);
-}
-
 void level_overworld_event_callback(game *p_game, SDL_Renderer *renderer)
 {
   printf("%s", "CALLBACK!\n");
 }
 
 void level_overworld(game *p_game, SDL_Renderer *renderer)
-{
-  level_free(p_game->p_level);
+{ 
   level_load(p_game->p_level, "data/overworld.map", renderer);
   p_game->p_level->p_music = music_load(p_game->p_level->path_music);
   music_play(p_game->p_level->p_music);
 
   // NPCs
-  int NPC_count = 2;
+  int NPC_count = 1;
   NPC *p_NPC = calloc(NPC_count, sizeof(NPC));
   p_game->p_level->NPC_count = NPC_count;
   p_game->p_level->p_NPC = p_NPC;
@@ -40,11 +34,7 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   strcpy(p_NPC[0].p_on_action_param, text);
   p_NPC[0].p_on_action_callback = NPC_show_dialog_on_action;
   p_NPC[0].p_sprite->x = 5 * p_game->p_level->p_map->tile_width;
-  p_NPC[0].p_sprite->y = 6 * p_game->p_level->p_map->tile_height;
-
-  p_NPC[1].p_sprite->x = 7 * p_game->p_level->p_map->tile_width;
-  p_NPC[1].p_sprite->y = 6 * p_game->p_level->p_map->tile_height;
-  p_NPC[1].p_on_action_callback = NULL;
+  p_NPC[0].p_sprite->y = 4 * p_game->p_level->p_map->tile_height;
 
   // events
   const int event_count = 3;
@@ -61,18 +51,18 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   p_event[0].index_src_x = 2;
   p_event[0].index_src_y = 2;
 
-  p_event[1].p_param = "THIS IS A TEXT EVENT";
+  p_event[1].p_param = "OOPS! I STEPPED ON A FLOWER";
   p_event[1].o_event_trigger = ON_TILE_ENTER;
   p_event[1].o_event_type = EVENT_TYPE_TEXT;
   p_event[1].has_triggered = false;
-  p_event[1].index_src_x = 2;
-  p_event[1].index_src_y = 5;
+  p_event[1].index_src_x = 4;
+  p_event[1].index_src_y = 6;
 
   p_event[2].p_param = level_overworld_event_callback;
   p_event[2].o_event_trigger = ON_TILE_ENTER;
   p_event[2].o_event_type = EVENT_TYPE_FUNCTION;
   p_event[2].has_triggered = false;
-  p_event[2].index_src_x = 3;
+  p_event[2].index_src_x = 0;
   p_event[2].index_src_y = 5;
 
   p_game->p_level->event_count = event_count;
@@ -82,11 +72,11 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 // CAVE
 void level_cave(game *p_game, SDL_Renderer *renderer)
 {
-  level_free(p_game->p_level);
   level_load(p_game->p_level, "data/cave.map", renderer);
   p_game->p_level->p_music = music_load(p_game->p_level->path_music);
   music_play(p_game->p_level->p_music);
 
+  // Events
   const int event_count = 1;
   event *p_event = calloc(event_count, sizeof(event));
 

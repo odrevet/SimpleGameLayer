@@ -139,6 +139,8 @@ int main(int argc, char **argv)
   // load the initial level
   level_overworld(&o_game, renderer);
 
+  game_center_camera_on_hero(&o_game);
+  
   // game states
   game_state ret_code = IN_GAME;
   while (ret_code != QUIT)
@@ -249,15 +251,6 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
 
   while (!done)
   {
-    // update map tile animation
-    /*if (p_game->nb_tile > 0)
-    {
-      for (int i = 0; i < p_game->nb_tile; i++)
-      {
-        animation_update(p_game->v_tile[i].p_animation);
-      }
-    }*/
-
     // hero current tile
     int hero_center_x = p_game->p_hero->p_sprite->bounding_box.x +
                         p_game->p_hero->p_sprite->bounding_box.w / 2;
