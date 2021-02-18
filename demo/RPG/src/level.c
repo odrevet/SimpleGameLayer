@@ -25,7 +25,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
 
   // tileset
   fscanf(fp, "%s", buffer);
-  if (*current_path_tileset == NULL || strcmp(buffer, current_path_tileset) != 0)
+  if (*current_path_tileset == NULL || strcmp(buffer, *current_path_tileset) != 0)
   {
     free(*current_path_tileset);
     *current_path_tileset = calloc(strlen(buffer) + 1, sizeof(char));
