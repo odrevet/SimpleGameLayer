@@ -20,7 +20,6 @@ typedef struct t_tileset
    int tile_height;
    int tile_width;
    bool have_loop;
-   bool one_loop;
    bool is_paused;
 } tileset;
 

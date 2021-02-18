@@ -14,7 +14,6 @@ typedef struct t_tile
   int id;
   int x;
   int y;
-  animation *p_animation;
 } tile;
 
 typedef struct t_camera
@@ -33,6 +32,7 @@ typedef struct t_tilemap
   int tile_width;
   int tile_height;
   tile ***p_tiles;
+  //animation *v_animation;
 } tilemap;
 
 void map_init(tilemap *p_map);
