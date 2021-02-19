@@ -10,22 +10,23 @@ void sprite_init(sprite *p_sprite,
 {
   p_sprite->x = x;
   p_sprite->y = y;
-  tileset_init(p_sprite->p_tileset, frame_nb_x, frame_nb_y, animation_current, animation_nb);
+  p_sprite->animation_current = animation_current;
+  tileset_init(p_sprite->p_tileset, frame_nb_x, frame_nb_y, animation_nb);
 }
 
 void sprite_draw(sprite *p_sprite, SDL_Renderer *renderer)
 {
-  tileset_draw(p_sprite->p_tileset, renderer, p_sprite->x, p_sprite->y);
+  tileset_draw(p_sprite->p_tileset, renderer, p_sprite->x, p_sprite->y, p_sprite->animation_current);
 }
 
 void sprite_draw_with_offset(sprite *p_sprite, SDL_Renderer *renderer, int offset_x, int offset_y)
 {
-  tileset_draw(p_sprite->p_tileset, renderer, p_sprite->x - offset_x, p_sprite->y - offset_y);
+  tileset_draw(p_sprite->p_tileset, renderer, p_sprite->x - offset_x, p_sprite->y - offset_y, p_sprite->animation_current);
 }
 
 void sprite_update_frame(sprite *p_sprite)
 {
-  tileset_update_frame(p_sprite->p_tileset);
+  tileset_update_frame(p_sprite->p_tileset, p_sprite->animation_current);
 }
 
 int sprite_get_height(sprite *p_sprite)
@@ -36,11 +37,6 @@ int sprite_get_height(sprite *p_sprite)
 int sprite_get_width(sprite *p_sprite)
 {
   return tileset_get_width(p_sprite->p_tileset);
-}
-
-animation *sprite_get_current_animation(sprite *p_sprite)
-{
-  return tileset_get_current_animation(p_sprite->p_tileset);
 }
 
 bool sprite_intersect(const sprite *p_sprite_a, const sprite *p_sprite_b)

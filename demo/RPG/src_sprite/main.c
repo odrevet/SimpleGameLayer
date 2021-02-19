@@ -71,13 +71,14 @@ int main(int argc, char **argv)
   tileset o_tileset;
   o_tileset.p_image = malloc(sizeof(image));
   image_load(o_tileset.p_image, "gfx/NPC_test.png", renderer, NULL);
-  tileset_init(&o_tileset, 4, 1, 0, 4);
+  tileset_init(&o_tileset, 4, 1, 4);
 
   sprite o_sprite;
   o_sprite.x = SCREEN_WIDTH / 2;
   o_sprite.y = SCREEN_HEIGHT / 2;
   o_sprite.vel_x = 0;
   o_sprite.vel_y = 0;
+  o_sprite.animation_current = DOWN;
   o_sprite.p_tileset = &o_tileset;
 
   o_game.p_sprite = &o_sprite;
@@ -148,25 +149,25 @@ game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 
     if (state[SDL_SCANCODE_LEFT])
     {
-      p_game->p_sprite->p_tileset->animation_current = LEFT;
+      p_game->p_sprite->animation_current = LEFT;
       p_game->p_sprite->vel_y = 0;
       p_game->p_sprite->vel_x = -1;
     }
     else if (state[SDL_SCANCODE_RIGHT])
     {
-      p_game->p_sprite->p_tileset->animation_current = RIGHT;
+      p_game->p_sprite->animation_current = RIGHT;
       p_game->p_sprite->vel_y = 0;
       p_game->p_sprite->vel_x = 1;
     }
     else if (state[SDL_SCANCODE_UP])
     {
-      p_game->p_sprite->p_tileset->animation_current = UP;
+      p_game->p_sprite->animation_current = UP;
       p_game->p_sprite->vel_y = -1;
       p_game->p_sprite->vel_x = 0;
     }
     else if (state[SDL_SCANCODE_DOWN])
     {
-      p_game->p_sprite->p_tileset->animation_current = DOWN;
+      p_game->p_sprite->animation_current = DOWN;
       p_game->p_sprite->vel_y = 1;
       p_game->p_sprite->vel_x = 0;
     }

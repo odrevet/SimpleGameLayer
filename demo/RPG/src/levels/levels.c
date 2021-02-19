@@ -17,7 +17,7 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   level_load(p_game->p_level, "data/overworld.map", &p_game->path_tileset, &p_game->path_music, renderer);
 
   // NPCs
-  int NPC_count = 1;
+  int NPC_count = 2;
   NPC *p_NPC = calloc(NPC_count, sizeof(NPC));
   p_game->p_level->NPC_count = NPC_count;
   p_game->p_level->p_NPC = p_NPC;
@@ -27,12 +27,16 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
     NPC_init(p_NPC + NPC_index, p_game->p_tileset_NPC, renderer);
   }
 
-  char *text = "HELLO !";
-  p_NPC[0].p_on_action_param = calloc(strlen(text) + 1, sizeof(char));
-  strcpy(p_NPC[0].p_on_action_param, text);
+  p_NPC[0].p_on_action_param = "WELCOME TO THE RPG DEMO!\nHAVE FUN!";
   p_NPC[0].p_on_action_callback = NPC_show_dialog_on_action;
   p_NPC[0].p_sprite->x = 5 * p_game->p_level->p_map->tile_width;
   p_NPC[0].p_sprite->y = 4 * p_game->p_level->p_map->tile_height;
+
+  p_NPC[1].p_on_action_param = "I LIKE TO LOOK AT THE WATER";
+  p_NPC[1].p_on_action_callback = NPC_show_dialog_on_action;
+  p_NPC[1].p_sprite->x = 15 * p_game->p_level->p_map->tile_width;
+  p_NPC[1].p_sprite->y = 10 * p_game->p_level->p_map->tile_height;
+  p_NPC[1].p_sprite->animation_current = LEFT;
 
   // events
   const int event_count = 3;

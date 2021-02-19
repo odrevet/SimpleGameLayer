@@ -9,6 +9,7 @@ typedef struct t_sprite
 {
    float x, y;
    float vel_x, vel_y;
+   int animation_current;
    SDL_Rect bounding_box;
    tileset *p_tileset;
 } sprite;
@@ -44,8 +45,6 @@ int sprite_get_height(sprite *p_sprite);
    @note charset width / frame_nb_x
 */
 int sprite_get_width(sprite *p_sprite);
-
-animation *sprite_get_current_animation(sprite *p_sprite);
 
 bool sprite_intersect(const sprite *p_sprite_a, const sprite *p_sprite_b);
 

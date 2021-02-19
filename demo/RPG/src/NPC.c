@@ -6,6 +6,7 @@ void NPC_init(NPC *p_NPC, tileset *p_tileset_NPC, SDL_Renderer *renderer)
     p_sprite->vel_x = 0;
     p_sprite->vel_y = 0;
     p_sprite->p_tileset = p_tileset_NPC;
+    p_sprite->animation_current = DOWN;
     p_NPC->p_sprite = p_sprite;
     p_NPC->p_on_action_param = NULL;
 }
