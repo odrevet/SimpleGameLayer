@@ -1,11 +1,5 @@
 #include "levels.h"
 
-void NPC_show_dialog_on_action(NPC *p_NPC, game *p_game, SDL_Renderer *renderer)
-{
-  char *text = p_NPC->p_on_action_param;
-  dialog_box_show(p_game, text, renderer);
-}
-
 // OVERWORLD
 void level_overworld_event_callback(game *p_game, SDL_Renderer *renderer)
 {
@@ -15,28 +9,6 @@ void level_overworld_event_callback(game *p_game, SDL_Renderer *renderer)
 void level_overworld(game *p_game, SDL_Renderer *renderer)
 {
   level_load(p_game->p_level, "data/overworld.map", &p_game->path_tileset, &p_game->path_music, renderer);
-
-  // NPCs
-  int NPC_count = 2;
-  NPC *p_NPC = calloc(NPC_count, sizeof(NPC));
-  p_game->p_level->NPC_count = NPC_count;
-  p_game->p_level->p_NPC = p_NPC;
-
-  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count; NPC_index++)
-  {
-    NPC_init(p_NPC + NPC_index, p_game->p_tileset_NPC, renderer);
-  }
-
-  p_NPC[0].p_on_action_param = "WELCOME TO THE RPG DEMO!\nHAVE FUN!";
-  p_NPC[0].p_on_action_callback = NPC_show_dialog_on_action;
-  p_NPC[0].p_sprite->x = 5 * p_game->p_level->p_map->tile_width;
-  p_NPC[0].p_sprite->y = 4 * p_game->p_level->p_map->tile_height;
-
-  p_NPC[1].p_on_action_param = "I LIKE TO LOOK AT THE WATER";
-  p_NPC[1].p_on_action_callback = NPC_show_dialog_on_action;
-  p_NPC[1].p_sprite->x = 15 * p_game->p_level->p_map->tile_width;
-  p_NPC[1].p_sprite->y = 10 * p_game->p_level->p_map->tile_height;
-  p_NPC[1].p_sprite->animation_current = LEFT;
 
   // events
   const int event_count = 3;
@@ -69,6 +41,26 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 
   p_game->p_level->event_count = event_count;
   p_game->p_level->p_event = p_event;
+
+  // NPCs
+  int NPC_count = 2;
+  NPC *p_NPC = calloc(NPC_count, sizeof(NPC));
+  p_game->p_level->NPC_count = NPC_count;
+  p_game->p_level->p_NPC = p_NPC;
+
+  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count; NPC_index++)
+  {
+    NPC_init(p_NPC + NPC_index, p_game->p_tileset_NPC, renderer);
+  }
+
+  p_NPC[0].p_event = p_event;
+  p_NPC[0].p_sprite->x = 5 * p_game->p_level->p_map->tile_width;
+  p_NPC[0].p_sprite->y = 4 * p_game->p_level->p_map->tile_height;
+
+  p_NPC[1].p_event = p_event + 1;
+  p_NPC[1].p_sprite->x = 15 * p_game->p_level->p_map->tile_width;
+  p_NPC[1].p_sprite->y = 10 * p_game->p_level->p_map->tile_height;
+  p_NPC[1].p_sprite->animation_current = LEFT;
 }
 
 // CAVE

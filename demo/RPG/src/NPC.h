@@ -11,14 +11,14 @@
 // forward declaration
 typedef struct t_NPC NPC;
 typedef struct t_game game;
+typedef struct t_event event;
 
 typedef void (*on_action)(NPC *, game *, SDL_Renderer *);
 
 typedef struct t_NPC
 {
     sprite *p_sprite;
-    on_action p_on_action_callback;
-    void *p_on_action_param;
+    event *p_event;
 } NPC;
 
 void NPC_init(NPC *p_NPC, tileset *p_tileset_NPC, SDL_Renderer *renderer);

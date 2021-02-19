@@ -37,6 +37,8 @@ typedef struct t_event
     void *p_param;
 } event;
 
+void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+
 void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 
 void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);

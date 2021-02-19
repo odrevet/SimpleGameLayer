@@ -1,5 +1,28 @@
 #include "event.h"
 
+void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
+{
+  p_event->has_triggered = true;
+  switch (p_event->o_event_type)
+  {
+  case EVENT_TYPE_FUNCTION:
+  {
+    event_callback p_event_callback = (event_callback)p_event->p_param;
+    p_event_callback(p_game, renderer);
+  }
+  break;
+  case EVENT_TYPE_TEXT:
+    event_text_exec(p_event, p_game, renderer);
+    break;
+  case EVENT_TYPE_WARP:
+    event_warp_exec(p_event, p_game, renderer);
+    break;
+
+  default:
+    break;
+  }
+}
+
 void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 {
   dialog_box_show(p_game, (char *)p_event->p_param, renderer);

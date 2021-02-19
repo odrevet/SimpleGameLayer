@@ -182,25 +182,8 @@ void game_check_auto_event(game *p_game, int hero_current_tile_index_x,
         p_event->o_event_trigger == ON_TILE_ENTER &&
         !p_event->has_triggered)
     {
-      p_event->has_triggered = true;
-      switch (p_event->o_event_type)
-      {
-      case EVENT_TYPE_FUNCTION:
-      {
-        event_callback p_event_callback = (event_callback)p_event->p_param;
-        p_event_callback(p_game, renderer);
-      }
+      event_exec(p_event, p_game, renderer);
       break;
-      case EVENT_TYPE_TEXT:
-        event_text_exec(p_event, p_game, renderer);
-        break;
-      case EVENT_TYPE_WARP:
-        event_warp_exec(p_event, p_game, renderer);
-        break;
-
-      default:
-        break;
-      }
     }
   }
 }
@@ -235,9 +218,9 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
     {
       NPC *p_NPC = p_game->p_level->p_NPC + index_NPC;
       SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
-      if (SDL_PointInRect(&hero_front, &p_NPC->p_sprite->bounding_box) && p_NPC->p_on_action_callback)
+      if (SDL_PointInRect(&hero_front, &p_NPC->p_sprite->bounding_box) && p_NPC->p_event)
       {
-        p_NPC->p_on_action_callback(p_NPC, p_game, renderer);
+        event_exec(p_NPC->p_event, p_game, renderer);
         break;
       }
     }
