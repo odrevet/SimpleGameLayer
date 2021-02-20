@@ -44,7 +44,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
 
   // music
   fscanf(fp, "%s", buffer);
-  if (*current_path_music == NULL || strcmp(buffer, *current_path_music))
+  if (*current_path_music == NULL || strcmp(buffer, *current_path_music) != 0)
   {
     free(*current_path_music);
     *current_path_music = calloc(strlen(buffer) + 1, sizeof(char));
