@@ -32,7 +32,6 @@ typedef struct t_tilemap
   int tile_width;
   int tile_height;
   tile ***p_tiles;
-  //animation *v_animation;
 } tilemap;
 
 void map_init(tilemap *p_map);
