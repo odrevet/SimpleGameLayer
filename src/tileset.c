@@ -29,19 +29,7 @@ void tileset_draw(tileset *p_tileset, SDL_Renderer *renderer, int x, int y, int 
 void tileset_update_frame(tileset *p_tileset, int animation_index)
 {
   animation *p_animation = p_tileset->v_animation + animation_index;
-  if ((p_animation->frame_delay >= 0) && (--p_animation->frame_trigger <= 0))
-  {
-    if (p_animation->frame_current + 1 >= p_animation->frame_nb)
-    {
-      p_animation->frame_current = 0;
-    }
-    else
-    {
-      p_animation->frame_current++;
-    }
-
-    p_animation->frame_trigger = p_animation->frame_delay;
-  }
+  animation_update(p_animation);
 }
 
 int tileset_get_height(tileset *p_tileset)
