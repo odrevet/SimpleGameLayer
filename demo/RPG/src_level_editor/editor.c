@@ -134,15 +134,6 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
             }
         }
 
-        //update tile animation
-        /*if (p_editor->nb_tile > 0)
-    {
-      for (int i = 0; i < p_editor->nb_tile; i++)
-      {
-        animation_update(p_editor->v_tile[i].p_animation);
-      }
-    }*/
-
         // render
         SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
         SDL_RenderClear(renderer);
