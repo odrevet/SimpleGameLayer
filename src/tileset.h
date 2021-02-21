@@ -18,8 +18,6 @@ typedef struct t_tileset
    int frame_nb_y;
    int tile_height;
    int tile_width;
-   bool have_loop;
-   bool is_paused;
 } tileset;
 
 void tileset_set_frame(tileset *p_tileset,

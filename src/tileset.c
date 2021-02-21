@@ -41,11 +41,6 @@ void tileset_update_frame(tileset *p_tileset, int animation_index)
     }
 
     p_animation->frame_trigger = p_animation->frame_delay;
-
-    if (!p_tileset->have_loop && p_animation->frame_current == 0)
-    {
-      p_tileset->is_paused = true;
-    }
   }
 }
 
