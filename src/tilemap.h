@@ -8,12 +8,13 @@
 
 #include "image.h"
 #include "animation.h"
-
+//#include "tileset.h"
 typedef struct t_tile
 {
   int id;
   int x;
   int y;
+  animation *p_animation;
 } tile;
 
 typedef struct t_camera
@@ -24,13 +25,17 @@ typedef struct t_camera
 
 typedef struct t_tilemap
 {
-  camera o_camera;
+
   image *p_image;
+  int tile_width;
+  int tile_height;
+  int nb_animation;
+  animation *v_animation;
+  //tileset *p_tileset;
   int width;
   int height;
   int nb_layer;
-  int tile_width;
-  int tile_height;
+  camera o_camera;
   tile ***p_tiles;
 } tilemap;
 

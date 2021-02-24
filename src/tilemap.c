@@ -7,6 +7,7 @@ void map_init(tilemap *p_map)
   p_map->nb_layer = 0;
   p_map->width = 0;
   p_map->height = 0;
+  p_map->v_animation = NULL;
 }
 
 void map_draw(tilemap *p_map, SDL_Renderer *renderer)
@@ -47,10 +48,19 @@ void map_draw_tile(tilemap *p_map,
                    SDL_Renderer *renderer)
 {
   SDL_Rect src;
-  src.x = p_tile->x * p_map->tile_width;
-  src.y = p_tile->y * p_map->tile_height;
-  src.w = p_map->tile_width;
-  src.h = p_map->tile_height;
+
+  if (p_tile->p_animation)
+  {
+    int frame_current = p_tile->p_animation->frame_current;
+    src = p_tile->p_animation->v_frame[frame_current];
+  }
+  else
+  {
+    src.x = p_tile->x * p_map->tile_width;
+    src.y = p_tile->y * p_map->tile_height;
+    src.w = p_map->tile_width;
+    src.h = p_map->tile_height;
+  }
 
   image_draw_part(p_map->p_image, renderer, x, y, &src);
 }
