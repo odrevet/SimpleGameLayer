@@ -84,11 +84,11 @@ int main(int argc, char **argv)
   map_init(&o_tilemap);
 
   level o_level;
-  level_init(&o_level);
-
+  
   image o_image_tilemap;
   o_game.p_level = &o_level;
   o_game.p_level->p_map = &o_tilemap;
+  level_init(&o_level); 
   o_game.p_level->p_map->p_image = &o_image_tilemap;
   o_game.path_music = NULL;
   o_game.path_tileset = NULL;

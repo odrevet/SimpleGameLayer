@@ -105,6 +105,13 @@ void game_center_camera_on_hero(game *p_game)
 
 void game_update(game *p_game)
 {
+  // map
+  for (int animation_index = 0; animation_index < p_game->p_level->p_map->nb_animation; animation_index++)
+  {
+    animation_update(p_game->p_level->p_map->v_animation + animation_index);
+  }
+
+  // hero
   sprite *p_hero_sprite = p_game->p_hero->p_sprite;
 
   if (p_hero_sprite->vel_x || p_hero_sprite->vel_y)
