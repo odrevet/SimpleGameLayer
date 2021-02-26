@@ -98,22 +98,22 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
         }
         else if (tile_idstr[0] == 'a')
         {
-          // animated tile
+          p_tile->is_animated = true;
           char *p_tile_idstr = tile_idstr;
           tile_index = atoi(++p_tile_idstr);
           p_tile->p_animation = p_level->p_map->v_animation + tile_index;
         }
         else
         {
+          p_tile->is_animated = false;
           tile_index = atoi(tile_idstr);
+          p_tile->o_frame.x = tile_index % (p_map->p_image->width / p_map->tile_width) * p_map->tile_width;
+          p_tile->o_frame.y = tile_index / (p_map->p_image->width / p_map->tile_width) * p_map->tile_height;
+          p_tile->o_frame.w = p_map->tile_width;
+          p_tile->o_frame.h = p_map->tile_height;
         }
 
-        
         p_tile->id = tile_index;
-        p_tile->o_frame.x = tile_index % (p_map->p_image->width / p_map->tile_width) * p_map->tile_width;
-        p_tile->o_frame.y = tile_index / (p_map->p_image->width / p_map->tile_width) * p_map->tile_height;
-        p_tile->o_frame.w = p_map->tile_width;
-        p_tile->o_frame.h = p_map->tile_height;
 
         // tile property
         tile_property *p_tile_property = p_level->p_tile_properties[index_layer][index_height] + index_width;

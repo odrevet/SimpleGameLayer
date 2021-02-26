@@ -49,7 +49,7 @@ void map_draw_tile(tilemap *p_map,
 {
   SDL_Rect src;
 
-  if (p_tile->p_animation)
+  if (p_tile->is_animated)
   {
     int frame_current = p_tile->p_animation->frame_current;
     src = p_tile->p_animation->v_frame[frame_current];

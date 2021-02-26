@@ -13,10 +13,10 @@ typedef struct t_tile
 {
   int id;
   bool is_animated;
-  SDL_Rect o_frame;
-  //int x;
-  //int y;
-  animation *p_animation;
+  union{
+    SDL_Rect o_frame;
+    animation *p_animation;
+  };
 } tile;
 
 typedef struct t_tilemap
