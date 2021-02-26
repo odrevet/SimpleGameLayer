@@ -31,7 +31,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     done = true;
                     break;
                 case SDLK_s:
-                    level_save(p_editor->p_level, p_editor->path_level);
+                    level_save(p_editor->p_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
                     break;
                 case SDLK_t:
                     editor_tile_selection(p_editor, renderer);
@@ -119,6 +119,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = p_editor->tileset_selected_index;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].x = p_editor->tileset_selected_index % tileset_nb_tile_x;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].y = p_editor->tileset_selected_index / tileset_nb_tile_x;
+                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].p_animation = NULL;
                     break;
                 case SDLK_BACKSPACE:
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = -1;
@@ -132,6 +133,12 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
             case SDL_MOUSEBUTTONDOWN:
                 break;
             }
+        }
+
+        //update animated tile
+        for (int animation_index = 0; animation_index < p_map->nb_animation; animation_index++)
+        {
+            animation_update(p_map->v_animation + animation_index);
         }
 
         // render
@@ -194,7 +201,7 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                     done = true;
                     break;
                 case SDLK_s:
-                    level_save(p_editor->p_level, p_editor->path_level);
+                    level_save(p_editor->p_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
                     break;
                 case SDLK_LEFT:
                     if (p_editor->tileset_selected_index > 0 && p_editor->tileset_selected_index % tileset_nb_tile_x != 0)

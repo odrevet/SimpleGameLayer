@@ -85,20 +85,30 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
     {
       for (int index_width = 0; index_width < p_map->width; index_width++)
       {
+        tile *p_tile = p_map->p_tiles[index_layer][index_height] + index_width;
+
         int tile_index;
         char tile_idstr[8];
         fscanf(fp, "%s", tile_idstr);
 
         if (strcmp(tile_idstr, "_") == 0)
         {
+          // blank tile
           tile_index = -1;
+        }
+        else if (tile_idstr[0] == 'a')
+        {
+          // animated tile
+          char *p_tile_idstr = tile_idstr;
+          tile_index = atoi(++p_tile_idstr);
+          p_tile->p_animation = p_level->p_map->v_animation + tile_index;
         }
         else
         {
           tile_index = atoi(tile_idstr);
         }
 
-        tile *p_tile = p_map->p_tiles[index_layer][index_height] + index_width;
+        
         p_tile->id = tile_index;
         p_tile->x = tile_index % (p_map->p_image->width / p_map->tile_width);
         p_tile->y = tile_index / (p_map->p_image->width / p_map->tile_width);
@@ -120,13 +130,6 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   }
 
   fclose(fp);
-
-  // hard code a test animated tile
-  if (p_level->p_map->v_animation)
-  {
-
-    p_level->p_map->p_tiles[0][0][0].p_animation = p_level->p_map->v_animation + 0;
-  }
 
   return true;
 }

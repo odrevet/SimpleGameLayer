@@ -11,6 +11,7 @@ $(SGLDIR)/image.c \
 $(SGLDIR)/tilemap.c \
 $(SGLDIR)/animation.c \
 $(SGLDIR)/tileset.c \
+$(SGLDIR)/sound.c \
 $(foreach DIR,$(SOURCEDIR),$(wildcard $(DIR)/*.c)) \
 src/level.c \
 src/NPC.c

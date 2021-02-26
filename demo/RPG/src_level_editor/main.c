@@ -76,9 +76,9 @@ int main(int argc, char **argv)
 
   image o_image;
   level o_level;
-  level_init(&o_level);
   o_editor.p_level = &o_level;
   o_editor.p_level->p_map = &o_tilemap;
+  level_init(&o_level);
   o_editor.p_level->p_map->p_image = &o_image;
   o_editor.tileset_selected_index = 0;
   o_editor.layer = 0;
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
     if (strcmp(extension, ".map") == 0)
     {
-      if (!level_load(o_editor.p_level, level_load_path, renderer))
+      if (!level_load(o_editor.p_level, level_load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
       {
         printf("Cannot find map at %s\n", level_load_path);
         printf("Create it y/n ? \n");
@@ -129,14 +129,14 @@ int main(int argc, char **argv)
         scanf("%d", &p_level->p_map->height);
         printf("Tilset image (path) : \n");
         scanf("%s", path_tileset);
-        o_editor.p_level->path_tileset = calloc(strlen(path_tileset) + 1, sizeof(char));
-        strcpy(o_editor.p_level->path_tileset, path_tileset);
+        o_editor.path_tileset = calloc(strlen(path_tileset) + 1, sizeof(char));
+        strcpy(o_editor.path_tileset, path_tileset);
 
         map_tiles_alloc(p_level->p_map);
-        level_save(p_level, level_load_path);
+        level_save(p_level, level_load_path, o_editor.path_tileset, o_editor.path_music);
 
         // load the tileset image so the level is editable without having to reload from file
-        image_load(o_editor.p_level->p_map->p_image, o_editor.p_level->path_tileset, renderer, NULL);
+        image_load(o_editor.p_level->p_map->p_image, o_editor.path_tileset, renderer, NULL);
       }
     }
 

@@ -1,6 +1,6 @@
 #include "level_util.h"
 
-bool level_save(level *p_level, const char *pathfile)
+bool level_save(level *p_level, const char *pathfile, char *path_tileset, char *path_music)
 {
     FILE *fp = fopen(pathfile, "w");
     if (!fp)
@@ -11,9 +11,9 @@ bool level_save(level *p_level, const char *pathfile)
 
     tilemap *p_map = p_level->p_map;
 
-    fprintf(fp, "%s\n", p_level->path_tileset);
+    fprintf(fp, "%s\n", path_tileset);
     fprintf(fp, "%s\n", p_level->path_tile_property);
-    fprintf(fp, "%s\n", p_level->path_music);
+    fprintf(fp, "%s\n", path_music);
     fprintf(fp, "%d:%d\n", p_map->tile_width, p_map->tile_height);
     fprintf(fp, "%d:%d:%d\n", p_map->width, p_map->height, p_map->nb_layer);
 
@@ -24,7 +24,18 @@ bool level_save(level *p_level, const char *pathfile)
             for (int index_x = 0; index_x < p_map->width; index_x++)
             {
                 tile o_tile = p_map->p_tiles[index_layer][index_y][index_x];
-                fprintf(fp, "%d ", o_tile.id);
+                if (o_tile.p_animation)
+                {
+                    fprintf(fp, "a%d ", o_tile.id);
+                }
+                else if (o_tile.id == -1)
+                {
+                    fprintf(fp, "%c ", '_');
+                }
+                else
+                {
+                    fprintf(fp, "%d ", o_tile.id);
+                }
             }
             fprintf(fp, "\n");
         }
