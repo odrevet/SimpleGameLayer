@@ -17,12 +17,6 @@ typedef struct t_tile
   animation *p_animation;
 } tile;
 
-typedef struct t_camera
-{
-  int x;
-  int y;
-} camera;
-
 typedef struct t_tilemap
 {
 
@@ -35,7 +29,7 @@ typedef struct t_tilemap
   int width;
   int height;
   int nb_layer;
-  camera o_camera;
+  SDL_Point o_camera;
   tile ***p_tiles;
 } tilemap;
 
