@@ -56,10 +56,7 @@ void map_draw_tile(tilemap *p_map,
   }
   else
   {
-    src.x = p_tile->x * p_map->tile_width;
-    src.y = p_tile->y * p_map->tile_height;
-    src.w = p_map->tile_width;
-    src.h = p_map->tile_height;
+    src = p_tile->o_frame;
   }
 
   image_draw_part(p_map->p_image, renderer, x, y, &src);

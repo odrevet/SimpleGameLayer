@@ -12,8 +12,10 @@
 typedef struct t_tile
 {
   int id;
-  int x;
-  int y;
+  bool is_animated;
+  SDL_Rect o_frame;
+  //int x;
+  //int y;
   animation *p_animation;
 } tile;
 

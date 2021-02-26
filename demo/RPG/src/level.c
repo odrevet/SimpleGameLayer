@@ -110,8 +110,10 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
 
         
         p_tile->id = tile_index;
-        p_tile->x = tile_index % (p_map->p_image->width / p_map->tile_width);
-        p_tile->y = tile_index / (p_map->p_image->width / p_map->tile_width);
+        p_tile->o_frame.x = tile_index % (p_map->p_image->width / p_map->tile_width) * p_map->tile_width;
+        p_tile->o_frame.y = tile_index / (p_map->p_image->width / p_map->tile_width) * p_map->tile_height;
+        p_tile->o_frame.w = p_map->tile_width;
+        p_tile->o_frame.h = p_map->tile_height;
 
         // tile property
         tile_property *p_tile_property = p_level->p_tile_properties[index_layer][index_height] + index_width;
