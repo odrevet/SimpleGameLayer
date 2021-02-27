@@ -31,8 +31,8 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
     free(*current_path_tileset);
     *current_path_tileset = calloc(strlen(buffer) + 1, sizeof(char));
     strcpy(*current_path_tileset, buffer);
-    image_free(p_map->p_image);
-    image_load(p_map->p_image, *current_path_tileset, renderer, NULL);
+    image_free(p_map->p_tileset->p_image);
+    image_load(p_map->p_tileset->p_image, *current_path_tileset, renderer, NULL);
   }
 
   // tile properties
@@ -107,8 +107,8 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
         {
           p_tile->is_animated = false;
           tile_index = atoi(tile_idstr);
-          p_tile->o_frame.x = tile_index % (p_map->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_width;
-          p_tile->o_frame.y = tile_index / (p_map->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_height;
+          p_tile->o_frame.x = tile_index % (p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_width;
+          p_tile->o_frame.y = tile_index / (p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_height;
           p_tile->o_frame.w = p_map->p_tileset->tile_width;
           p_tile->o_frame.h = p_map->p_tileset->tile_height;
         }
@@ -167,8 +167,8 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
         int tile_index;
         fscanf(fp, "%d", &tile_index);
 
-        int x = tile_index % (p_level->p_map->p_image->width / 16 /*p_map->tile_width*/); //TODO parse width before tile
-        int y = tile_index / (p_level->p_map->p_image->width / 16 /*p_map->tile_width*/);
+        int x = tile_index % (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->tile_width*/); //TODO parse width before tile
+        int y = tile_index / (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->tile_width*/);
         animation_set_frame(p_level->p_map->p_tileset->v_animation[index_tile].v_frame + index_frame, x * 16, y * 16, 16, 16);
       }
     }

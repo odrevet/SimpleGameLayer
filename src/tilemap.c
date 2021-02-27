@@ -59,7 +59,7 @@ void map_draw_tile(tilemap *p_map,
     src = p_tile->o_frame;
   }
 
-  image_draw_part(p_map->p_image, renderer, x, y, &src);
+  image_draw_part(p_map->p_tileset->p_image, renderer, x, y, &src);
 }
 
 void map_tiles_alloc(tilemap *p_map)
