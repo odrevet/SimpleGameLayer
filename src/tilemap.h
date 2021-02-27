@@ -24,9 +24,6 @@ typedef struct t_tilemap
 {
 
   image *p_image;
-  int tile_width;
-  int tile_height;
-  //int nb_animation; 
   tileset *p_tileset;
 
   int width;

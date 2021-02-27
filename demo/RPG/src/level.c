@@ -58,7 +58,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   fgetc(fp);
 
   // map tile size
-  fscanf(fp, "%d:%d", &p_map->tile_width, &p_map->tile_height);
+  fscanf(fp, "%d:%d", &p_map->p_tileset->tile_width, &p_map->p_tileset->tile_height);
 
   // map width height and nb of layers
   fscanf(fp, "%d:%d:%d", &p_map->width, &p_map->height, &p_map->nb_layer);
@@ -107,10 +107,10 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
         {
           p_tile->is_animated = false;
           tile_index = atoi(tile_idstr);
-          p_tile->o_frame.x = tile_index % (p_map->p_image->width / p_map->tile_width) * p_map->tile_width;
-          p_tile->o_frame.y = tile_index / (p_map->p_image->width / p_map->tile_width) * p_map->tile_height;
-          p_tile->o_frame.w = p_map->tile_width;
-          p_tile->o_frame.h = p_map->tile_height;
+          p_tile->o_frame.x = tile_index % (p_map->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_width;
+          p_tile->o_frame.y = tile_index / (p_map->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_height;
+          p_tile->o_frame.w = p_map->p_tileset->tile_width;
+          p_tile->o_frame.h = p_map->p_tileset->tile_height;
         }
 
         p_tile->id = tile_index;

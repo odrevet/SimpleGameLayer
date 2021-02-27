@@ -63,8 +63,8 @@ bool game_check_NPC_collid(game *p_game)
 
 bool game_check_tile_walkable(tile_property ***p_tile_properties, tilemap *p_map, int x, int y, int z)
 {
-  int index_x = x / p_map->tile_width;
-  int index_y = y / p_map->tile_height;
+  int index_x = x / p_map->p_tileset->tile_width;
+  int index_y = y / p_map->p_tileset->tile_height;
 
   // check boundaries
   if (x < 0 || y < 0 || index_x < 0 || index_y < 0 || index_x >= p_map->width || index_y >= p_map->height)
@@ -87,8 +87,8 @@ void game_center_camera_on_hero(game *p_game)
   else
   {
     p_map->o_camera.y = p_hero->p_sprite->y - (SCREEN_HEIGHT / 2);
-    if (p_map->o_camera.y > p_map->height * p_map->tile_height - SCREEN_HEIGHT)
-      p_map->o_camera.y = p_map->height * p_map->tile_height - SCREEN_HEIGHT;
+    if (p_map->o_camera.y > p_map->height * p_map->p_tileset->tile_height - SCREEN_HEIGHT)
+      p_map->o_camera.y = p_map->height * p_map->p_tileset->tile_height - SCREEN_HEIGHT;
   }
 
   if (p_hero->p_sprite->x < SCREEN_WIDTH / 2)
@@ -98,8 +98,8 @@ void game_center_camera_on_hero(game *p_game)
   else
   {
     p_map->o_camera.x = p_hero->p_sprite->x - (SCREEN_WIDTH / 2);
-    if (p_map->o_camera.x > p_map->width * p_map->tile_width - SCREEN_WIDTH)
-      p_map->o_camera.x = p_map->width * p_map->tile_width - SCREEN_WIDTH;
+    if (p_map->o_camera.x > p_map->width * p_map->p_tileset->tile_width - SCREEN_WIDTH)
+      p_map->o_camera.x = p_map->width * p_map->p_tileset->tile_width - SCREEN_WIDTH;
   }
 }
 

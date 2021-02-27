@@ -211,8 +211,8 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
     break;
   }
 
-  if (hero_front_x >= 0 && hero_front_x < p_game->p_level->p_map->width * p_game->p_level->p_map->tile_width &&
-      hero_front_y >= 0 && hero_front_y < p_game->p_level->p_map->height * p_game->p_level->p_map->tile_height)
+  if (hero_front_x >= 0 && hero_front_x < p_game->p_level->p_map->width * p_game->p_level->p_map->p_tileset->tile_width &&
+      hero_front_y >= 0 && hero_front_y < p_game->p_level->p_map->height * p_game->p_level->p_map->p_tileset->tile_height)
   {
     for (int index_NPC = 0; index_NPC < p_game->p_level->NPC_count;
          index_NPC++)
@@ -242,8 +242,8 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
                         p_game->p_hero->p_sprite->bounding_box.w / 2;
     int hero_center_y = p_game->p_hero->p_sprite->bounding_box.y +
                         p_game->p_hero->p_sprite->bounding_box.h / 2;
-    int hero_current_tile_index_x = hero_center_x / p_map->tile_width;
-    int hero_current_tile_index_y = hero_center_y / p_map->tile_height;
+    int hero_current_tile_index_x = hero_center_x / p_map->p_tileset->tile_width;
+    int hero_current_tile_index_y = hero_center_y / p_map->p_tileset->tile_height;
 
     // input
     SDL_Event event;
