@@ -81,6 +81,7 @@ int main(int argc, char **argv)
   game o_game;
 
   tilemap o_tilemap;
+  o_tilemap.p_tileset = malloc(sizeof(tileset));
   map_init(&o_tilemap);
 
   level o_level;
