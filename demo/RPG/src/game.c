@@ -106,7 +106,7 @@ void game_center_camera_on_hero(game *p_game)
 void game_update(game *p_game)
 {
   // update map animations
-  for (int animation_index = 0; animation_index < p_game->p_level->p_map->nb_animation; animation_index++)
+  for (int animation_index = 0; animation_index < p_game->p_level->p_map->p_tileset->animation_nb; animation_index++)
   {
     animation_update(p_game->p_level->p_map->p_tileset->v_animation + animation_index);
   }

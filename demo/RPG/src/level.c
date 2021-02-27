@@ -152,7 +152,7 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
   // line break
   fgetc(fp);
 
-  p_level->p_map->nb_animation = nb_tile_animated;
+  p_level->p_map->p_tileset->animation_nb = nb_tile_animated;
 
   if (nb_tile_animated > 0)
   {
