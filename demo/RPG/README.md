@@ -48,6 +48,12 @@ Controles:
 
 Load and animate NPCs
 
+
+# UML diagram
+
+![Alt text](doc/uml_class_diagram.png?raw=true "UML Diagram")
+
+
 # Credits
 
 ## Graphics
