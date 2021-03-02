@@ -52,6 +52,10 @@ A readme file is present under each directory to explain details.
 
 Each demo can be exited by pressing the `q` key.
 
+# UML diagram
+
+![Alt text](doc/uml_class_diagram.png?raw=true "UML Diagram")
+
 # License
 
  MIT license
