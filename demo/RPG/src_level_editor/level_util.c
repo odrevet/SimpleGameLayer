@@ -24,7 +24,7 @@ bool level_save(level *p_level, const char *pathfile, char *path_tileset, char *
             for (int index_x = 0; index_x < p_map->width; index_x++)
             {
                 tile o_tile = p_map->p_tiles[index_layer][index_y][index_x];
-                if (o_tile.p_animation)
+                if (o_tile.is_animated)
                 {
                     fprintf(fp, "a%d ", o_tile.id);
                 }
