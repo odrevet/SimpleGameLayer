@@ -167,8 +167,8 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
         int tile_index;
         fscanf(fp, "%d", &tile_index);
 
-        int x = tile_index % (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->tile_width*/); //TODO parse width before tile
-        int y = tile_index / (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->tile_width*/);
+        int x = tile_index % (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/); //TODO parse width before tile
+        int y = tile_index / (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/);
         animation_set_frame(p_level->p_map->p_tileset->v_animation[index_tile].v_frame + index_frame, x * 16, y * 16, 16, 16);
       }
     }
