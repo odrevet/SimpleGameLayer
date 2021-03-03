@@ -16,6 +16,9 @@ typedef struct t_animation
     SDL_Rect *v_frame; // rect of each frames
 } animation;
 
+/*
+    Allocate `frame_nb` frames which must be freed with `animation_free`
+*/
 void animation_init(animation *p_animation,
                     bool have_loop,
                     int frame_nb,
