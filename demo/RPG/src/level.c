@@ -2,9 +2,9 @@
 
 void level_init(level *p_level)
 {
-  //p_level->path_tile_property = NULL;
-  //p_level->p_music = NULL;
-  //p_level->p_tile_properties = NULL;
+  p_level->path_tile_property = NULL;
+  p_level->p_music = NULL;
+  p_level->p_tile_properties = NULL;
   p_level->p_event = NULL;
   p_level->event_count = 0;
   p_level->p_NPC = NULL;
@@ -28,8 +28,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   fscanf(fp, "%s", buffer);
   if (*current_path_tileset == NULL || strcmp(buffer, *current_path_tileset) != 0)
   {
-    free(*current_path_tileset);
-    *current_path_tileset = calloc(strlen(buffer) + 1, sizeof(char));
+    *current_path_tileset = realloc(*current_path_tileset, strlen(buffer) * sizeof(char));
     strcpy(*current_path_tileset, buffer);
     image_free(p_map->p_tileset->p_image);
     image_load(p_map->p_tileset->p_image, *current_path_tileset, renderer, NULL);
@@ -37,7 +36,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
 
   // tile properties
   fscanf(fp, "%s", buffer);
-  p_level->path_tile_property = calloc(strlen(buffer) + 1, sizeof(char));
+  p_level->path_tile_property = realloc(p_level->path_tile_property, strlen(buffer) * sizeof(char));
   strcpy(p_level->path_tile_property, buffer);
   tile_property *v_tile_property = NULL;
   int nb_tile_property;
@@ -47,8 +46,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   fscanf(fp, "%s", buffer);
   if (*current_path_music == NULL || strcmp(buffer, *current_path_music) != 0)
   {
-    free(*current_path_music);
-    *current_path_music = calloc(strlen(buffer) + 1, sizeof(char));
+    *current_path_music = realloc(*current_path_music , strlen(buffer) * sizeof(char));
     strcpy(*current_path_music, buffer);
     p_level->p_music = music_load(*current_path_music);
     music_play(p_level->p_music);
@@ -205,14 +203,14 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
 void level_free(level *p_level)
 {
   //free tiles properties
-  /*for (int index_layer = 0; index_layer < p_level->p_map->nb_layer; index_layer++)
+  for (int index_layer = 0; index_layer < p_level->p_map->nb_layer; index_layer++)
   {
     for (int index_height = 0; index_height < p_level->p_map->height; index_height++)
     {
       free(p_level->p_tile_properties[index_layer][index_height]);
     }
     free(p_level->p_tile_properties[index_layer]);
-  }*/
+  }
 
   //free(p_level->p_tile_properties);
   map_tiles_free(p_level->p_map);
@@ -223,5 +221,5 @@ void level_free(level *p_level)
   }
   free(p_level->p_NPC);
   free(p_level->p_event);
-  //free(p_level->path_tile_property);
+  free(p_level->path_tile_property);
 }
