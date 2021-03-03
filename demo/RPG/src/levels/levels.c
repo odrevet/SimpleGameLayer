@@ -8,7 +8,7 @@ void level_overworld_event_callback(game *p_game, SDL_Renderer *renderer)
 
 void level_overworld(game *p_game, SDL_Renderer *renderer)
 {
-  level_load(p_game->p_level, "data/overworld.map", &p_game->path_tileset, &p_game->path_music, renderer);
+  level_load(&p_game->o_level, "data/overworld.map", &p_game->path_tileset, &p_game->path_music, renderer);
 
   // events
   const int event_count = 3;
@@ -39,34 +39,34 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   p_event[2].index_src_x = 0;
   p_event[2].index_src_y = 5;
 
-  p_game->p_level->event_count = event_count;
-  p_game->p_level->p_event = p_event;
+  p_game->o_level.event_count = event_count;
+  p_game->o_level.p_event = p_event;
 
   // NPCs
   int NPC_count = 2;
   NPC *p_NPC = calloc(NPC_count, sizeof(NPC));
-  p_game->p_level->NPC_count = NPC_count;
-  p_game->p_level->p_NPC = p_NPC;
+  p_game->o_level.NPC_count = NPC_count;
+  p_game->o_level.p_NPC = p_NPC;
 
-  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count; NPC_index++)
+  for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count; NPC_index++)
   {
     NPC_init(p_NPC + NPC_index, p_game->p_tileset_NPC, renderer);
   }
 
   p_NPC[0].p_event = p_event;
-  p_NPC[0].p_sprite->x = 5 * p_game->p_level->p_map->p_tileset->tile_width;
-  p_NPC[0].p_sprite->y = 4 * p_game->p_level->p_map->p_tileset->tile_height;
+  p_NPC[0].p_sprite->x = 5 * p_game->o_level.p_map->p_tileset->tile_width;
+  p_NPC[0].p_sprite->y = 4 * p_game->o_level.p_map->p_tileset->tile_height;
 
   p_NPC[1].p_event = p_event + 1;
-  p_NPC[1].p_sprite->x = 15 * p_game->p_level->p_map->p_tileset->tile_width;
-  p_NPC[1].p_sprite->y = 10 * p_game->p_level->p_map->p_tileset->tile_height;
+  p_NPC[1].p_sprite->x = 15 * p_game->o_level.p_map->p_tileset->tile_width;
+  p_NPC[1].p_sprite->y = 10 * p_game->o_level.p_map->p_tileset->tile_height;
   p_NPC[1].p_sprite->animation_current = LEFT;
 }
 
 // CAVE
 void level_cave(game *p_game, SDL_Renderer *renderer)
 {
-  level_load(p_game->p_level, "data/cave.map", &p_game->path_tileset, &p_game->path_music, renderer);
+  level_load(&p_game->o_level, "data/cave.map", &p_game->path_tileset, &p_game->path_music, renderer);
 
   // Events
   const int event_count = 1;
@@ -82,6 +82,6 @@ void level_cave(game *p_game, SDL_Renderer *renderer)
   p_event[0].has_triggered = false;
   p_event[0].index_src_x = 3;
   p_event[0].index_src_y = 5;
-  p_game->p_level->event_count = event_count;
-  p_game->p_level->p_event = p_event;
+  p_game->o_level.event_count = event_count;
+  p_game->o_level.p_event = p_event;
 }

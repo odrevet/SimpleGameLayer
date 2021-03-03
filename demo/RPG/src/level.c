@@ -2,13 +2,13 @@
 
 void level_init(level *p_level)
 {
-  p_level->path_tile_property = NULL;
-  p_level->p_music = NULL;
+  //p_level->path_tile_property = NULL;
+  //p_level->p_music = NULL;
+  //p_level->p_tile_properties = NULL;
   p_level->p_event = NULL;
   p_level->event_count = 0;
   p_level->p_NPC = NULL;
   p_level->NPC_count = 0;
-  p_level->p_tile_properties = NULL;
   map_init(p_level->p_map);
 }
 
@@ -205,17 +205,16 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
 void level_free(level *p_level)
 {
   //free tiles properties
-  for (int index_layer = 0; index_layer < p_level->p_map->nb_layer; index_layer++)
+  /*for (int index_layer = 0; index_layer < p_level->p_map->nb_layer; index_layer++)
   {
     for (int index_height = 0; index_height < p_level->p_map->height; index_height++)
     {
       free(p_level->p_tile_properties[index_layer][index_height]);
     }
     free(p_level->p_tile_properties[index_layer]);
-  }
+  }*/
 
-  //TODO free map v_animation
-  free(p_level->p_tile_properties);
+  //free(p_level->p_tile_properties);
   map_tiles_free(p_level->p_map);
 
   for (int index_NPC = 0; index_NPC < p_level->NPC_count; index_NPC++)
@@ -224,5 +223,5 @@ void level_free(level *p_level)
   }
   free(p_level->p_NPC);
   free(p_level->p_event);
-  free(p_level->path_tile_property);
+  //free(p_level->path_tile_property);
 }

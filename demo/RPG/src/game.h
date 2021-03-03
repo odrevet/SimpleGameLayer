@@ -26,9 +26,9 @@ typedef void (*level_addr)(game *, SDL_Renderer *);
 
 typedef struct t_game
 {
-  level *p_level;
+  level o_level;
   level_addr p_level_function;
-  hero *p_hero;
+  hero o_hero;
   tileset *p_tileset_NPC;
   fontmap *p_fontmap;
   char *path_tileset;

@@ -83,14 +83,11 @@ int main(int argc, char **argv)
   tilemap o_tilemap;
   o_tilemap.p_tileset = malloc(sizeof(tileset));
   map_init(&o_tilemap);
-
-  level o_level;
   
   image o_image_tilemap;
-  o_game.p_level = &o_level;
-  o_game.p_level->p_map = &o_tilemap;
-  level_init(&o_level); 
-  o_game.p_level->p_map->p_tileset->p_image = &o_image_tilemap;
+  o_game.o_level.p_map = &o_tilemap;
+  level_init(&o_game.o_level); 
+  o_game.o_level.p_map->p_tileset->p_image = &o_image_tilemap;
   o_game.path_music = NULL;
   o_game.path_tileset = NULL;
 
@@ -127,9 +124,7 @@ int main(int argc, char **argv)
   o_game.p_tileset_NPC = &o_tileset_NPC;
 
   // hero
-  hero o_hero;
-  o_game.p_hero = &o_hero;
-  hero_init(o_game.p_hero, renderer);
+  hero_init(&o_game.o_hero, renderer);
 
   // fontmap
   fontmap o_fontmap;
@@ -160,7 +155,7 @@ int main(int argc, char **argv)
   }
 
   // free memory
-  level_free(o_game.p_level);
+  level_free(&o_game.o_level);
   Mix_CloseAudio();
 
   // free images
@@ -174,10 +169,10 @@ int main(int argc, char **argv)
 void game_check_auto_event(game *p_game, int hero_current_tile_index_x,
                            int hero_current_tile_index_y, SDL_Renderer *renderer)
 {
-  for (int index_event = 0; index_event < p_game->p_level->event_count;
+  for (int index_event = 0; index_event < p_game->o_level.event_count;
        index_event++)
   {
-    event *p_event = p_game->p_level->p_event + index_event;
+    event *p_event = p_game->o_level.p_event + index_event;
     if (p_event->index_src_x == hero_current_tile_index_x &&
         p_event->index_src_y == hero_current_tile_index_y &&
         p_event->o_event_trigger == ON_TILE_ENTER &&
@@ -195,7 +190,7 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
   int hero_front_x = hero_center_x;
   int hero_front_y = hero_center_y;
 
-  switch (p_game->p_hero->p_sprite->animation_current)
+  switch (p_game->o_hero.p_sprite->animation_current)
   {
   case UP:
     hero_front_y -= 8;
@@ -211,13 +206,13 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
     break;
   }
 
-  if (hero_front_x >= 0 && hero_front_x < p_game->p_level->p_map->width * p_game->p_level->p_map->p_tileset->tile_width &&
-      hero_front_y >= 0 && hero_front_y < p_game->p_level->p_map->height * p_game->p_level->p_map->p_tileset->tile_height)
+  if (hero_front_x >= 0 && hero_front_x < p_game->o_level.p_map->width * p_game->o_level.p_map->p_tileset->tile_width &&
+      hero_front_y >= 0 && hero_front_y < p_game->o_level.p_map->height * p_game->o_level.p_map->p_tileset->tile_height)
   {
-    for (int index_NPC = 0; index_NPC < p_game->p_level->NPC_count;
+    for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count;
          index_NPC++)
     {
-      NPC *p_NPC = p_game->p_level->p_NPC + index_NPC;
+      NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
       SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
       if (SDL_PointInRect(&hero_front, &p_NPC->p_sprite->bounding_box) && p_NPC->p_event)
       {
@@ -233,15 +228,15 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
   bool done = false;
 
   game_state ret_code = QUIT;
-  tilemap *p_map = p_game->p_level->p_map;
+  tilemap *p_map = p_game->o_level.p_map;
 
   while (!done)
   {
     // hero current tile
-    int hero_center_x = p_game->p_hero->p_sprite->bounding_box.x +
-                        p_game->p_hero->p_sprite->bounding_box.w / 2;
-    int hero_center_y = p_game->p_hero->p_sprite->bounding_box.y +
-                        p_game->p_hero->p_sprite->bounding_box.h / 2;
+    int hero_center_x = p_game->o_hero.p_sprite->bounding_box.x +
+                        p_game->o_hero.p_sprite->bounding_box.w / 2;
+    int hero_center_y = p_game->o_hero.p_sprite->bounding_box.y +
+                        p_game->o_hero.p_sprite->bounding_box.h / 2;
     int hero_current_tile_index_x = hero_center_x / p_map->p_tileset->tile_width;
     int hero_current_tile_index_y = hero_center_y / p_map->p_tileset->tile_height;
 
@@ -278,32 +273,32 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
 
     if (state[SDL_SCANCODE_LEFT])
     {
-      p_game->p_hero->p_sprite->animation_current = LEFT;
-      p_game->p_hero->p_sprite->vel_y = 0;
-      p_game->p_hero->p_sprite->vel_x = -1;
+      p_game->o_hero.p_sprite->animation_current = LEFT;
+      p_game->o_hero.p_sprite->vel_y = 0;
+      p_game->o_hero.p_sprite->vel_x = -1;
     }
     else if (state[SDL_SCANCODE_RIGHT])
     {
-      p_game->p_hero->p_sprite->animation_current = RIGHT;
-      p_game->p_hero->p_sprite->vel_y = 0;
-      p_game->p_hero->p_sprite->vel_x = 1;
+      p_game->o_hero.p_sprite->animation_current = RIGHT;
+      p_game->o_hero.p_sprite->vel_y = 0;
+      p_game->o_hero.p_sprite->vel_x = 1;
     }
     else if (state[SDL_SCANCODE_UP])
     {
-      p_game->p_hero->p_sprite->animation_current = UP;
-      p_game->p_hero->p_sprite->vel_y = -1;
-      p_game->p_hero->p_sprite->vel_x = 0;
+      p_game->o_hero.p_sprite->animation_current = UP;
+      p_game->o_hero.p_sprite->vel_y = -1;
+      p_game->o_hero.p_sprite->vel_x = 0;
     }
     else if (state[SDL_SCANCODE_DOWN])
     {
-      p_game->p_hero->p_sprite->animation_current = DOWN;
-      p_game->p_hero->p_sprite->vel_y = 1;
-      p_game->p_hero->p_sprite->vel_x = 0;
+      p_game->o_hero.p_sprite->animation_current = DOWN;
+      p_game->o_hero.p_sprite->vel_y = 1;
+      p_game->o_hero.p_sprite->vel_x = 0;
     }
     else
     {
-      p_game->p_hero->p_sprite->vel_x = 0;
-      p_game->p_hero->p_sprite->vel_y = 0;
+      p_game->o_hero.p_sprite->vel_x = 0;
+      p_game->o_hero.p_sprite->vel_y = 0;
     }
 
     // update logic

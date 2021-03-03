@@ -18,23 +18,23 @@ int compar_sprite_depth(const void *a, const void *b)
 
 void game_sort_sprites(game *p_game, int nb_sprites_to_draw, sprite **v_sprites_to_draw)
 {
-  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count; NPC_index++)
+  for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count; NPC_index++)
   {
-    v_sprites_to_draw[NPC_index] = p_game->p_level->p_NPC[NPC_index].p_sprite;
+    v_sprites_to_draw[NPC_index] = p_game->o_level.p_NPC[NPC_index].p_sprite;
   }
-  v_sprites_to_draw[nb_sprites_to_draw - 1] = p_game->p_hero->p_sprite;
+  v_sprites_to_draw[nb_sprites_to_draw - 1] = p_game->o_hero.p_sprite;
   qsort(v_sprites_to_draw, nb_sprites_to_draw, sizeof(sprite *), compar_sprite_depth);
 }
 
 void game_draw(game *p_game, SDL_Renderer *renderer)
 {
   // sort sprite by y for the drawing order
-  const int nb_sprites_to_draw = p_game->p_level->NPC_count + 1;
+  const int nb_sprites_to_draw = p_game->o_level.NPC_count + 1;
   sprite *v_sprites_to_draw[nb_sprites_to_draw];
   game_sort_sprites(p_game, nb_sprites_to_draw, &v_sprites_to_draw);
 
   // draw map
-  tilemap *p_map = p_game->p_level->p_map;
+  tilemap *p_map = p_game->o_level.p_map;
   map_draw(p_map, renderer);
 
   //draw sprites
@@ -46,13 +46,13 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
 
 bool game_check_NPC_collid(game *p_game)
 {
-  SDL_Rect hero_bounding_box = p_game->p_hero->p_sprite->bounding_box;
-  hero_bounding_box.x += p_game->p_hero->p_sprite->vel_x;
-  hero_bounding_box.y += p_game->p_hero->p_sprite->vel_y;
+  SDL_Rect hero_bounding_box = p_game->o_hero.p_sprite->bounding_box;
+  hero_bounding_box.x += p_game->o_hero.p_sprite->vel_x;
+  hero_bounding_box.y += p_game->o_hero.p_sprite->vel_y;
 
-  for (int index_NPC = 0; index_NPC < p_game->p_level->NPC_count; index_NPC++)
+  for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count; index_NPC++)
   {
-    NPC *p_NPC = p_game->p_level->p_NPC + index_NPC;
+    NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
     if (SDL_HasIntersection(&p_NPC->p_sprite->bounding_box, &hero_bounding_box))
     {
       return true;
@@ -77,27 +77,26 @@ bool game_check_tile_walkable(tile_property ***p_tile_properties, tilemap *p_map
 
 void game_center_camera_on_hero(game *p_game)
 {
-  hero *p_hero = p_game->p_hero;
-  tilemap *p_map = p_game->p_level->p_map;
+  tilemap *p_map = p_game->o_level.p_map;
 
-  if (p_hero->p_sprite->y < SCREEN_HEIGHT / 2)
+  if (p_game->o_hero.p_sprite->y < SCREEN_HEIGHT / 2)
   {
     p_map->o_camera.y = 0;
   }
   else
   {
-    p_map->o_camera.y = p_hero->p_sprite->y - (SCREEN_HEIGHT / 2);
+    p_map->o_camera.y = p_game->o_hero.p_sprite->y - (SCREEN_HEIGHT / 2);
     if (p_map->o_camera.y > p_map->height * p_map->p_tileset->tile_height - SCREEN_HEIGHT)
       p_map->o_camera.y = p_map->height * p_map->p_tileset->tile_height - SCREEN_HEIGHT;
   }
 
-  if (p_hero->p_sprite->x < SCREEN_WIDTH / 2)
+  if (p_game->o_hero.p_sprite->x < SCREEN_WIDTH / 2)
   {
     p_map->o_camera.x = 0;
   }
   else
   {
-    p_map->o_camera.x = p_hero->p_sprite->x - (SCREEN_WIDTH / 2);
+    p_map->o_camera.x = p_game->o_hero.p_sprite->x - (SCREEN_WIDTH / 2);
     if (p_map->o_camera.x > p_map->width * p_map->p_tileset->tile_width - SCREEN_WIDTH)
       p_map->o_camera.x = p_map->width * p_map->p_tileset->tile_width - SCREEN_WIDTH;
   }
@@ -106,13 +105,13 @@ void game_center_camera_on_hero(game *p_game)
 void game_update(game *p_game)
 {
   // update map animations
-  for (int animation_index = 0; animation_index < p_game->p_level->p_map->p_tileset->animation_nb; animation_index++)
+  for (int animation_index = 0; animation_index < p_game->o_level.p_map->p_tileset->animation_nb; animation_index++)
   {
-    animation_update(p_game->p_level->p_map->p_tileset->v_animation + animation_index);
+    animation_update(p_game->o_level.p_map->p_tileset->v_animation + animation_index);
   }
 
   // hero
-  sprite *p_hero_sprite = p_game->p_hero->p_sprite;
+  sprite *p_hero_sprite = p_game->o_hero.p_sprite;
 
   if (p_hero_sprite->vel_x || p_hero_sprite->vel_y)
   {
@@ -126,8 +125,8 @@ void game_update(game *p_game)
     bool walkable = true;
     int next_x = p_hero_sprite->bounding_box.x + p_hero_sprite->vel_x;
     int next_y = p_hero_sprite->bounding_box.y + p_hero_sprite->vel_y;
-    tilemap *p_map = p_game->p_level->p_map;
-    tile_property ***p_tile_properties = p_game->p_level->p_tile_properties;
+    tilemap *p_map = p_game->o_level.p_map;
+    tile_property ***p_tile_properties = p_game->o_level.p_tile_properties;
 
     int z = 0;
     do
@@ -150,20 +149,20 @@ void game_update(game *p_game)
   //hero bounding box
   const int hero_bouding_box_margin_x = 5;
   const int hero_bouding_box_margin_y = 18;
-  p_game->p_hero->p_sprite->bounding_box.x = p_game->p_hero->p_sprite->x + hero_bouding_box_margin_x;
-  p_game->p_hero->p_sprite->bounding_box.y = p_game->p_hero->p_sprite->y + hero_bouding_box_margin_y;
-  p_game->p_hero->p_sprite->bounding_box.w = sprite_get_width(p_game->p_hero->p_sprite) - 10;
-  p_game->p_hero->p_sprite->bounding_box.h = sprite_get_height(p_game->p_hero->p_sprite) - 24;
+  p_game->o_hero.p_sprite->bounding_box.x = p_game->o_hero.p_sprite->x + hero_bouding_box_margin_x;
+  p_game->o_hero.p_sprite->bounding_box.y = p_game->o_hero.p_sprite->y + hero_bouding_box_margin_y;
+  p_game->o_hero.p_sprite->bounding_box.w = sprite_get_width(p_game->o_hero.p_sprite) - 10;
+  p_game->o_hero.p_sprite->bounding_box.h = sprite_get_height(p_game->o_hero.p_sprite) - 24;
 
   // NPCs bouding box
   const int NPC_bouding_box_margin_x = 0;
   const int NPC_bouding_box_margin_y = 12;
-  for (int NPC_index = 0; NPC_index < p_game->p_level->NPC_count;
+  for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count;
        NPC_index++)
   {
-    p_game->p_level->p_NPC[NPC_index].p_sprite->bounding_box.x = p_game->p_level->p_NPC[NPC_index].p_sprite->x + NPC_bouding_box_margin_x;
-    p_game->p_level->p_NPC[NPC_index].p_sprite->bounding_box.y = p_game->p_level->p_NPC[NPC_index].p_sprite->y + NPC_bouding_box_margin_y;
-    p_game->p_level->p_NPC[NPC_index].p_sprite->bounding_box.w = sprite_get_width(p_game->p_level->p_NPC[NPC_index].p_sprite) - NPC_bouding_box_margin_x;
-    p_game->p_level->p_NPC[NPC_index].p_sprite->bounding_box.h = sprite_get_height(p_game->p_level->p_NPC[NPC_index].p_sprite) - NPC_bouding_box_margin_y;
+    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.x = p_game->o_level.p_NPC[NPC_index].p_sprite->x + NPC_bouding_box_margin_x;
+    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.y = p_game->o_level.p_NPC[NPC_index].p_sprite->y + NPC_bouding_box_margin_y;
+    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.w = sprite_get_width(p_game->o_level.p_NPC[NPC_index].p_sprite) - NPC_bouding_box_margin_x;
+    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.h = sprite_get_height(p_game->o_level.p_NPC[NPC_index].p_sprite) - NPC_bouding_box_margin_y;
   }
 }
