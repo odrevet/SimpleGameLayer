@@ -14,7 +14,7 @@ bool level_save(level *p_level, const char *pathfile, char *path_tileset, char *
     fprintf(fp, "%s\n", path_tileset);
     fprintf(fp, "%s\n", p_level->path_tile_property);
     fprintf(fp, "%s\n", path_music);
-    fprintf(fp, "%d:%d\n", p_map->tile_width, p_map->tile_height);
+    fprintf(fp, "%d:%d\n", p_map->p_tileset->tile_width, p_map->p_tileset->tile_height);
     fprintf(fp, "%d:%d:%d\n", p_map->width, p_map->height, p_map->nb_layer);
 
     for (int index_layer = 0; index_layer < p_map->nb_layer; index_layer++)
@@ -57,8 +57,11 @@ void map_add_row(tilemap *p_map)
         for (int index_width = 0; index_width < p_map->width; index_width++)
         {
             p_map->p_tiles[index_layer][index_height][index_width].id = -1;
-            p_map->p_tiles[index_layer][index_height][index_width].x = -16;
-            p_map->p_tiles[index_layer][index_height][index_width].y = -16;
+            p_map->p_tiles[index_layer][index_height][index_width].is_animated = false;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.x = 0;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.y = 0;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.h = 0;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.w = 0;
         }
     }
 }
@@ -73,8 +76,11 @@ void map_add_col(tilemap *p_map)
         {
             p_map->p_tiles[index_layer][index_height] = realloc(p_map->p_tiles[index_layer][index_height], p_map->width * sizeof(tile));
             p_map->p_tiles[index_layer][index_height][index_width].id = -1;
-            p_map->p_tiles[index_layer][index_height][index_width].x = -16;
-            p_map->p_tiles[index_layer][index_height][index_width].y = -16;
+            p_map->p_tiles[index_layer][index_height][index_width].is_animated = false;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.x = 0;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.y = 0;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.h = 0;
+            p_map->p_tiles[index_layer][index_height][index_width].o_frame.w = 0;
         }
     }
 }
