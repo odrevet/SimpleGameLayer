@@ -69,26 +69,20 @@ int main(int argc, char **argv)
                                               SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  //editor
-  editor o_editor;
-  editor_init(&o_editor);
+  //image
+  image o_image;
+  o_image.p_texture = NULL;
 
   //tilemap
   tilemap o_tilemap;
   o_tilemap.p_tileset = malloc(sizeof(tileset));
   map_init(&o_tilemap);
 
-  //image
-  image o_image;
-  o_image.p_texture = NULL;
-  
-  //level
-  level o_level;
-  level_init(&o_level);
-  o_editor.p_level = &o_level;
-  o_editor.p_level->p_map = &o_tilemap;
-  o_editor.p_level->p_map->p_tileset->p_image = &o_image;
-  
+  //editor
+  editor o_editor;
+  editor_init(&o_editor);
+  o_editor.o_level.p_map = &o_tilemap;
+  o_editor.o_level.p_map->p_tileset->p_image = &o_image;
 
   // fontmap
   fontmap o_fontmap;
@@ -107,7 +101,7 @@ int main(int argc, char **argv)
 
     if (strcmp(extension, ".map") == 0)
     {
-      if (!level_load(o_editor.p_level, level_load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
+      if (!level_load(&o_editor.o_level, level_load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
       {
         printf("Cannot find map at %s\n", level_load_path);
         printf("Create it y/n ? \n");
@@ -119,7 +113,7 @@ int main(int argc, char **argv)
         }
 
         //create a new map from user input
-        level *p_level = o_editor.p_level;
+        level *p_level = &o_editor.o_level;
         char path_tileset[256];
 
         printf("Creation of a new map\n");
@@ -142,11 +136,11 @@ int main(int argc, char **argv)
         level_save(p_level, level_load_path, o_editor.path_tileset, o_editor.path_music);
 
         // load the tileset image so the level is editable without having to reload from file
-        image_load(o_editor.p_level->p_map->p_tileset->p_image, o_editor.path_tileset, renderer, NULL);
+        image_load(o_editor.o_level.p_map->p_tileset->p_image, o_editor.path_tileset, renderer, NULL);
       }
     }
 
-    if (!o_editor.p_level->p_map)
+    if (!o_editor.o_level.p_map)
     {
       printf("Cannot load level at '%s'\n", level_load_path);
       return EXIT_FAILURE;

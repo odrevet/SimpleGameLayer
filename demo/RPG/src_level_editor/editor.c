@@ -10,7 +10,7 @@ void editor_init(editor *p_editor)
     p_editor->path_tileset = NULL;
     p_editor->tile_select_scroll_index_x = 0;
     p_editor->tile_select_scroll_index_y = 0;
-    p_editor->p_level = NULL;
+    level_init(&p_editor->o_level);
 }
 
 editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
@@ -18,7 +18,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
     bool done = false;
     editor_state ret_code = QUIT;
 
-    tilemap *p_map = p_editor->p_level->p_map;
+    tilemap *p_map = p_editor->o_level.p_map;
     int tileset_nb_tile_x = p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width;
 
     int scroll_index_x = 0;
@@ -44,7 +44,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     done = true;
                     break;
                 case SDLK_s:
-                    level_save(p_editor->p_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
+                    level_save(p_editor->o_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
                     break;
                 case SDLK_t:
                     editor_tile_selection(p_editor, renderer);
@@ -163,7 +163,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
         SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
         SDL_RenderClear(renderer);
 
-        map_draw(p_editor->p_level->p_map, renderer);
+        map_draw(p_editor->o_level.p_map, renderer);
 
         // display a rect above the focused tile
         SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
@@ -191,7 +191,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 {
     bool done = false;
-    tilemap *p_map = p_editor->p_level->p_map;
+    tilemap *p_map = p_editor->o_level.p_map;
     int tileset_nb_tile_y = p_map->p_tileset->p_image->height / p_map->p_tileset->tile_height;
     int tileset_nb_tile_x = p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width;
 
@@ -216,7 +216,7 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                     done = true;
                     break;
                 case SDLK_s:
-                    level_save(p_editor->p_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
+                    level_save(p_editor->o_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
                     break;
                 case SDLK_LEFT:
                     if (p_editor->tileset_selected_index > 0 && p_editor->tileset_selected_index % tileset_nb_tile_x != 0)

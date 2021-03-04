@@ -17,7 +17,7 @@ typedef enum e_editor_state
 
 typedef struct t_editor
 {
-    level *p_level;
+    level o_level;
     char *path_level;
     SDL_Point mouse_coord;
     int tileset_selected_index; //selected tile in the tileset
