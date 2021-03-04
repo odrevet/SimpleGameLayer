@@ -153,8 +153,6 @@ int main(int argc, char **argv)
   // free memory
   level_free(&o_game.o_level);
   Mix_CloseAudio();
-
-  // free images
   image_free(&o_image_fontmap);
   image_free(&o_image_NPC);
 
