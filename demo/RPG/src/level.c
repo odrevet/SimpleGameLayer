@@ -13,7 +13,7 @@ void level_init(level *p_level)
 
 bool level_load(level *p_level, const char *pathfile, char **current_path_tileset, char **current_path_music, SDL_Renderer *renderer)
 {
-  tilemap *p_map = p_level->p_map;
+  tilemap *p_map = &p_level->o_tilemap;
 
   FILE *fp = fopen(pathfile, "r");
   if (!fp)
@@ -98,7 +98,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
           p_tile->is_animated = true;
           char *p_tile_idstr = tile_idstr;
           tile_index = atoi(++p_tile_idstr);
-          p_tile->p_animation = p_level->p_map->p_tileset->v_animation + tile_index;
+          p_tile->p_animation = p_level->o_tilemap.p_tileset->v_animation + tile_index;
         }
         else
         {
@@ -149,24 +149,24 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
   // line break
   fgetc(fp);
 
-  p_level->p_map->p_tileset->animation_nb = nb_tile_animated;
+  p_level->o_tilemap.p_tileset->animation_nb = nb_tile_animated;
 
   if (nb_tile_animated > 0)
   {
-    p_level->p_map->p_tileset->v_animation = calloc(nb_tile_animated, sizeof(animation));
+    p_level->o_tilemap.p_tileset->v_animation = calloc(nb_tile_animated, sizeof(animation));
     for (int index_tile = 0; index_tile < nb_tile_animated; index_tile++)
     {
       int nb_frame;
       fscanf(fp, "%d", &nb_frame);
-      animation_init(p_level->p_map->p_tileset->v_animation + index_tile, true, nb_frame, 10, 0);
+      animation_init(p_level->o_tilemap.p_tileset->v_animation + index_tile, true, nb_frame, 10, 0);
       for (int index_frame = 0; index_frame < nb_frame; index_frame++)
       {
         int tile_index;
         fscanf(fp, "%d", &tile_index);
 
-        int x = tile_index % (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/); //TODO parse width before tile
-        int y = tile_index / (p_level->p_map->p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/);
-        animation_set_frame(p_level->p_map->p_tileset->v_animation[index_tile].v_frame + index_frame, x * 16, y * 16, 16, 16);
+        int x = tile_index % (p_level->o_tilemap.p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/); //TODO parse width before tile
+        int y = tile_index / (p_level->o_tilemap.p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/);
+        animation_set_frame(p_level->o_tilemap.p_tileset->v_animation[index_tile].v_frame + index_frame, x * 16, y * 16, 16, 16);
       }
     }
   }
@@ -202,9 +202,9 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
 void level_free(level *p_level)
 {
   //free tiles properties
-  for (int index_layer = 0; index_layer < p_level->p_map->nb_layer; index_layer++)
+  for (int index_layer = 0; index_layer < p_level->o_tilemap.nb_layer; index_layer++)
   {
-    for (int index_height = 0; index_height < p_level->p_map->height; index_height++)
+    for (int index_height = 0; index_height < p_level->o_tilemap.height; index_height++)
     {
       free(p_level->p_tile_properties[index_layer][index_height]);
     }
@@ -212,7 +212,7 @@ void level_free(level *p_level)
   }
 
   free(p_level->p_tile_properties);
-  map_tiles_free(p_level->p_map);
+  map_tiles_free(&p_level->o_tilemap);
 
   for (int index_NPC = 0; index_NPC < p_level->NPC_count; index_NPC++)
   {

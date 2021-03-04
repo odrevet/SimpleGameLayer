@@ -79,16 +79,11 @@ int main(int argc, char **argv)
 
   // create a new game
   game o_game;
-
-  tilemap o_tilemap;
-  o_tilemap.p_tileset = malloc(sizeof(tileset));
-  map_init(&o_tilemap);
-  
+  level_init(&o_game.o_level); 
+  o_game.o_level.o_tilemap.p_tileset = malloc(sizeof(tileset));
   image o_image_tilemap;
   o_image_tilemap.p_texture = NULL;
-  o_game.o_level.p_map = &o_tilemap;
-  level_init(&o_game.o_level); 
-  o_game.o_level.p_map->p_tileset->p_image = &o_image_tilemap;
+  o_game.o_level.o_tilemap.p_tileset->p_image = &o_image_tilemap;
   o_game.path_music = NULL;
   o_game.path_tileset = NULL;
 
@@ -207,8 +202,8 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
     break;
   }
 
-  if (hero_front_x >= 0 && hero_front_x < p_game->o_level.p_map->width * p_game->o_level.p_map->p_tileset->tile_width &&
-      hero_front_y >= 0 && hero_front_y < p_game->o_level.p_map->height * p_game->o_level.p_map->p_tileset->tile_height)
+  if (hero_front_x >= 0 && hero_front_x < p_game->o_level.o_tilemap.width * p_game->o_level.o_tilemap.p_tileset->tile_width &&
+      hero_front_y >= 0 && hero_front_y < p_game->o_level.o_tilemap.height * p_game->o_level.o_tilemap.p_tileset->tile_height)
   {
     for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count;
          index_NPC++)
@@ -229,7 +224,7 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
   bool done = false;
 
   game_state ret_code = QUIT;
-  tilemap *p_map = p_game->o_level.p_map;
+  tilemap *p_map = &p_game->o_level.o_tilemap;
 
   while (!done)
   {

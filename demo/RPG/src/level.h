@@ -21,7 +21,7 @@ typedef struct t_event event;
 
 typedef struct t_level
 {
-    tilemap *p_map;
+    tilemap o_tilemap;
     char *path_tile_property;
     tile_property ***p_tile_properties;
     Mix_Music *p_music;

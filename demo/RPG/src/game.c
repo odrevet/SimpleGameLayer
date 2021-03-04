@@ -34,7 +34,7 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
   game_sort_sprites(p_game, nb_sprites_to_draw, &v_sprites_to_draw);
 
   // draw map
-  tilemap *p_map = p_game->o_level.p_map;
+  tilemap *p_map = &p_game->o_level.o_tilemap;
   map_draw(p_map, renderer);
 
   //draw sprites
@@ -77,7 +77,7 @@ bool game_check_tile_walkable(tile_property ***p_tile_properties, tilemap *p_map
 
 void game_center_camera_on_hero(game *p_game)
 {
-  tilemap *p_map = p_game->o_level.p_map;
+  tilemap *p_map = &p_game->o_level.o_tilemap;
 
   if (p_game->o_hero.p_sprite->y < SCREEN_HEIGHT / 2)
   {
@@ -105,9 +105,9 @@ void game_center_camera_on_hero(game *p_game)
 void game_update(game *p_game)
 {
   // update map animations
-  for (int animation_index = 0; animation_index < p_game->o_level.p_map->p_tileset->animation_nb; animation_index++)
+  for (int animation_index = 0; animation_index < p_game->o_level.o_tilemap.p_tileset->animation_nb; animation_index++)
   {
-    animation_update(p_game->o_level.p_map->p_tileset->v_animation + animation_index);
+    animation_update(p_game->o_level.o_tilemap.p_tileset->v_animation + animation_index);
   }
 
   // hero
@@ -125,7 +125,7 @@ void game_update(game *p_game)
     bool walkable = true;
     int next_x = p_hero_sprite->bounding_box.x + p_hero_sprite->vel_x;
     int next_y = p_hero_sprite->bounding_box.y + p_hero_sprite->vel_y;
-    tilemap *p_map = p_game->o_level.p_map;
+    tilemap *p_map = &p_game->o_level.o_tilemap;
     tile_property ***p_tile_properties = p_game->o_level.p_tile_properties;
 
     int z = 0;

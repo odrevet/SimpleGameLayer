@@ -54,12 +54,12 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   }
 
   p_NPC[0].p_event = p_event;
-  p_NPC[0].p_sprite->x = 5 * p_game->o_level.p_map->p_tileset->tile_width;
-  p_NPC[0].p_sprite->y = 4 * p_game->o_level.p_map->p_tileset->tile_height;
+  p_NPC[0].p_sprite->x = 5 * p_game->o_level.o_tilemap.p_tileset->tile_width;
+  p_NPC[0].p_sprite->y = 4 * p_game->o_level.o_tilemap.p_tileset->tile_height;
 
   p_NPC[1].p_event = p_event + 1;
-  p_NPC[1].p_sprite->x = 15 * p_game->o_level.p_map->p_tileset->tile_width;
-  p_NPC[1].p_sprite->y = 10 * p_game->o_level.p_map->p_tileset->tile_height;
+  p_NPC[1].p_sprite->x = 15 * p_game->o_level.o_tilemap.p_tileset->tile_width;
+  p_NPC[1].p_sprite->y = 10 * p_game->o_level.o_tilemap.p_tileset->tile_height;
   p_NPC[1].p_sprite->animation_current = LEFT;
 }
 
