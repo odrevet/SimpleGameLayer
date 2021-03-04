@@ -28,8 +28,8 @@ typedef struct t_editor
     int map_tile_index_y;
 
     // scroll location in the tile selector
-    int scroll_index_x;
-    int scroll_index_y;
+    int tile_select_scroll_index_x;
+    int tile_select_scroll_index_y;
 
     fontmap *p_fontmap;
     char *path_tileset;
