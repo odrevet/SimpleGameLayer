@@ -175,11 +175,12 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
         SDL_RenderDrawRect(renderer, &rect_tile_chipset);
 
         // HUD
-        fontmap_printf(p_editor->p_fontmap, 0, 0, renderer, "L %d X %d Y %d ID %d",
+        fontmap_printf(p_editor->p_fontmap, 0, 0, renderer, "L %d X %d Y %d ID %d %s",
                        p_editor->layer,
                        p_editor->map_tile_index_x,
                        p_editor->map_tile_index_y,
-                       p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id);
+                       p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id,
+                       p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated ? "ANIMATED" : "");
 
         SDL_RenderPresent(renderer);
     }
