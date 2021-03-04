@@ -73,17 +73,12 @@ int main(int argc, char **argv)
   image o_image;
   o_image.p_texture = NULL;
 
-  //tilemap
-  tilemap o_tilemap;
-  o_tilemap.p_tileset = malloc(sizeof(tileset));
-  map_init(&o_tilemap);
-
   //editor
   editor o_editor;
   editor_init(&o_editor);
-  o_editor.o_level.p_map = &o_tilemap;
-  o_editor.o_level.p_map->p_tileset->p_image = &o_image;
-
+  o_editor.o_level.o_tilemap.p_tileset = malloc(sizeof(tileset));
+  o_editor.o_level.o_tilemap.p_tileset->p_image = &o_image;
+  
   // fontmap
   fontmap o_fontmap;
   o_fontmap.character_size = 7;
@@ -96,7 +91,7 @@ int main(int argc, char **argv)
   //try to load a map from file
   if (level_load_path)
   {
-    //check file extension to known which maploader use
+    //check file extension
     const char *extension = strrchr(level_load_path, '.');
 
     if (strcmp(extension, ".map") == 0)
@@ -118,32 +113,26 @@ int main(int argc, char **argv)
 
         printf("Creation of a new map\n");
         printf("Map Layers count (in tile) : \n");
-        scanf("%d", &p_level->p_map->nb_layer);
+        scanf("%d", &p_level->o_tilemap.nb_layer);
         printf("Tile Width (in pixel) : \n");
-        scanf("%d", &p_level->p_map->p_tileset->tile_width);
+        scanf("%d", &p_level->o_tilemap.p_tileset->tile_width);
         printf("Tile Height (in pixel) : \n");
-        scanf("%d", &p_level->p_map->p_tileset->tile_height);
+        scanf("%d", &p_level->o_tilemap.p_tileset->tile_height);
         printf("Map Width (in tile) : \n");
-        scanf("%d", &p_level->p_map->width);
+        scanf("%d", &p_level->o_tilemap.width);
         printf("Map Height (in tile): \n");
-        scanf("%d", &p_level->p_map->height);
+        scanf("%d", &p_level->o_tilemap.height);
         printf("Tilset image (path) : \n");
         scanf("%s", path_tileset);
         o_editor.path_tileset = calloc(strlen(path_tileset) + 1, sizeof(char));
         strcpy(o_editor.path_tileset, path_tileset);
 
-        map_tiles_alloc(p_level->p_map);
+        map_tiles_alloc(&p_level->o_tilemap);
         level_save(p_level, level_load_path, o_editor.path_tileset, o_editor.path_music);
 
         // load the tileset image so the level is editable without having to reload from file
-        image_load(o_editor.o_level.p_map->p_tileset->p_image, o_editor.path_tileset, renderer, NULL);
+        image_load(o_editor.o_level.o_tilemap.p_tileset->p_image, o_editor.path_tileset, renderer, NULL);
       }
-    }
-
-    if (!o_editor.o_level.p_map)
-    {
-      printf("Cannot load level at '%s'\n", level_load_path);
-      return EXIT_FAILURE;
     }
   }
   else

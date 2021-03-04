@@ -9,7 +9,7 @@ bool level_save(level *p_level, const char *pathfile, char *path_tileset, char *
         return false;
     }
 
-    tilemap *p_map = p_level->p_map;
+    tilemap *p_map = &p_level->o_tilemap;
 
     fprintf(fp, "%s\n", path_tileset);
     fprintf(fp, "%s\n", p_level->path_tile_property);

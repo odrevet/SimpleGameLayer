@@ -8,6 +8,7 @@ void editor_init(editor *p_editor)
     p_editor->map_tile_index_y = 0;
     p_editor->path_level = NULL;
     p_editor->path_tileset = NULL;
+    p_editor->path_music = NULL;
     p_editor->tile_select_scroll_index_x = 0;
     p_editor->tile_select_scroll_index_y = 0;
     level_init(&p_editor->o_level);
@@ -18,7 +19,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
     bool done = false;
     editor_state ret_code = QUIT;
 
-    tilemap *p_map = p_editor->o_level.p_map;
+    tilemap *p_map = &p_editor->o_level.o_tilemap;
     int tileset_nb_tile_x = p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width;
 
     int scroll_index_x = 0;
@@ -163,7 +164,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
         SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
         SDL_RenderClear(renderer);
 
-        map_draw(p_editor->o_level.p_map, renderer);
+        map_draw(&p_editor->o_level.o_tilemap, renderer);
 
         // display a rect above the focused tile
         SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
@@ -191,7 +192,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 {
     bool done = false;
-    tilemap *p_map = p_editor->o_level.p_map;
+    tilemap *p_map = &p_editor->o_level.o_tilemap;
     int tileset_nb_tile_y = p_map->p_tileset->p_image->height / p_map->p_tileset->tile_height;
     int tileset_nb_tile_x = p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width;
 
