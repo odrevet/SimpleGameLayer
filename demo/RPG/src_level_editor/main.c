@@ -69,28 +69,26 @@ int main(int argc, char **argv)
                                               SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  //create a new editor
+  //editor
   editor o_editor;
+  editor_init(&o_editor);
+
+  //tilemap
   tilemap o_tilemap;
   o_tilemap.p_tileset = malloc(sizeof(tileset));
   map_init(&o_tilemap);
 
+  //image
   image o_image;
   o_image.p_texture = NULL;
+  
+  //level
   level o_level;
+  level_init(&o_level);
   o_editor.p_level = &o_level;
   o_editor.p_level->p_map = &o_tilemap;
-  level_init(&o_level);
   o_editor.p_level->p_map->p_tileset->p_image = &o_image;
-  o_editor.tileset_selected_index = 0;
-  o_editor.layer = 0;
-  o_editor.map_tile_index_x = 0;
-  o_editor.map_tile_index_y = 0;
-  o_editor.path_level = level_load_path;
-  o_editor.path_tileset = NULL;
-  o_editor.path_music = NULL;
-  o_editor.tile_select_scroll_index_x = 0;
-  o_editor.tile_select_scroll_index_y = 0;
+  
 
   // fontmap
   fontmap o_fontmap;

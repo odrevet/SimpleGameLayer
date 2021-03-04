@@ -10,6 +10,7 @@ void editor_init(editor *p_editor)
     p_editor->path_tileset = NULL;
     p_editor->tile_select_scroll_index_x = 0;
     p_editor->tile_select_scroll_index_y = 0;
+    p_editor->p_level = NULL;
 }
 
 editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
