@@ -27,11 +27,16 @@ typedef struct t_editor
     int map_tile_index_x;
     int map_tile_index_y;
 
+    // scroll location in the tile selector
+    int scroll_index_x;
+    int scroll_index_y;
+
     fontmap *p_fontmap;
     char *path_tileset;
     char *path_music;
 } editor;
 
+void editor_init(editor *p_editor);
 editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer);
 editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer);
 

@@ -212,7 +212,7 @@ void level_free(level *p_level)
     free(p_level->p_tile_properties[index_layer]);
   }
 
-  //free(p_level->p_tile_properties);
+  free(p_level->p_tile_properties);
   map_tiles_free(p_level->p_map);
 
   for (int index_NPC = 0; index_NPC < p_level->NPC_count; index_NPC++)

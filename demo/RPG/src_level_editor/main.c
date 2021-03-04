@@ -76,6 +76,7 @@ int main(int argc, char **argv)
   map_init(&o_tilemap);
 
   image o_image;
+  o_image.p_texture = NULL;
   level o_level;
   o_editor.p_level = &o_level;
   o_editor.p_level->p_map = &o_tilemap;
@@ -83,7 +84,13 @@ int main(int argc, char **argv)
   o_editor.p_level->p_map->p_tileset->p_image = &o_image;
   o_editor.tileset_selected_index = 0;
   o_editor.layer = 0;
+  o_editor.map_tile_index_x = 0;
+  o_editor.map_tile_index_y = 0;
   o_editor.path_level = level_load_path;
+  o_editor.path_tileset = NULL;
+  o_editor.path_music = NULL;
+  o_editor.scroll_index_x = 0;
+  o_editor.scroll_index_y = 0;
 
   // fontmap
   fontmap o_fontmap;

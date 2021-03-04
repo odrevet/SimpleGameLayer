@@ -85,6 +85,7 @@ int main(int argc, char **argv)
   map_init(&o_tilemap);
   
   image o_image_tilemap;
+  o_image_tilemap.p_texture = NULL;
   o_game.o_level.p_map = &o_tilemap;
   level_init(&o_game.o_level); 
   o_game.o_level.p_map->p_tileset->p_image = &o_image_tilemap;

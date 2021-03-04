@@ -1,5 +1,17 @@
 #include "editor.h"
 
+void editor_init(editor *p_editor)
+{
+    p_editor->tileset_selected_index = 0;
+    p_editor->layer = 0;
+    p_editor->map_tile_index_x = 0;
+    p_editor->map_tile_index_y = 0;
+    p_editor->path_level = NULL;
+    p_editor->path_tileset = NULL;
+    p_editor->scroll_index_x = 0;
+    p_editor->scroll_index_y = 0;
+}
+
 editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 {
     bool done = false;
@@ -7,9 +19,6 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 
     tilemap *p_map = p_editor->p_level->p_map;
     int tileset_nb_tile_x = p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width;
-
-    int scroll_index_x = 0;
-    int scroll_index_y = 0;
 
     while (!done)
     {
@@ -67,9 +76,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->map_tile_index_x--;
 
                         //update scroll position
-                        if (p_editor->map_tile_index_x - scroll_index_x + 1 == 0)
+                        if (p_editor->map_tile_index_x - p_editor->scroll_index_x + 1 == 0)
                         {
-                            scroll_index_x--;
+                            p_editor->scroll_index_x--;
                             p_map->o_camera.x -= p_map->p_tileset->tile_width;
                         }
                     }
@@ -81,9 +90,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->map_tile_index_x++;
 
                         //update scroll position
-                        if (p_editor->map_tile_index_x >= SCREEN_WIDTH / p_map->p_tileset->tile_width + scroll_index_x)
+                        if (p_editor->map_tile_index_x >= SCREEN_WIDTH / p_map->p_tileset->tile_width + p_editor->scroll_index_x)
                         {
-                            scroll_index_x++;
+                            p_editor->scroll_index_x++;
                             p_map->o_camera.x += p_map->p_tileset->tile_width;
                         }
                     }
@@ -94,9 +103,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->map_tile_index_y--;
 
                         //update scroll position
-                        if (p_editor->map_tile_index_y - scroll_index_y + 1 == 0)
+                        if (p_editor->map_tile_index_y - p_editor->scroll_index_y + 1 == 0)
                         {
-                            scroll_index_y--;
+                            p_editor->scroll_index_y--;
                             p_map->o_camera.y -= p_map->p_tileset->tile_height;
                         }
                     }
@@ -107,9 +116,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     {
                         p_editor->map_tile_index_y++;
                         //update scroll position
-                        if (p_editor->map_tile_index_y >= SCREEN_HEIGHT / p_map->p_tileset->tile_height + scroll_index_y)
+                        if (p_editor->map_tile_index_y >= SCREEN_HEIGHT / p_map->p_tileset->tile_height + p_editor->scroll_index_y)
                         {
-                            scroll_index_y++;
+                            p_editor->scroll_index_y++;
                             p_map->o_camera.y += p_map->p_tileset->tile_height;
                         }
                     }
@@ -117,7 +126,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     break;
                 case SDLK_RETURN:
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = p_editor->tileset_selected_index;
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.x = (p_editor->tileset_selected_index % tileset_nb_tile_x) * 16;  //TODO tile size from tileset
+                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.x = (p_editor->tileset_selected_index % tileset_nb_tile_x) * 16; //TODO tile size from tileset
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.y = (p_editor->tileset_selected_index / tileset_nb_tile_x) * 16;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.h = 16;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.w = 16;
@@ -181,10 +190,6 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
     int tileset_nb_tile_y = p_map->p_tileset->p_image->height / p_map->p_tileset->tile_height;
     int tileset_nb_tile_x = p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width;
 
-    // display tileset from index (scroll in the tileset tile selector)
-    int scroll_index_x = 0;
-    int scroll_index_y = 0;
-
     while (!done)
     {
         //input
@@ -215,9 +220,9 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->tileset_selected_index--;
 
                         //update scroll position
-                        if (scroll_index_x > p_editor->tileset_selected_index % tileset_nb_tile_x)
+                        if (p_editor->scroll_index_x > p_editor->tileset_selected_index % tileset_nb_tile_x)
                         {
-                            scroll_index_x--;
+                            p_editor->scroll_index_x--;
                         }
                     }
 
@@ -229,9 +234,9 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->tileset_selected_index++;
 
                         //update scroll position
-                        if (p_editor->tileset_selected_index % tileset_nb_tile_x >= scroll_index_x + SCREEN_WIDTH / p_map->p_tileset->tile_width)
+                        if (p_editor->tileset_selected_index % tileset_nb_tile_x >= p_editor->scroll_index_x + SCREEN_WIDTH / p_map->p_tileset->tile_width)
                         {
-                            scroll_index_x++;
+                            p_editor->scroll_index_x++;
                         }
                     }
 
@@ -243,9 +248,9 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->tileset_selected_index -= tileset_nb_tile_x;
 
                         //update scroll position
-                        if (scroll_index_y > p_editor->tileset_selected_index / tileset_nb_tile_x)
+                        if (p_editor->scroll_index_y > p_editor->tileset_selected_index / tileset_nb_tile_x)
                         {
-                            scroll_index_y--;
+                            p_editor->scroll_index_y--;
                         }
                     }
                     break;
@@ -256,9 +261,9 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->tileset_selected_index += tileset_nb_tile_x;
 
                         //update scroll position
-                        if (p_editor->tileset_selected_index / tileset_nb_tile_x >= scroll_index_y + SCREEN_HEIGHT / p_map->p_tileset->tile_height)
+                        if (p_editor->tileset_selected_index / tileset_nb_tile_x >= p_editor->scroll_index_y + SCREEN_HEIGHT / p_map->p_tileset->tile_height)
                         {
-                            scroll_index_y++;
+                            p_editor->scroll_index_y++;
                         }
                     }
                     break;
@@ -280,8 +285,8 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 
         //dislpay the tileset
         SDL_Rect src = {
-            .x = scroll_index_x * p_map->p_tileset->tile_width,
-            .y = scroll_index_y * p_map->p_tileset->tile_height,
+            .x = p_editor->scroll_index_x * p_map->p_tileset->tile_width,
+            .y = p_editor->scroll_index_y * p_map->p_tileset->tile_height,
             .w = SCREEN_WIDTH,
             .h = SCREEN_HEIGHT};
         image_draw_part(p_map->p_tileset->p_image, renderer, 0, 0, &src);
@@ -310,8 +315,8 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
         //display a rect above the focused tile in the tileset
         SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
         SDL_Rect rect_tile_chipset =
-            {.x = ((p_editor->tileset_selected_index % tileset_nb_tile_x) * p_map->p_tileset->tile_width) - scroll_index_x * p_map->p_tileset->tile_width,
-             .y = ((p_editor->tileset_selected_index / tileset_nb_tile_x) * p_map->p_tileset->tile_height) - scroll_index_y * p_map->p_tileset->tile_height,
+            {.x = ((p_editor->tileset_selected_index % tileset_nb_tile_x) * p_map->p_tileset->tile_width) - p_editor->scroll_index_x * p_map->p_tileset->tile_width,
+             .y = ((p_editor->tileset_selected_index / tileset_nb_tile_x) * p_map->p_tileset->tile_height) - p_editor->scroll_index_y * p_map->p_tileset->tile_height,
              .h = p_map->p_tileset->tile_height,
              .w = p_map->p_tileset->tile_width};
         SDL_RenderDrawRect(renderer, &rect_tile_chipset);
