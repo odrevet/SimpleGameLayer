@@ -9,7 +9,6 @@ void level_init(level *p_level)
   p_level->event_count = 0;
   p_level->p_NPC = NULL;
   p_level->NPC_count = 0;
-  map_init(p_level->p_map);
 }
 
 bool level_load(level *p_level, const char *pathfile, char **current_path_tileset, char **current_path_music, SDL_Renderer *renderer)
