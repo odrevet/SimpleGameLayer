@@ -4,6 +4,7 @@
 #include <fontmap.h>
 
 #include "../src/level.h"
+#include "level_util.h"
 
 #define SCREEN_WIDTH 15 * 16
 #define SCREEN_HEIGHT 10 * 16
