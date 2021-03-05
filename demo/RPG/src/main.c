@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
   // create a new game
   game o_game;
-  level_init(&o_game.o_level); 
+  level_init(&o_game.o_level);
   o_game.o_level.o_tilemap.p_tileset = malloc(sizeof(tileset));
   image o_image_tilemap;
   o_image_tilemap.p_texture = NULL;
@@ -203,14 +203,29 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
   if (hero_front_x >= 0 && hero_front_x < p_game->o_level.o_tilemap.width * p_game->o_level.o_tilemap.p_tileset->tile_width &&
       hero_front_y >= 0 && hero_front_y < p_game->o_level.o_tilemap.height * p_game->o_level.o_tilemap.p_tileset->tile_height)
   {
-    for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count;
-         index_NPC++)
+    for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count; index_NPC++)
     {
       NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
       SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
       if (SDL_PointInRect(&hero_front, &p_NPC->o_sprite.bounding_box) && p_NPC->p_event)
       {
         event_exec(p_NPC->p_event, p_game, renderer);
+        break;
+      }
+    }
+
+    for (int index_event = 0; index_event < p_game->o_level.NPC_count; index_event++)
+    {
+      event *p_event = p_game->o_level.p_event + index_event;
+      if (p_event->o_event_trigger != ON_BUTTON_PRESS)
+      {
+        continue;
+      }
+      SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
+      SDL_Rect event_rect = {.x = p_event->index_src_x * 16, .y = p_event->index_src_y * 16, .w = 16, .h = 16}; // TODO tile size from level tileset
+      if (SDL_PointInRect(&hero_front, &event_rect))
+      {
+        event_exec(p_event, p_game, renderer);
         break;
       }
     }
