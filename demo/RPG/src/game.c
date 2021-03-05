@@ -16,7 +16,7 @@ int compar_sprite_depth(const void *a, const void *b)
     return 0;
 }
 
-void game_sort_sprites(game *p_game, int nb_sprites_to_draw, sprite **v_sprites_to_draw)
+void game_sort_sprites(game *p_game, int nb_sprites_to_draw, sprite *v_sprites_to_draw[])
 {
   for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count; NPC_index++)
   {
@@ -31,7 +31,7 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
   // sort sprite by y for the drawing order
   const int nb_sprites_to_draw = p_game->o_level.NPC_count + 1;
   sprite *v_sprites_to_draw[nb_sprites_to_draw];
-  game_sort_sprites(p_game, nb_sprites_to_draw, &v_sprites_to_draw);
+  game_sort_sprites(p_game, nb_sprites_to_draw, v_sprites_to_draw);
 
   // draw map
   tilemap *p_map = &p_game->o_level.o_tilemap;
