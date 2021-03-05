@@ -178,7 +178,7 @@ void game_check_auto_event(game *p_game, int hero_current_tile_index_x,
   }
 }
 
-void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
+void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_center_y,
                            SDL_Renderer *renderer)
 {
   int hero_front_x = hero_center_x;
@@ -264,7 +264,7 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
         switch (event.key.keysym.sym)
         {
         case SDLK_RETURN:
-          game_check_NPC_action(p_game, hero_center_x, hero_center_y, renderer);
+          game_check_on_bouton_press_event(p_game, hero_center_x, hero_center_y, renderer);
         }
       }
     }
