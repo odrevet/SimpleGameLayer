@@ -7,15 +7,12 @@ void hero_init(hero *p_hero, SDL_Renderer *renderer)
     image_load(p_tileset->p_image, "gfx/character.png", renderer, NULL);
     tileset_init(p_tileset, 17, 8, 4);
 
-    sprite *p_sprite = malloc(sizeof(sprite));
-    p_sprite->x = 64;
-    p_sprite->y = 61;
-    p_sprite->vel_x = 0;
-    p_sprite->vel_y = 0;
-    p_sprite->animation_current = DOWN;
-    p_sprite->p_tileset = p_tileset;
-
-    p_hero->p_sprite = p_sprite;
+    p_hero->o_sprite.x = 64;
+    p_hero->o_sprite.y = 61;
+    p_hero->o_sprite.vel_x = 0;
+    p_hero->o_sprite.vel_y = 0;
+    p_hero->o_sprite.animation_current = DOWN;
+    p_hero->o_sprite.p_tileset = p_tileset;
 
     animation_init(p_tileset->v_animation + DOWN, false, 4, 10, 0);
     tileset_set_frame(p_tileset, DOWN, 0, 00, 0, 16, 32);

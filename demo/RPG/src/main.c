@@ -184,7 +184,7 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
   int hero_front_x = hero_center_x;
   int hero_front_y = hero_center_y;
 
-  switch (p_game->o_hero.p_sprite->animation_current)
+  switch (p_game->o_hero.o_sprite.animation_current)
   {
   case UP:
     hero_front_y -= 8;
@@ -227,10 +227,10 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
   while (!done)
   {
     // hero current tile
-    int hero_center_x = p_game->o_hero.p_sprite->bounding_box.x +
-                        p_game->o_hero.p_sprite->bounding_box.w / 2;
-    int hero_center_y = p_game->o_hero.p_sprite->bounding_box.y +
-                        p_game->o_hero.p_sprite->bounding_box.h / 2;
+    int hero_center_x = p_game->o_hero.o_sprite.bounding_box.x +
+                        p_game->o_hero.o_sprite.bounding_box.w / 2;
+    int hero_center_y = p_game->o_hero.o_sprite.bounding_box.y +
+                        p_game->o_hero.o_sprite.bounding_box.h / 2;
     int hero_current_tile_index_x = hero_center_x / p_map->p_tileset->tile_width;
     int hero_current_tile_index_y = hero_center_y / p_map->p_tileset->tile_height;
 
@@ -267,32 +267,32 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
 
     if (state[SDL_SCANCODE_LEFT])
     {
-      p_game->o_hero.p_sprite->animation_current = LEFT;
-      p_game->o_hero.p_sprite->vel_y = 0;
-      p_game->o_hero.p_sprite->vel_x = -1;
+      p_game->o_hero.o_sprite.animation_current = LEFT;
+      p_game->o_hero.o_sprite.vel_y = 0;
+      p_game->o_hero.o_sprite.vel_x = -1;
     }
     else if (state[SDL_SCANCODE_RIGHT])
     {
-      p_game->o_hero.p_sprite->animation_current = RIGHT;
-      p_game->o_hero.p_sprite->vel_y = 0;
-      p_game->o_hero.p_sprite->vel_x = 1;
+      p_game->o_hero.o_sprite.animation_current = RIGHT;
+      p_game->o_hero.o_sprite.vel_y = 0;
+      p_game->o_hero.o_sprite.vel_x = 1;
     }
     else if (state[SDL_SCANCODE_UP])
     {
-      p_game->o_hero.p_sprite->animation_current = UP;
-      p_game->o_hero.p_sprite->vel_y = -1;
-      p_game->o_hero.p_sprite->vel_x = 0;
+      p_game->o_hero.o_sprite.animation_current = UP;
+      p_game->o_hero.o_sprite.vel_y = -1;
+      p_game->o_hero.o_sprite.vel_x = 0;
     }
     else if (state[SDL_SCANCODE_DOWN])
     {
-      p_game->o_hero.p_sprite->animation_current = DOWN;
-      p_game->o_hero.p_sprite->vel_y = 1;
-      p_game->o_hero.p_sprite->vel_x = 0;
+      p_game->o_hero.o_sprite.animation_current = DOWN;
+      p_game->o_hero.o_sprite.vel_y = 1;
+      p_game->o_hero.o_sprite.vel_x = 0;
     }
     else
     {
-      p_game->o_hero.p_sprite->vel_x = 0;
-      p_game->o_hero.p_sprite->vel_y = 0;
+      p_game->o_hero.o_sprite.vel_x = 0;
+      p_game->o_hero.o_sprite.vel_y = 0;
     }
 
     // update logic

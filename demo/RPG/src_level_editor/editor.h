@@ -19,8 +19,9 @@ typedef struct t_editor
 {
     level o_level;
     char *path_level;
-    SDL_Point mouse_coord;
-    int tileset_selected_index; //selected tile in the tileset
+
+    //selected tile in the tileset
+    int tileset_selected_index;
 
     // selected tile in the map
     int layer;

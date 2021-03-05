@@ -18,7 +18,7 @@
 
 typedef struct t_hero
 {
-    sprite *p_sprite;
+    sprite o_sprite;
 } hero;
 
 void hero_init(hero *p_hero, SDL_Renderer *renderer);
