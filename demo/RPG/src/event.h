@@ -4,6 +4,7 @@
 #include <SDL.h>
 
 #include "game.h"
+#include "dialog_box.h"
 
 typedef enum e_event_trigger
 {
