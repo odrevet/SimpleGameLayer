@@ -214,10 +214,6 @@ void level_free(level *p_level)
   free(p_level->p_tile_properties);
   map_tiles_free(&p_level->o_tilemap);
 
-  for (int index_NPC = 0; index_NPC < p_level->NPC_count; index_NPC++)
-  {
-    NPC_free(p_level->p_NPC + index_NPC);
-  }
   free(p_level->p_NPC);
   free(p_level->p_event);
   free(p_level->path_tile_property);

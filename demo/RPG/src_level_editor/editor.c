@@ -45,7 +45,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     done = true;
                     break;
                 case SDLK_s:
-                    level_save(p_editor->o_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
+                    level_save(&p_editor->o_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
                     break;
                 case SDLK_t:
                     editor_tile_selection(p_editor, renderer);
@@ -217,7 +217,7 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                     done = true;
                     break;
                 case SDLK_s:
-                    level_save(p_editor->o_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
+                    level_save(&p_editor->o_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
                     break;
                 case SDLK_LEFT:
                     if (p_editor->tileset_selected_index > 0 && p_editor->tileset_selected_index % tileset_nb_tile_x != 0)

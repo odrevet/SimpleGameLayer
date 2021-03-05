@@ -20,7 +20,7 @@ void game_sort_sprites(game *p_game, int nb_sprites_to_draw, sprite **v_sprites_
 {
   for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count; NPC_index++)
   {
-    v_sprites_to_draw[NPC_index] = p_game->o_level.p_NPC[NPC_index].p_sprite;
+    v_sprites_to_draw[NPC_index] = &p_game->o_level.p_NPC[NPC_index].o_sprite;
   }
   v_sprites_to_draw[nb_sprites_to_draw - 1] = p_game->o_hero.p_sprite;
   qsort(v_sprites_to_draw, nb_sprites_to_draw, sizeof(sprite *), compar_sprite_depth);
@@ -53,7 +53,7 @@ bool game_check_NPC_collid(game *p_game)
   for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count; index_NPC++)
   {
     NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
-    if (SDL_HasIntersection(&p_NPC->p_sprite->bounding_box, &hero_bounding_box))
+    if (SDL_HasIntersection(&p_NPC->o_sprite.bounding_box, &hero_bounding_box))
     {
       return true;
     }
@@ -160,9 +160,9 @@ void game_update(game *p_game)
   for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count;
        NPC_index++)
   {
-    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.x = p_game->o_level.p_NPC[NPC_index].p_sprite->x + NPC_bouding_box_margin_x;
-    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.y = p_game->o_level.p_NPC[NPC_index].p_sprite->y + NPC_bouding_box_margin_y;
-    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.w = sprite_get_width(p_game->o_level.p_NPC[NPC_index].p_sprite) - NPC_bouding_box_margin_x;
-    p_game->o_level.p_NPC[NPC_index].p_sprite->bounding_box.h = sprite_get_height(p_game->o_level.p_NPC[NPC_index].p_sprite) - NPC_bouding_box_margin_y;
+    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.x = p_game->o_level.p_NPC[NPC_index].o_sprite.x + NPC_bouding_box_margin_x;
+    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.y = p_game->o_level.p_NPC[NPC_index].o_sprite.y + NPC_bouding_box_margin_y;
+    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.w = sprite_get_width(&p_game->o_level.p_NPC[NPC_index].o_sprite) - NPC_bouding_box_margin_x;
+    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.h = sprite_get_height(&p_game->o_level.p_NPC[NPC_index].o_sprite) - NPC_bouding_box_margin_y;
   }
 }

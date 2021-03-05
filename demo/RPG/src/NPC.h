@@ -17,12 +17,10 @@ typedef void (*on_action)(NPC *, game *, SDL_Renderer *);
 
 typedef struct t_NPC
 {
-    sprite *p_sprite;
+    sprite o_sprite;
     event *p_event;
 } NPC;
 
 void NPC_init(NPC *p_NPC, tileset *p_tileset_NPC, SDL_Renderer *renderer);
-
-void NPC_free(NPC *p_NPC);
 
 #endif

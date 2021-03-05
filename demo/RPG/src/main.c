@@ -208,7 +208,7 @@ void game_check_NPC_action(game *p_game, int hero_center_x, int hero_center_y,
     {
       NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
       SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
-      if (SDL_PointInRect(&hero_front, &p_NPC->p_sprite->bounding_box) && p_NPC->p_event)
+      if (SDL_PointInRect(&hero_front, &p_NPC->o_sprite.bounding_box) && p_NPC->p_event)
       {
         event_exec(p_NPC->p_event, p_game, renderer);
         break;
