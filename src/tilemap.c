@@ -7,7 +7,6 @@ void map_init(tilemap *p_map)
   p_map->nb_layer = 0;
   p_map->width = 0;
   p_map->height = 0;
-  p_map->p_tileset->v_animation = NULL;
 }
 
 void map_draw(tilemap *p_map, SDL_Renderer *renderer)

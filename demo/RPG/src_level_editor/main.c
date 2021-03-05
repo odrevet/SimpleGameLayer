@@ -76,6 +76,7 @@ int main(int argc, char **argv)
   //editor
   editor o_editor;
   editor_init(&o_editor);
+  map_init(&o_editor.o_level.o_tilemap);
   o_editor.o_level.o_tilemap.p_tileset = malloc(sizeof(tileset));
   o_editor.o_level.o_tilemap.p_tileset->p_image = &o_image;
 
