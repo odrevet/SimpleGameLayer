@@ -12,8 +12,8 @@ bool level_save(level *p_level, const char *pathfile, char *path_tileset, char *
     tilemap *p_map = &p_level->o_tilemap;
 
     fprintf(fp, "%s\n", path_tileset);
-    fprintf(fp, "%s\n", p_level->path_tile_property);
     fprintf(fp, "%s\n", path_music);
+    fprintf(fp, "%s\n", p_level->path_tile_property);
     fprintf(fp, "%d:%d\n", p_map->p_tileset->tile_width, p_map->p_tileset->tile_height);
     fprintf(fp, "%d:%d:%d\n", p_map->width, p_map->height, p_map->nb_layer);
 
