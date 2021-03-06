@@ -23,6 +23,7 @@ typedef struct t_editor
 
     //selected tile in the tileset
     int tileset_selected_index;
+    int tileset_selected_animated_index;
     bool tileset_selected_is_animated;
 
     // selected tile in the map
