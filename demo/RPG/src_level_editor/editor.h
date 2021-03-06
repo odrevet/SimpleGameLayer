@@ -23,6 +23,7 @@ typedef struct t_editor
 
     //selected tile in the tileset
     int tileset_selected_index;
+    bool tileset_selected_is_animated;
 
     // selected tile in the map
     int layer;
@@ -41,5 +42,6 @@ typedef struct t_editor
 void editor_init(editor *p_editor);
 editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer);
 editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer);
+editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *renderer);
 
 #endif

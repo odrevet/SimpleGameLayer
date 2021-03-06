@@ -3,6 +3,7 @@
 void editor_init(editor *p_editor)
 {
     p_editor->tileset_selected_index = 0;
+    p_editor->tileset_selected_is_animated = false;
     p_editor->layer = 0;
     p_editor->map_tile_index_x = 0;
     p_editor->map_tile_index_y = 0;
@@ -49,6 +50,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     break;
                 case SDLK_t:
                     editor_tile_selection(p_editor, renderer);
+                    break;
+                case SDLK_a:
+                    editor_animated_tile_selection(p_editor, renderer);
                     break;
                 case SDLK_l:
                     if (p_editor->layer == p_map->nb_layer - 1)
@@ -131,7 +135,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     break;
                 case SDLK_RETURN:
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = p_editor->tileset_selected_index;
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.x = (p_editor->tileset_selected_index % tileset_nb_tile_x) * 16;  //TODO tile size from tileset
+                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.x = (p_editor->tileset_selected_index % tileset_nb_tile_x) * 16; //TODO tile size from tileset
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.y = (p_editor->tileset_selected_index / tileset_nb_tile_x) * 16;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.h = 16;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.w = 16;
@@ -215,9 +219,6 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                 {
                 case SDLK_q:
                     done = true;
-                    break;
-                case SDLK_s:
-                    level_save(&p_editor->o_level, p_editor->path_level, p_editor->path_tileset, p_editor->path_music);
                     break;
                 case SDLK_LEFT:
                     if (p_editor->tileset_selected_index > 0 && p_editor->tileset_selected_index % tileset_nb_tile_x != 0)
@@ -326,6 +327,104 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
              .h = p_map->p_tileset->tile_height,
              .w = p_map->p_tileset->tile_width};
         SDL_RenderDrawRect(renderer, &rect_tile_chipset);
+
+        // HUD
+        fontmap_printf(p_editor->p_fontmap, 0, 0, renderer, "%d", p_editor->tileset_selected_index);
+
+        SDL_RenderPresent(renderer);
+    }
+
+    return 0;
+}
+
+editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *renderer)
+{
+    bool done = false;
+    tilemap *p_map = &p_editor->o_level.o_tilemap;
+
+    while (!done)
+    {
+        //input
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
+        {
+
+            if (event.type == SDL_QUIT)
+            {
+                exit(EXIT_SUCCESS);
+            }
+
+            switch (event.type)
+            {
+            case SDL_KEYDOWN:
+                switch (event.key.keysym.sym)
+                {
+                case SDLK_q:
+                    done = true;
+                    break;
+                case SDLK_LEFT:
+                    break;
+                case SDLK_RIGHT:
+                    break;
+                case SDLK_UP:
+                    break;
+                case SDLK_DOWN:
+                    break;
+                case SDLK_RETURN:
+                    done = true;
+                    break;
+                default:
+                    break;
+                }
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                break;
+            }
+        }
+
+        //update animated tile
+        for (int animation_index = 0; animation_index < p_map->p_tileset->animation_nb; animation_index++)
+        {
+            animation_update(p_map->p_tileset->v_animation + animation_index);
+        }
+
+        // update display
+        SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+        SDL_RenderClear(renderer);
+
+        // display a grid
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        for (int y = 0; y < SCREEN_HEIGHT; y += p_map->p_tileset->tile_height)
+        {
+            for (int x = 0; x < SCREEN_WIDTH; x += p_map->p_tileset->tile_width)
+            {
+                SDL_RenderDrawLine(renderer,
+                                   0,
+                                   y,
+                                   SCREEN_WIDTH,
+                                   y);
+
+                // draw a vertical grid line
+                SDL_RenderDrawLine(renderer,
+                                   x,
+                                   0,
+                                   x,
+                                   SCREEN_HEIGHT);
+            }
+        }
+
+        // display all animated tiles
+        for (int animation_index = 0; animation_index < p_map->p_tileset->animation_nb; animation_index++)
+        {
+            int x = 0;  //TODO
+            int y = 0;  //TODO
+            int frame_current = p_map->p_tileset->v_animation[animation_index].frame_current;
+            SDL_Rect src = p_map->p_tileset->v_animation[animation_index].v_frame[frame_current];
+            image_draw_part(p_map->p_tileset->p_image, renderer, x, y, &src);
+        }
+
+        // display a rect above the focused tile in the tileset
+        SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
 
         // HUD
         fontmap_printf(p_editor->p_fontmap, 0, 0, renderer, "%d", p_editor->tileset_selected_index);
