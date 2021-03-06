@@ -33,23 +33,20 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
     image_load(p_map->p_tileset->p_image, *current_path_tileset, renderer, NULL);
   }
 
-  // tile properties
-  fscanf(fp, "%s", buffer);
-  p_level->path_tile_property = realloc(p_level->path_tile_property, strlen(buffer) * sizeof(char));
-  strcpy(p_level->path_tile_property, buffer);
-  tile_property *v_tile_property = NULL;
-  int nb_tile_property;
-  v_tile_property = level_parse_tiles_file(p_level, buffer, &nb_tile_property, v_tile_property);
-
   // music
   fscanf(fp, "%s", buffer);
   if (*current_path_music == NULL || strcmp(buffer, *current_path_music) != 0)
   {
-    *current_path_music = realloc(*current_path_music , strlen(buffer) * sizeof(char));
+    *current_path_music = realloc(*current_path_music, strlen(buffer) * sizeof(char));
     strcpy(*current_path_music, buffer);
     p_level->p_music = music_load(*current_path_music);
     music_play(p_level->p_music);
   }
+
+  // tile properties path
+  fscanf(fp, "%s", buffer);
+  p_level->path_tile_property = realloc(p_level->path_tile_property, strlen(buffer) * sizeof(char));
+  strcpy(p_level->path_tile_property, buffer);
 
   // line break
   fgetc(fp);
@@ -63,9 +60,14 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   // line break
   fgetc(fp);
 
+  // allocate tiles
   map_tiles_alloc(p_map);
 
   // allocate tile properties
+  tile_property *v_tile_property = NULL;
+  int nb_tile_property;
+  v_tile_property = level_parse_tiles_file(p_level, buffer, &nb_tile_property, v_tile_property);
+
   p_level->p_tile_properties = calloc(p_map->nb_layer, sizeof(tile_property **));
   for (int index_layer = 0; index_layer < p_map->nb_layer; index_layer++)
   {
@@ -164,9 +166,12 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
         int tile_index;
         fscanf(fp, "%d", &tile_index);
 
-        int x = tile_index % (p_level->o_tilemap.p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/); //TODO parse width before tile
-        int y = tile_index / (p_level->o_tilemap.p_tileset->p_image->width / 16 /*p_map->p_tileset->tile_width*/);
-        animation_set_frame(p_level->o_tilemap.p_tileset->v_animation[index_tile].v_frame + index_frame, x * 16, y * 16, 16, 16);
+        int x = tile_index % (p_level->o_tilemap.p_tileset->p_image->width / p_level->o_tilemap.p_tileset->tile_width);
+        int y = tile_index / (p_level->o_tilemap.p_tileset->p_image->width / p_level->o_tilemap.p_tileset->tile_width);
+        animation_set_frame(p_level->o_tilemap.p_tileset->v_animation[index_tile].v_frame + index_frame,
+                            x * p_level->o_tilemap.p_tileset->tile_width, y * p_level->o_tilemap.p_tileset->tile_height,
+                            p_level->o_tilemap.p_tileset->tile_width,
+                            p_level->o_tilemap.p_tileset->tile_height);
       }
     }
   }
