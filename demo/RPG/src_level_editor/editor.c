@@ -138,25 +138,24 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     if (p_editor->tileset_selected_is_animated)
                     {
                         p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated = true;
+                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = p_editor->tileset_selected_animated_index;
                         p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].p_animation = p_editor->o_level.o_tilemap.p_tileset->v_animation + p_editor->tileset_selected_animated_index;
                     }
                     else
                     {
                         p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = p_editor->tileset_selected_index;
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.x = (p_editor->tileset_selected_index % tileset_nb_tile_x) * p_editor->o_level.o_tilemap.p_tileset->tile_width;
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.y = (p_editor->tileset_selected_index / tileset_nb_tile_x) * p_editor->o_level.o_tilemap.p_tileset->tile_width;
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.h = p_editor->o_level.o_tilemap.p_tileset->tile_height;
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.w = p_editor->o_level.o_tilemap.p_tileset->tile_width;
                         p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated = false;
+                        animation_set_frame(&p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame,
+                                            (p_editor->tileset_selected_index % tileset_nb_tile_x) * p_editor->o_level.o_tilemap.p_tileset->tile_width,
+                                            (p_editor->tileset_selected_index / tileset_nb_tile_x) * p_editor->o_level.o_tilemap.p_tileset->tile_width,
+                                            p_editor->o_level.o_tilemap.p_tileset->tile_height,
+                                            p_editor->o_level.o_tilemap.p_tileset->tile_width);
                     }
                     break;
                 case SDLK_BACKSPACE:
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = -1;
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.x = 0;
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.y = 0;
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.h = 0;
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame.w = 0;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated = false;
+                    animation_set_frame(&p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame, 0, 0, 0, 0);
                     break;
                 default:
                     break;
