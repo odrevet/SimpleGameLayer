@@ -179,7 +179,7 @@ void game_check_auto_event(game *p_game, int hero_current_tile_index_x,
 }
 
 void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_center_y,
-                           SDL_Renderer *renderer)
+                                      SDL_Renderer *renderer)
 {
   int hero_front_x = hero_center_x;
   int hero_front_y = hero_center_y;
@@ -222,7 +222,7 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
         continue;
       }
       SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
-      SDL_Rect event_rect = {.x = p_event->index_src_x * 16, .y = p_event->index_src_y * 16, .w = 16, .h = 16}; // TODO tile size from level tileset
+      SDL_Rect event_rect = {.x = p_event->index_src_x * 16, .y = p_event->index_src_y * 16, .w = p_game->o_level.o_tilemap.p_tileset->tile_width, .h = p_game->o_level.o_tilemap.p_tileset->tile_height};
       if (SDL_PointInRect(&hero_front, &event_rect))
       {
         event_exec(p_event, p_game, renderer);
