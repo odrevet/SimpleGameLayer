@@ -116,11 +116,12 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
 
         // tile property
         tile_property *p_tile_property = p_level->p_tile_properties[index_layer][index_height] + index_width;
-        p_tile_property->id = tile_index;
+        p_tile_property->id = p_tile->id;
+        p_tile_property->is_animated = p_tile->is_animated;
 
         for (int index_property = 0; index_property < nb_tile_property; index_property++)
         {
-          if (v_tile_property[index_property].id == tile_index)
+          if (v_tile_property[index_property].id == p_tile->id && p_tile_property->is_animated == v_tile_property[index_property].is_animated)
           {
             p_tile_property->walkable = v_tile_property[index_property].walkable;
             break;
@@ -188,9 +189,22 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
   for (int index_tile = 0; index_tile < *nb_tile_property; index_tile++)
   {
     int tile_id;
+    char tile_idstr[8];
     char properties[nb_properties_per_tile + 1];
 
-    fscanf(fp, "%d %s", &tile_id, properties);
+    fscanf(fp, "%s %s", tile_idstr, properties);
+
+    if (tile_idstr[0] == 'a')
+    {
+      v_tile_property[index_tile].is_animated = true;
+      char *p_tile_idstr = tile_idstr;
+      tile_id = atoi(++p_tile_idstr);
+    }
+    else
+    {
+      v_tile_property[index_tile].is_animated = false;
+      tile_id = atoi(tile_idstr);
+    }
 
     v_tile_property[index_tile].id = tile_id;
     v_tile_property[index_tile].walkable = properties[0] != '0';
