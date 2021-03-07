@@ -69,7 +69,8 @@ int main(int argc, char **argv)
   game o_game;
 
   tileset o_tileset;
-  o_tileset.p_image = malloc(sizeof(image));
+  image o_image;
+  o_tileset.p_image = &o_image;
   image_load(o_tileset.p_image, "gfx/NPC_test.png", renderer, NULL);
   tileset_init(&o_tileset, 4, 1, 4);
 
