@@ -407,11 +407,19 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
         // display all animated tiles
         for (int animation_index = 0; animation_index < p_map->p_tileset->animation_nb; animation_index++)
         {
-            int x = 0;
+            // display the animation on the first column
+            animation *p_animation = p_map->p_tileset->v_animation + animation_index;
             int y = animation_index * p_map->p_tileset->tile_height;
-            int frame_current = p_map->p_tileset->v_animation[animation_index].frame_current;
-            SDL_Rect src = p_map->p_tileset->v_animation[animation_index].v_frame[frame_current];
-            image_draw_part(p_map->p_tileset->p_image, renderer, x, y, &src);
+            int frame_current = p_animation->frame_current;
+            SDL_Rect src = p_animation->v_frame[frame_current];
+            image_draw_part(p_map->p_tileset->p_image, renderer, 0, y, &src);
+
+            // display all frames of the animation 
+            for (int frame_index = 0; frame_index < p_map->p_tileset->animation_nb; frame_index++)
+            {
+                SDL_Rect src = p_animation->v_frame[frame_index];
+                image_draw_part(p_map->p_tileset->p_image, renderer, (frame_index + 1) * p_map->p_tileset->tile_width, y, &src);
+            }
         }
 
         // display a grid
