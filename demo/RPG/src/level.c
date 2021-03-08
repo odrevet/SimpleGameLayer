@@ -48,17 +48,11 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   p_level->path_tile_property = realloc(p_level->path_tile_property, (strlen(buffer) + 1) * sizeof(char));
   strcpy(p_level->path_tile_property, buffer);
 
-  // line break
-  fgetc(fp);
-
   // map tile size
   fscanf(fp, "%d:%d", &p_map->o_tileset.tile_width, &p_map->o_tileset.tile_height);
 
   // map width height and nb of layers
   fscanf(fp, "%d:%d:%d", &p_map->width, &p_map->height, &p_map->nb_layer);
-
-  // line break
-  fgetc(fp);
 
   // allocate tiles
   map_tiles_alloc(p_map);
@@ -176,6 +170,11 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
       }
     }
   }
+  else
+  {
+    p_level->o_tilemap.o_tileset.v_animation = NULL;
+  }
+
   // tile properties
   int nb_properties_per_tile;
 
@@ -238,9 +237,9 @@ void level_free(level *p_level)
   free(p_level->path_tile_property);
 
   //TODO free / alloc only if differant between levels
-  /*for (int index_animation = 0; index_animation < p_level->o_tilemap.o_tileset.animation_nb; index_animation++)
+  for (int index_animation = 0; index_animation < p_level->o_tilemap.o_tileset.animation_nb; index_animation++)
   {
     animation_free(p_level->o_tilemap.o_tileset.v_animation + index_animation);
-  }*/
-  //free(p_level->o_tilemap.o_tileset.v_animation);
+  }
+  free(p_level->o_tilemap.o_tileset.v_animation);
 }
