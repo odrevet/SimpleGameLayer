@@ -376,7 +376,7 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
                     }
                     break;
                 case SDLK_DOWN:
-                    if (p_editor->tileset_selected_animated_index <= p_map->o_tileset.animation_nb)
+                    if (p_editor->tileset_selected_animated_index + 1< p_map->o_tileset.animation_nb)
                     {
                         p_editor->tileset_selected_animated_index++;
                     }
@@ -417,8 +417,8 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
             // display all frames of the animation 
             for (int frame_index = 0; frame_index < p_map->o_tileset.animation_nb; frame_index++)
             {
-                SDL_Rect src = p_animation->v_frame[frame_index];
-                image_draw_part(p_map->o_tileset.p_image, renderer, (frame_index + 1) * p_map->o_tileset.tile_width, y, &src);
+                SDL_Rect *src = p_animation->v_frame + frame_index;
+                image_draw_part(p_map->o_tileset.p_image, renderer, (frame_index + 1) * p_map->o_tileset.tile_width, y, src);
             }
         }
 
