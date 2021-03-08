@@ -147,33 +147,26 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
   fgetc(fp);
 
   p_level->o_tilemap.o_tileset.animation_nb = nb_tile_animated;
-
-  if (nb_tile_animated > 0)
+  p_level->o_tilemap.o_tileset.v_animation = calloc(nb_tile_animated, sizeof(animation));
+  for (int index_tile = 0; index_tile < nb_tile_animated; index_tile++)
   {
-    p_level->o_tilemap.o_tileset.v_animation = calloc(nb_tile_animated, sizeof(animation));
-    for (int index_tile = 0; index_tile < nb_tile_animated; index_tile++)
+    int nb_frame;
+    fscanf(fp, "%d", &nb_frame);
+    animation_init(p_level->o_tilemap.o_tileset.v_animation + index_tile, true, nb_frame, 10, 0);
+    for (int index_frame = 0; index_frame < nb_frame; index_frame++)
     {
-      int nb_frame;
-      fscanf(fp, "%d", &nb_frame);
-      animation_init(p_level->o_tilemap.o_tileset.v_animation + index_tile, true, nb_frame, 10, 0);
-      for (int index_frame = 0; index_frame < nb_frame; index_frame++)
-      {
-        int tile_index;
-        fscanf(fp, "%d", &tile_index);
+      int tile_index;
+      fscanf(fp, "%d", &tile_index);
 
-        int x = tile_index % (p_level->o_tilemap.o_tileset.p_image->width / p_level->o_tilemap.o_tileset.tile_width);
-        int y = tile_index / (p_level->o_tilemap.o_tileset.p_image->width / p_level->o_tilemap.o_tileset.tile_width);
-        animation_set_frame(p_level->o_tilemap.o_tileset.v_animation[index_tile].v_frame + index_frame,
-                            x * p_level->o_tilemap.o_tileset.tile_width, y * p_level->o_tilemap.o_tileset.tile_height,
-                            p_level->o_tilemap.o_tileset.tile_width,
-                            p_level->o_tilemap.o_tileset.tile_height);
-      }
+      int x = tile_index % (p_level->o_tilemap.o_tileset.p_image->width / p_level->o_tilemap.o_tileset.tile_width);
+      int y = tile_index / (p_level->o_tilemap.o_tileset.p_image->width / p_level->o_tilemap.o_tileset.tile_width);
+      animation_set_frame(p_level->o_tilemap.o_tileset.v_animation[index_tile].v_frame + index_frame,
+                          x * p_level->o_tilemap.o_tileset.tile_width, y * p_level->o_tilemap.o_tileset.tile_height,
+                          p_level->o_tilemap.o_tileset.tile_width,
+                          p_level->o_tilemap.o_tileset.tile_height);
     }
   }
-  else
-  {
-    p_level->o_tilemap.o_tileset.v_animation = NULL;
-  }
+  
 
   // tile properties
   int nb_properties_per_tile;
