@@ -27,7 +27,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   fscanf(fp, "%s", buffer);
   if (*current_path_tileset == NULL || strcmp(buffer, *current_path_tileset) != 0)
   {
-    *current_path_tileset = realloc(*current_path_tileset, strlen(buffer) * sizeof(char));
+    *current_path_tileset = realloc(*current_path_tileset, (strlen(buffer) + 1) * sizeof(char));
     strcpy(*current_path_tileset, buffer);
     image_free(p_map->o_tileset.p_image);
     image_load(p_map->o_tileset.p_image, *current_path_tileset, renderer, NULL);
@@ -37,7 +37,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   fscanf(fp, "%s", buffer);
   if (*current_path_music == NULL || strcmp(buffer, *current_path_music) != 0)
   {
-    *current_path_music = realloc(*current_path_music, strlen(buffer) * sizeof(char));
+    *current_path_music = realloc(*current_path_music, (strlen(buffer) + 1) * sizeof(char));
     strcpy(*current_path_music, buffer);
     p_level->p_music = music_load(*current_path_music);
     music_play(p_level->p_music);
@@ -45,7 +45,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
 
   // tile properties path
   fscanf(fp, "%s", buffer);
-  p_level->path_tile_property = realloc(p_level->path_tile_property, strlen(buffer) * sizeof(char));
+  p_level->path_tile_property = realloc(p_level->path_tile_property, (strlen(buffer) + 1) * sizeof(char));
   strcpy(p_level->path_tile_property, buffer);
 
   // line break
