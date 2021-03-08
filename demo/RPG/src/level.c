@@ -232,6 +232,7 @@ void level_free(level *p_level)
   //TODO free / alloc only if differant between levels
   for (int index_animation = 0; index_animation < p_level->o_tilemap.o_tileset.animation_nb; index_animation++)
   {
+    printf("FREE ANIMAION %d / %d\n", index_animation, p_level->o_tilemap.o_tileset.animation_nb);
     animation_free(p_level->o_tilemap.o_tileset.v_animation + index_animation);
   }
   free(p_level->o_tilemap.o_tileset.v_animation);
