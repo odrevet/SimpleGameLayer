@@ -22,5 +22,6 @@ typedef struct t_hero
 } hero;
 
 void hero_init(hero *p_hero, SDL_Renderer *renderer);
+void hero_free(hero *p_hero);
 
 #endif

@@ -77,8 +77,7 @@ int main(int argc, char **argv)
   editor o_editor;
   editor_init(&o_editor);
   map_init(&o_editor.o_level.o_tilemap);
-  o_editor.o_level.o_tilemap.p_tileset = malloc(sizeof(tileset));
-  o_editor.o_level.o_tilemap.p_tileset->p_image = &o_image;
+  o_editor.o_level.o_tilemap.o_tileset.p_image = &o_image;
 
   // fontmap
   fontmap o_fontmap;
@@ -117,10 +116,10 @@ int main(int argc, char **argv)
         printf("Creation of a new map\n");
 
         printf("Tile Width (in pixel) : \n");
-        scanf("%d", &p_level->o_tilemap.p_tileset->tile_width);
+        scanf("%d", &p_level->o_tilemap.o_tileset.tile_width);
 
         printf("Tile Height (in pixel) : \n");
-        scanf("%d", &p_level->o_tilemap.p_tileset->tile_height);
+        scanf("%d", &p_level->o_tilemap.o_tileset.tile_height);
 
         printf("How many layers in the map ?  (in tile) : \n");
         scanf("%d", &p_level->o_tilemap.nb_layer);
@@ -168,7 +167,7 @@ int main(int argc, char **argv)
         level_save(p_level, level_load_path, o_editor.path_tileset, o_editor.path_music);
 
         // load the tileset image so the level is editable without having to reload from file
-        image_load(o_editor.o_level.o_tilemap.p_tileset->p_image, o_editor.path_tileset, renderer, NULL);
+        image_load(o_editor.o_level.o_tilemap.o_tileset.p_image, o_editor.path_tileset, renderer, NULL);
       }
     }
   }

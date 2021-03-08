@@ -44,11 +44,13 @@ int tileset_get_width(tileset *p_tileset)
 
 void tileset_free(tileset *p_tileset)
 {
-  for (int i = 0; i < p_tileset->animation_nb; i++)
+  for (int index_animation = 0; index_animation < p_tileset->animation_nb; index_animation++)
   {
-    animation_free(p_tileset->v_animation + i);
+    animation_free(p_tileset->v_animation + index_animation);
   }
 
   free(p_tileset->v_animation);
   p_tileset->v_animation = NULL;
+  image_free(p_tileset->p_image);
+  p_tileset->p_image = NULL;
 }

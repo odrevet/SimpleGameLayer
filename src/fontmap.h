@@ -54,10 +54,4 @@ int fontmap_printf(fontmap *p_fontmap,
                    SDL_Renderer *renderer,
                    const char *format, ...);
 
-/**
-   @brief free the memory
-   @param the fontmap
- */
-void fontmap_free(fontmap *p_fontmap);
-
 #endif

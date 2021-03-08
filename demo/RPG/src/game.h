@@ -39,5 +39,5 @@ void game_draw(game *p_game, SDL_Renderer *renderer);
 bool game_check_NPC_collid(game *p_game);
 void game_center_camera_on_hero(game *p_game);
 void game_update(game *p_game);
-
+void game_free(game *p_game);
 #endif

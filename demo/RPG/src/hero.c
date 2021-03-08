@@ -38,3 +38,8 @@ void hero_init(hero *p_hero, SDL_Renderer *renderer)
     tileset_set_frame(p_tileset, RIGHT, 2, 32, 32, 16, 32);
     tileset_set_frame(p_tileset, RIGHT, 3, 48, 32, 16, 32);
 }
+
+void hero_free(hero *p_hero)
+{
+    sprite_free(&p_hero->o_sprite);
+}

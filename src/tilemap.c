@@ -16,16 +16,16 @@ void map_draw(tilemap *p_map, SDL_Renderer *renderer)
 
   for (int index_layer = 0; index_layer < p_map->nb_layer; index_layer++)
   {
-    int x_from = -(p_map->o_camera.x % p_map->p_tileset->tile_width);
-    int x_to = x_from + SCREEN_WIDTH + (x_from == 0 ? 0 : p_map->p_tileset->tile_width);
-    int y_from = -(p_map->o_camera.y % p_map->p_tileset->tile_height);
-    int y_to = y_from + SCREEN_HEIGHT + (y_from == 0 ? 0 : p_map->p_tileset->tile_height);
-    int tile_y_index = p_map->o_camera.y / p_map->p_tileset->tile_height;
+    int x_from = -(p_map->o_camera.x % p_map->o_tileset.tile_width);
+    int x_to = x_from + SCREEN_WIDTH + (x_from == 0 ? 0 : p_map->o_tileset.tile_width);
+    int y_from = -(p_map->o_camera.y % p_map->o_tileset.tile_height);
+    int y_to = y_from + SCREEN_HEIGHT + (y_from == 0 ? 0 : p_map->o_tileset.tile_height);
+    int tile_y_index = p_map->o_camera.y / p_map->o_tileset.tile_height;
 
-    for (int y = y_from; y < y_to; y += p_map->p_tileset->tile_height)
+    for (int y = y_from; y < y_to; y += p_map->o_tileset.tile_height)
     {
-      int tile_x_index = p_map->o_camera.x / p_map->p_tileset->tile_width;
-      for (int x = x_from; x < x_to; x += p_map->p_tileset->tile_width)
+      int tile_x_index = p_map->o_camera.x / p_map->o_tileset.tile_width;
+      for (int x = x_from; x < x_to; x += p_map->o_tileset.tile_width)
       {
         tile *p_tile = p_map->p_tiles[index_layer][tile_y_index] + tile_x_index;
         map_draw_tile(p_map, p_tile, x, y, renderer);
@@ -58,7 +58,7 @@ void map_draw_tile(tilemap *p_map,
     src = p_tile->o_frame;
   }
 
-  image_draw_part(p_map->p_tileset->p_image, renderer, x, y, &src);
+  image_draw_part(p_map->o_tileset.p_image, renderer, x, y, &src);
 }
 
 void map_tiles_alloc(tilemap *p_map)

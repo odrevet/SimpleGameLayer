@@ -63,8 +63,8 @@ bool game_check_NPC_collid(game *p_game)
 
 bool game_check_tile_walkable(tile_property ***p_tile_properties, tilemap *p_map, int x, int y, int z)
 {
-  int index_x = x / p_map->p_tileset->tile_width;
-  int index_y = y / p_map->p_tileset->tile_height;
+  int index_x = x / p_map->o_tileset.tile_width;
+  int index_y = y / p_map->o_tileset.tile_height;
 
   // check boundaries
   if (x < 0 || y < 0 || index_x < 0 || index_y < 0 || index_x >= p_map->width || index_y >= p_map->height)
@@ -86,8 +86,8 @@ void game_center_camera_on_hero(game *p_game)
   else
   {
     p_map->o_camera.y = p_game->o_hero.o_sprite.y - (SCREEN_HEIGHT / 2);
-    if (p_map->o_camera.y > p_map->height * p_map->p_tileset->tile_height - SCREEN_HEIGHT)
-      p_map->o_camera.y = p_map->height * p_map->p_tileset->tile_height - SCREEN_HEIGHT;
+    if (p_map->o_camera.y > p_map->height * p_map->o_tileset.tile_height - SCREEN_HEIGHT)
+      p_map->o_camera.y = p_map->height * p_map->o_tileset.tile_height - SCREEN_HEIGHT;
   }
 
   if (p_game->o_hero.o_sprite.x < SCREEN_WIDTH / 2)
@@ -97,17 +97,17 @@ void game_center_camera_on_hero(game *p_game)
   else
   {
     p_map->o_camera.x = p_game->o_hero.o_sprite.x - (SCREEN_WIDTH / 2);
-    if (p_map->o_camera.x > p_map->width * p_map->p_tileset->tile_width - SCREEN_WIDTH)
-      p_map->o_camera.x = p_map->width * p_map->p_tileset->tile_width - SCREEN_WIDTH;
+    if (p_map->o_camera.x > p_map->width * p_map->o_tileset.tile_width - SCREEN_WIDTH)
+      p_map->o_camera.x = p_map->width * p_map->o_tileset.tile_width - SCREEN_WIDTH;
   }
 }
 
 void game_update(game *p_game)
 {
   // update map animations
-  for (int animation_index = 0; animation_index < p_game->o_level.o_tilemap.p_tileset->animation_nb; animation_index++)
+  for (int animation_index = 0; animation_index < p_game->o_level.o_tilemap.o_tileset.animation_nb; animation_index++)
   {
-    animation_update(p_game->o_level.o_tilemap.p_tileset->v_animation + animation_index);
+    animation_update(p_game->o_level.o_tilemap.o_tileset.v_animation + animation_index);
   }
 
   // hero
@@ -165,4 +165,15 @@ void game_update(game *p_game)
     p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.w = sprite_get_width(&p_game->o_level.p_NPC[NPC_index].o_sprite) - NPC_bouding_box_margin_x;
     p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.h = sprite_get_height(&p_game->o_level.p_NPC[NPC_index].o_sprite) - NPC_bouding_box_margin_y;
   }
+}
+
+void game_free(game *p_game)
+{
+  tileset_free(&p_game->o_level.o_tilemap.o_tileset);
+  tileset_free(p_game->p_tileset_NPC);
+  level_free(&p_game->o_level);
+  hero_free(&p_game->o_hero);
+  image_free(p_game->p_fontmap->p_image);
+  free(p_game->path_tileset);
+  free(p_game->path_music);
 }

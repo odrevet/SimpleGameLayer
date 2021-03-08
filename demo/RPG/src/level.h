@@ -36,5 +36,8 @@ typedef struct t_level
 void level_init(level *p_level);
 bool level_load(level *p_level, const char *pathfile, char **current_path_tileset, char **current_path_music, SDL_Renderer *renderer);
 tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int *nb_tile_property, tile_property *v_tile_property);
+
+//Do not free tileset as it may be needed again between loading another level with the same tileset
 void level_free(level *p_level);
+
 #endif

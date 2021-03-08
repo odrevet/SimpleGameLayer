@@ -29,8 +29,8 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   {
     *current_path_tileset = realloc(*current_path_tileset, strlen(buffer) * sizeof(char));
     strcpy(*current_path_tileset, buffer);
-    image_free(p_map->p_tileset->p_image);
-    image_load(p_map->p_tileset->p_image, *current_path_tileset, renderer, NULL);
+    image_free(p_map->o_tileset.p_image);
+    image_load(p_map->o_tileset.p_image, *current_path_tileset, renderer, NULL);
   }
 
   // music
@@ -52,7 +52,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   fgetc(fp);
 
   // map tile size
-  fscanf(fp, "%d:%d", &p_map->p_tileset->tile_width, &p_map->p_tileset->tile_height);
+  fscanf(fp, "%d:%d", &p_map->o_tileset.tile_width, &p_map->o_tileset.tile_height);
 
   // map width height and nb of layers
   fscanf(fp, "%d:%d:%d", &p_map->width, &p_map->height, &p_map->nb_layer);
@@ -100,16 +100,16 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
           p_tile->is_animated = true;
           char *p_tile_idstr = tile_idstr;
           tile_index = atoi(++p_tile_idstr);
-          p_tile->p_animation = p_level->o_tilemap.p_tileset->v_animation + tile_index;
+          p_tile->p_animation = p_level->o_tilemap.o_tileset.v_animation + tile_index;
         }
         else
         {
           p_tile->is_animated = false;
           tile_index = atoi(tile_idstr);
-          p_tile->o_frame.x = tile_index % (p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_width;
-          p_tile->o_frame.y = tile_index / (p_map->p_tileset->p_image->width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_height;
-          p_tile->o_frame.w = p_map->p_tileset->tile_width;
-          p_tile->o_frame.h = p_map->p_tileset->tile_height;
+          p_tile->o_frame.x = tile_index % (p_map->o_tileset.p_image->width / p_map->o_tileset.tile_width) * p_map->o_tileset.tile_width;
+          p_tile->o_frame.y = tile_index / (p_map->o_tileset.p_image->width / p_map->o_tileset.tile_width) * p_map->o_tileset.tile_height;
+          p_tile->o_frame.w = p_map->o_tileset.tile_width;
+          p_tile->o_frame.h = p_map->o_tileset.tile_height;
         }
 
         p_tile->id = tile_index;
@@ -152,27 +152,27 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
   // line break
   fgetc(fp);
 
-  p_level->o_tilemap.p_tileset->animation_nb = nb_tile_animated;
+  p_level->o_tilemap.o_tileset.animation_nb = nb_tile_animated;
 
   if (nb_tile_animated > 0)
   {
-    p_level->o_tilemap.p_tileset->v_animation = calloc(nb_tile_animated, sizeof(animation));
+    p_level->o_tilemap.o_tileset.v_animation = calloc(nb_tile_animated, sizeof(animation));
     for (int index_tile = 0; index_tile < nb_tile_animated; index_tile++)
     {
       int nb_frame;
       fscanf(fp, "%d", &nb_frame);
-      animation_init(p_level->o_tilemap.p_tileset->v_animation + index_tile, true, nb_frame, 10, 0);
+      animation_init(p_level->o_tilemap.o_tileset.v_animation + index_tile, true, nb_frame, 10, 0);
       for (int index_frame = 0; index_frame < nb_frame; index_frame++)
       {
         int tile_index;
         fscanf(fp, "%d", &tile_index);
 
-        int x = tile_index % (p_level->o_tilemap.p_tileset->p_image->width / p_level->o_tilemap.p_tileset->tile_width);
-        int y = tile_index / (p_level->o_tilemap.p_tileset->p_image->width / p_level->o_tilemap.p_tileset->tile_width);
-        animation_set_frame(p_level->o_tilemap.p_tileset->v_animation[index_tile].v_frame + index_frame,
-                            x * p_level->o_tilemap.p_tileset->tile_width, y * p_level->o_tilemap.p_tileset->tile_height,
-                            p_level->o_tilemap.p_tileset->tile_width,
-                            p_level->o_tilemap.p_tileset->tile_height);
+        int x = tile_index % (p_level->o_tilemap.o_tileset.p_image->width / p_level->o_tilemap.o_tileset.tile_width);
+        int y = tile_index / (p_level->o_tilemap.o_tileset.p_image->width / p_level->o_tilemap.o_tileset.tile_width);
+        animation_set_frame(p_level->o_tilemap.o_tileset.v_animation[index_tile].v_frame + index_frame,
+                            x * p_level->o_tilemap.o_tileset.tile_width, y * p_level->o_tilemap.o_tileset.tile_height,
+                            p_level->o_tilemap.o_tileset.tile_width,
+                            p_level->o_tilemap.o_tileset.tile_height);
       }
     }
   }
@@ -234,6 +234,13 @@ void level_free(level *p_level)
   map_tiles_free(&p_level->o_tilemap);
 
   free(p_level->p_NPC);
-  free(p_level->p_event);
+  free(p_level->p_event); //TODO event_free (free params if type warp)
   free(p_level->path_tile_property);
+
+  //TODO free / alloc only if differant between levels
+  /*for (int index_animation = 0; index_animation < p_level->o_tilemap.o_tileset.animation_nb; index_animation++)
+  {
+    animation_free(p_level->o_tilemap.o_tileset.v_animation + index_animation);
+  }*/
+  //free(p_level->o_tilemap.o_tileset.v_animation);
 }
