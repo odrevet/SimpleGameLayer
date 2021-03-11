@@ -39,6 +39,53 @@ typedef enum e_game_state
 */
 game_state state_in_game(game *p_game, SDL_Renderer *renderer);
 
+bool tileset_init_from_file(tileset *p_tileset, char *pathfile, SDL_Renderer *renderer)
+{
+  FILE *fp = fopen(pathfile, "r");
+  if (!fp)
+  {
+    return false;
+  }
+
+  char buffer[256];
+
+  // tileset
+  fscanf(fp, "%s", buffer);
+  image_load(p_tileset->p_image, buffer, renderer, NULL);
+
+  // tile size
+  fscanf(fp, "%d:%d", &p_tileset->tile_width, &p_tileset->tile_height);
+
+  // nb tile animated
+  int nb_tile_animated;
+  fscanf(fp, "%d", &nb_tile_animated);
+
+  p_tileset->animation_nb = nb_tile_animated;
+  p_tileset->v_animation = calloc(nb_tile_animated, sizeof(animation));
+
+  for (int index_tile = 0; index_tile < nb_tile_animated; index_tile++)
+  {
+    int nb_frame;
+    fscanf(fp, "%d", &nb_frame);
+    animation_init(p_tileset->v_animation + index_tile, true, nb_frame, 10, 0);
+    for (int index_frame = 0; index_frame < nb_frame; index_frame++)
+    {
+      int tile_index;
+      fscanf(fp, "%d", &tile_index);
+
+      int x = tile_index % (p_tileset->p_image->width / p_tileset->tile_width);
+      int y = tile_index / (p_tileset->p_image->width / p_tileset->tile_width);
+      animation_set_frame(p_tileset->v_animation[index_tile].v_frame + index_frame,
+                          x * p_tileset->tile_width, y * p_tileset->tile_height,
+                          p_tileset->tile_width,
+                          p_tileset->tile_height);
+    }
+  }
+
+  fclose(fp);
+  return true;
+}
+
 int main(int argc, char **argv)
 {
   // flags for the window
@@ -70,8 +117,7 @@ int main(int argc, char **argv)
   SDL_ShowCursor(SDL_DISABLE);
 
   // create a new window
-  SDL_Window *window =
-      create_window("RPG", &WINDOW_WIDTH, &WINDOW_HEIGHT, flags);
+  SDL_Window *window = create_window("RPG", &WINDOW_WIDTH, &WINDOW_HEIGHT, flags);
 
   // create a renderer
   SDL_Renderer *renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -86,37 +132,12 @@ int main(int argc, char **argv)
   o_game.path_music = NULL;
   o_game.path_tileset = NULL;
 
-  image o_image_NPC;
-  image_load(&o_image_NPC, "gfx/NPC_test.png", renderer, NULL);
-  tileset o_tileset_NPC;
-  o_tileset_NPC.p_image = &o_image_NPC;
-  tileset_init(&o_tileset_NPC, 3, 4, 4);
+  o_game.p_tileset_NPC = malloc(sizeof(tileset));
+  o_game.p_tileset_NPC->frame_nb_x = 3;
+  o_game.p_tileset_NPC->frame_nb_y = 4;
+  o_game.p_tileset_NPC->p_image = alloca(sizeof(image));
 
-  animation_init(o_tileset_NPC.v_animation + DOWN, false, 4, 10, 0);
-  tileset_set_frame(&o_tileset_NPC, DOWN, 0, 00, 0, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, DOWN, 1, 14, 0, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, DOWN, 2, 00, 0, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, DOWN, 3, 28, 0, 14, 21);
-
-  animation_init(o_tileset_NPC.v_animation + UP, false, 4, 10, 0);
-  tileset_set_frame(&o_tileset_NPC, UP, 0, 00, 42, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, UP, 1, 14, 42, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, UP, 2, 00, 42, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, UP, 3, 28, 42, 14, 21);
-
-  animation_init(o_tileset_NPC.v_animation + LEFT, false, 4, 10, 0);
-  tileset_set_frame(&o_tileset_NPC, LEFT, 0, 00, 64, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, LEFT, 1, 14, 64, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, LEFT, 2, 00, 63, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, LEFT, 3, 28, 64, 14, 21);
-
-  animation_init(o_tileset_NPC.v_animation + RIGHT, false, 4, 10, 0);
-  tileset_set_frame(&o_tileset_NPC, RIGHT, 0, 00, 21, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, RIGHT, 1, 14, 21, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, RIGHT, 2, 00, 21, 14, 21);
-  tileset_set_frame(&o_tileset_NPC, RIGHT, 3, 28, 21, 14, 21);
-
-  o_game.p_tileset_NPC = &o_tileset_NPC;
+  tileset_init_from_file(o_game.p_tileset_NPC, "data/NPC.tileset", renderer);
 
   // hero
   hero_init(&o_game.o_hero, renderer);
