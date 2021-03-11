@@ -43,3 +43,14 @@ void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
     p_game->p_level_function(p_game, renderer);
   }
 }
+
+void event_free(event *p_event)
+{
+  switch (p_event->o_event_type)
+  {
+  case EVENT_TYPE_WARP:
+    free((event_param_warp*)p_event->p_param); break;
+  default:
+    break;
+  }
+}

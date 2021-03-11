@@ -226,13 +226,12 @@ void level_free(level *p_level)
   map_tiles_free(&p_level->o_tilemap);
 
   free(p_level->p_NPC);
-  free(p_level->p_event); //TODO event_free (free params if type warp)
+  event_free(p_level->p_event);
+  free(p_level->p_event);
   free(p_level->path_tile_property);
 
-  //TODO free / alloc only if differant between levels
   for (int index_animation = 0; index_animation < p_level->o_tilemap.o_tileset.animation_nb; index_animation++)
   {
-    printf("FREE ANIMAION %d / %d\n", index_animation, p_level->o_tilemap.o_tileset.animation_nb);
     animation_free(p_level->o_tilemap.o_tileset.v_animation + index_animation);
   }
   free(p_level->o_tilemap.o_tileset.v_animation);

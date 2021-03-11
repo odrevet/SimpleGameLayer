@@ -44,4 +44,6 @@ void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 
 void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 
+void event_free(event *p_event);
+
 #endif
