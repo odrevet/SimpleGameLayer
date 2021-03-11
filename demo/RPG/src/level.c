@@ -166,7 +166,6 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
                           p_level->o_tilemap.o_tileset.tile_height);
     }
   }
-  
 
   // tile properties
   int nb_properties_per_tile;

@@ -169,7 +169,7 @@ void game_update(game *p_game)
 
 void game_free(game *p_game)
 {
-  tileset_free(&p_game->o_level.o_tilemap.o_tileset);
+  image_free(p_game->o_level.o_tilemap.o_tileset.p_image);
   tileset_free(p_game->p_tileset_NPC);
   level_free(&p_game->o_level);
   hero_free(&p_game->o_hero);
