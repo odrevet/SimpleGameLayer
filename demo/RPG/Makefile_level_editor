@@ -12,9 +12,10 @@ $(SGLDIR)/tilemap.c \
 $(SGLDIR)/animation.c \
 $(SGLDIR)/tileset.c \
 $(SGLDIR)/sound.c \
+$(SGLDIR)/UI/dialog.c \
 $(foreach DIR,$(SOURCEDIR),$(wildcard $(DIR)/*.c)) \
 src/level.c \
-src/NPC.c
+src/utils.c
 
 DEBUG=no
 ifeq ($(DEBUG),yes)

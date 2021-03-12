@@ -291,8 +291,6 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
                     break;
                 }
                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                break;
             }
         }
 
@@ -351,6 +349,7 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
 {
     bool done = false;
     tilemap *p_map = &p_editor->o_level.o_tilemap;
+    tileset *p_tileset = &p_map->o_tileset;
 
     while (!done)
     {
@@ -379,7 +378,7 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
                     }
                     break;
                 case SDLK_DOWN:
-                    if (p_editor->tileset_selected_animated_index + 1 < p_map->o_tileset.animation_nb)
+                    if (p_editor->tileset_selected_animated_index + 1 < p_tileset->animation_nb)
                     {
                         p_editor->tileset_selected_animated_index++;
                     }
@@ -392,13 +391,11 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
                     break;
                 }
                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                break;
             }
         }
 
         //update animated tile
-        for (int animation_index = 0; animation_index < p_map->o_tileset.animation_nb; animation_index++)
+        for (int animation_index = 0; animation_index < p_tileset->animation_nb; animation_index++)
         {
             animation_update(p_map->o_tileset.v_animation + animation_index);
         }
@@ -407,52 +404,15 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
         SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
         SDL_RenderClear(renderer);
 
-        // display all animated tiles
-        for (int animation_index = 0; animation_index < p_map->o_tileset.animation_nb; animation_index++)
-        {
-            // display the animation on the first column
-            animation *p_animation = p_map->o_tileset.v_animation + animation_index;
-            int y = animation_index * p_map->o_tileset.tile_height;
-            int frame_current = p_animation->frame_current;
-            SDL_Rect src = p_animation->v_frame[frame_current];
-            image_draw_part(p_map->o_tileset.p_image, renderer, 0, y, &src);
-
-            // display all frames of the animation
-            for (int frame_index = 0; frame_index < p_map->o_tileset.animation_nb; frame_index++)
-            {
-                SDL_Rect *src = p_animation->v_frame + frame_index;
-                image_draw_part(p_map->o_tileset.p_image, renderer, (frame_index + 1) * p_map->o_tileset.tile_width, y, src);
-            }
-        }
-
-        // display a grid
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        for (int y = 0; y < SCREEN_HEIGHT; y += p_map->o_tileset.tile_height)
-        {
-            for (int x = 0; x < SCREEN_WIDTH; x += p_map->o_tileset.tile_width)
-            {
-                SDL_RenderDrawLine(renderer,
-                                   0,
-                                   y,
-                                   SCREEN_WIDTH,
-                                   y);
-
-                // draw a vertical grid line
-                SDL_RenderDrawLine(renderer,
-                                   x,
-                                   0,
-                                   x,
-                                   SCREEN_HEIGHT);
-            }
-        }
+        editor_render_tileset_animations(p_tileset, renderer);
 
         // display a rect above the selected animated tile
         SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
         SDL_Rect rect_tile_animated =
             {.x = 0,
-             .y = p_editor->tileset_selected_animated_index * p_map->o_tileset.tile_height,
-             .h = p_map->o_tileset.tile_height,
-             .w = p_map->o_tileset.tile_width};
+             .y = p_editor->tileset_selected_animated_index * p_tileset->tile_height,
+             .h = p_tileset->tile_height,
+             .w = p_tileset->tile_width};
         SDL_RenderDrawRect(renderer, &rect_tile_animated);
 
         // HUD
@@ -462,4 +422,46 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
     }
 
     return 0;
+}
+
+void editor_render_tileset_animations(tileset *p_tileset, SDL_Renderer *renderer)
+{
+    // display all animated tiles
+    for (int animation_index = 0; animation_index < p_tileset->animation_nb; animation_index++)
+    {
+        // display the animation on the first column
+        animation *p_animation = p_tileset->v_animation + animation_index;
+        int y = animation_index * p_tileset->tile_height;
+        int frame_current = p_animation->frame_current;
+        SDL_Rect src = p_animation->v_frame[frame_current];
+        image_draw_part(p_tileset->p_image, renderer, 0, y, &src);
+
+        // display all frames of the animation
+        for (int frame_index = 0; frame_index < p_tileset->animation_nb; frame_index++)
+        {
+            SDL_Rect *src = p_animation->v_frame + frame_index;
+            image_draw_part(p_tileset->p_image, renderer, (frame_index + 1) * p_tileset->tile_width, y, src);
+        }
+    }
+
+    // display a grid
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    for (int y = 0; y < SCREEN_HEIGHT; y += p_tileset->tile_height)
+    {
+        for (int x = 0; x < SCREEN_WIDTH; x += p_tileset->tile_width)
+        {
+            SDL_RenderDrawLine(renderer,
+                               0,
+                               y,
+                               SCREEN_WIDTH,
+                               y);
+
+            // draw a vertical grid line
+            SDL_RenderDrawLine(renderer,
+                               x,
+                               0,
+                               x,
+                               SCREEN_HEIGHT);
+        }
+    }
 }

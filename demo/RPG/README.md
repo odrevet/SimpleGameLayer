@@ -11,7 +11,9 @@ A minimalisic RPG with :
 
 # Level Editor
 
-Create or modify a .map file.
+* Create or modify a .map file.
+
+* See animations of a .tileset file. 
 
 ## build
 
@@ -19,15 +21,14 @@ Create or modify a .map file.
 
 ## run
 
-    ./level_editor -l data/overworld.map
+    ./level_editor -i data/overworld.map
 
 Create and edit level files.
 
 Command line argument:
 
-* -l: level to load (.map file)
+* -i: level to load (.map or .tileset file)
 
-If the file do not existe, it may be created and intialize in the editor's console.
 
 Controles:
 
@@ -49,12 +50,20 @@ Controles:
 ### .map
 
 ```
-Path to tileset image file
+Path to .tileset file
 Path to music file
-Path to tiles properties file (defined in the next section)
+Path to .tiles file
 Tile width : tile height
 Number of tile for width : Number of tiles for height : Number of layers
 Ids of tiles separated by a space character
+```
+
+### .tileset
+
+```
+Path to tileset image file
+Number of animations
+Number of frames List Tile id for each frame
 ```
 
 ### .tiles
@@ -62,8 +71,6 @@ Ids of tiles separated by a space character
 The tiles file define the frames for the animated tiles and the properties associated for each tile id. In the RPG demo, there are only one property per tile which define if the hero can walk on the tile (1) or not (0).
 
 ```
-Number of animations
-Number of frames Tile id for each frame
 Number of tile properties Number of properties per tile
 List of Tile id Properties
 ```

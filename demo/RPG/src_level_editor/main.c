@@ -28,11 +28,11 @@ int main(int argc, char **argv)
   int flags = 0;
 
   //map to load path
-  char *level_load_path = NULL;
+  char *load_path = NULL;
 
   //parse command line arguments
   int c;
-  while ((c = getopt(argc, argv, "hfl:")) != -1)
+  while ((c = getopt(argc, argv, "hfi:")) != -1)
   {
     switch (c)
     {
@@ -40,14 +40,14 @@ int main(int argc, char **argv)
       printf("Tilemap display\n");
       printf("h: print this menu and exit\n");
       printf("f: launch in fullscreen\n");
-      printf("l <filename>: path of the level to load (default %s)\n", level_load_path);
+      printf("i <filename>: input file to load\n");
       return EXIT_SUCCESS;
       break;
     case 'f':
       flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
       break;
-    case 'l':
-      level_load_path = optarg;
+    case 'i':
+      load_path = optarg;
       break;
     default:
       abort();
@@ -69,15 +69,9 @@ int main(int argc, char **argv)
                                               SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  //image
-  image o_image;
-  o_image.p_texture = NULL;
-
   //editor
   editor o_editor;
   editor_init(&o_editor);
-  map_init(&o_editor.o_level.o_tilemap);
-  o_editor.o_level.o_tilemap.o_tileset.p_image = &o_image;
 
   // fontmap
   fontmap o_fontmap;
@@ -89,107 +83,94 @@ int main(int argc, char **argv)
   o_editor.p_fontmap = &o_fontmap;
 
   //try to load a map from file
-  if (level_load_path)
+  if (load_path)
   {
-    o_editor.path_level = level_load_path;
+    o_editor.path_level = load_path;
 
     //check file extension
-    const char *extension = strrchr(level_load_path, '.');
+    const char *extension = strrchr(load_path, '.');
 
     if (strcmp(extension, ".map") == 0)
     {
-      if (!level_load(&o_editor.o_level, level_load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
+      map_init(&o_editor.o_level.o_tilemap);
+      image o_image;
+      o_image.p_texture = NULL;
+      o_editor.o_level.o_tilemap.o_tileset.p_image = &o_image;
+      if (!level_load(&o_editor.o_level, load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
       {
-        printf("Cannot find map at %s\n", level_load_path);
-        printf("Create it y/n ? \n");
-        char chr;
-        scanf("%c", &chr);
-        if (chr != 'y')
+        printf("Cannot find map at %s\n", load_path);
+        exit(0);
+      }
+
+      editor_state ret_code = IN_EDITOR;
+      while (ret_code != QUIT)
+      {
+        switch (ret_code)
         {
-          exit(EXIT_SUCCESS);
+        case IN_EDITOR:
+          ret_code = editor_edit_layout(&o_editor, renderer);
+          break;
+        default:
+          break;
         }
+      }
+    }
+    else if (strcmp(extension, ".tileset") == 0)
+    {
+      tileset o_tileset;
+      image o_image_tileset;
+      o_image_tileset.p_texture = NULL;
+      o_tileset.p_image = &o_image_tileset;
+      tileset_init_from_file(&o_tileset, load_path, renderer);
+      bool done = false;
 
-        //create a new map from user input
-        level *p_level = &o_editor.o_level;
-        char buffer[256];
-
-        printf("Creation of a new map\n");
-
-        printf("Tile Width (in pixel) : \n");
-        scanf("%d", &p_level->o_tilemap.o_tileset.tile_width);
-
-        printf("Tile Height (in pixel) : \n");
-        scanf("%d", &p_level->o_tilemap.o_tileset.tile_height);
-
-        printf("How many layers in the map ?  (in tile) : \n");
-        scanf("%d", &p_level->o_tilemap.nb_layer);
-
-        printf("Width of the map (in tile) : \n");
-        scanf("%d", &p_level->o_tilemap.width);
-
-        printf("Height of the map (in tile): \n");
-        scanf("%d", &p_level->o_tilemap.height);
-
-        // tileset
-        printf("Tilset image (path) : \n");
-        scanf("%s", buffer);
-        o_editor.path_tileset = calloc(strlen(buffer), sizeof(char));
-        strcpy(o_editor.path_tileset, buffer);
-
-        //tile properties
-        printf("Tile Properties (path) : \n");
-        scanf("%s", buffer);
-        p_level->path_tile_property = calloc(strlen(buffer), sizeof(char));
-        strcpy(p_level->path_tile_property, buffer);
-
-        //music
-        printf("Music (path) : \n");
-        scanf("%s", buffer);
-        o_editor.path_music = calloc(strlen(buffer), sizeof(char));
-        strcpy(o_editor.path_music, buffer);
-
-        // allocate memory for tiles
-        map_tiles_alloc(&p_level->o_tilemap);
-
-        //set default tile values
-        for (int index_layer = 0; index_layer < o_editor.o_level.o_tilemap.nb_layer; index_layer++)
+      while (!done)
+      {
+        //input
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
         {
-          for (int index_height = 0; index_height < o_editor.o_level.o_tilemap.height; index_height++)
+
+          if (event.type == SDL_QUIT)
           {
-            for (int index_width = 0; index_width < o_editor.o_level.o_tilemap.width; index_width++)
+            exit(EXIT_SUCCESS);
+          }
+
+          switch (event.type)
+          {
+          case SDL_KEYDOWN:
+            switch (event.key.keysym.sym)
             {
-              o_editor.o_level.o_tilemap.p_tiles[index_layer][index_height][index_width].id = index_layer == 0 ? 0 : -1;
+            case SDLK_q:
+              done = true;
+              break;
+            default:
+              break;
             }
+            break;
           }
         }
 
-        // save to disc
-        level_save(p_level, level_load_path, o_editor.path_tileset, o_editor.path_music);
+        //update animated tile
+        for (int animation_index = 0; animation_index < o_tileset.animation_nb; animation_index++)
+        {
+          animation_update(o_tileset.v_animation + animation_index);
+        }
 
-        // load the tileset image so the level is editable without having to reload from file
-        image_load(o_editor.o_level.o_tilemap.o_tileset.p_image, o_editor.path_tileset, renderer, NULL);
+        // update display
+        SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+        SDL_RenderClear(renderer);
+        editor_render_tileset_animations(&o_tileset, renderer);
+        SDL_RenderPresent(renderer);
       }
     }
-  }
-  else
-  {
-    exit(0);
-  }
-
-  //editor states
-  editor_state ret_code = IN_EDITOR;
-  while (ret_code != QUIT)
-  {
-    switch (ret_code)
+    else
     {
-    case IN_EDITOR:
-      ret_code = editor_edit_layout(&o_editor, renderer);
-      break;
-    default:
-      break;
+      printf("Unknown file format\n");
+      exit(0);
     }
-  }
 
-  SDL_Quit();
-  return EXIT_SUCCESS;
+    SDL_Quit();
+    return EXIT_SUCCESS;
+  }
 }
