@@ -3,10 +3,7 @@
 
 #include <sprite.h>
 
-#define DOWN 0
-#define UP 1
-#define LEFT 2
-#define RIGHT 3
+#include "utils.h"
 
 // forward declaration
 typedef struct t_NPC NPC;

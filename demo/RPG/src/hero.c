@@ -4,39 +4,17 @@ void hero_init(hero *p_hero, SDL_Renderer *renderer)
 {
     tileset *p_tileset = malloc(sizeof(tileset));
     p_tileset->p_image = malloc(sizeof(image));
-    image_load(p_tileset->p_image, "gfx/character.png", renderer, NULL);
-    tileset_init(p_tileset, 17, 8, 4);
 
     p_hero->o_sprite.x = 64;
-    p_hero->o_sprite.y = 61;
+    p_hero->o_sprite.y = 64;
     p_hero->o_sprite.vel_x = 0;
     p_hero->o_sprite.vel_y = 0;
     p_hero->o_sprite.animation_current = DOWN;
     p_hero->o_sprite.p_tileset = p_tileset;
 
-    animation_init(p_tileset->v_animation + DOWN, false, 4, 10, 0);
-    tileset_set_frame(p_tileset, DOWN, 0, 00, 0, 16, 32);
-    tileset_set_frame(p_tileset, DOWN, 1, 16, 0, 16, 32);
-    tileset_set_frame(p_tileset, DOWN, 2, 32, 0, 16, 32);
-    tileset_set_frame(p_tileset, DOWN, 3, 48, 0, 16, 32);
-
-    animation_init(p_tileset->v_animation + UP, false, 4, 10, 0);
-    tileset_set_frame(p_tileset, UP, 0, 00, 64, 16, 32);
-    tileset_set_frame(p_tileset, UP, 1, 16, 64, 16, 32);
-    tileset_set_frame(p_tileset, UP, 2, 32, 64, 16, 32);
-    tileset_set_frame(p_tileset, UP, 3, 48, 64, 16, 32);
-
-    animation_init(p_tileset->v_animation + LEFT, false, 4, 10, 0);
-    tileset_set_frame(p_tileset, LEFT, 0, 00, 96, 16, 32);
-    tileset_set_frame(p_tileset, LEFT, 1, 16, 96, 16, 32);
-    tileset_set_frame(p_tileset, LEFT, 2, 32, 96, 16, 32);
-    tileset_set_frame(p_tileset, LEFT, 3, 48, 96, 16, 32);
-
-    animation_init(p_tileset->v_animation + RIGHT, false, 4, 10, 0);
-    tileset_set_frame(p_tileset, RIGHT, 0, 00, 32, 16, 32);
-    tileset_set_frame(p_tileset, RIGHT, 1, 16, 32, 16, 32);
-    tileset_set_frame(p_tileset, RIGHT, 2, 32, 32, 16, 32);
-    tileset_set_frame(p_tileset, RIGHT, 3, 48, 32, 16, 32);
+    p_tileset->frame_nb_x = 17;
+    p_tileset->frame_nb_y = 8;
+    tileset_init_from_file(p_tileset, "data/hero.tileset", renderer);
 }
 
 void hero_free(hero *p_hero)

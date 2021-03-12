@@ -14,6 +14,7 @@
 
 #include "tile_property.h"
 #include "NPC.h"
+#include "utils.h"
 
 // forward declaration
 typedef struct t_warp warp;

@@ -1,7 +1,6 @@
-gfx/cave.png
+data/cave.tileset
 data/cave.mod
 data/cave.tiles
-16:16
 26:6:1
 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 82 
 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 2 2 3 0 0 0 0 3 
