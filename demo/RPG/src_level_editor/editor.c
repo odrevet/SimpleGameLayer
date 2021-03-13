@@ -19,7 +19,6 @@ void editor_init(editor *p_editor)
 editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 {
     bool done = false;
-    editor_state ret_code = QUIT;
 
     tilemap *p_map = &p_editor->o_level.o_tilemap;
     int tileset_nb_tile_x = p_map->o_tileset.p_image->width / p_map->o_tileset.tile_width;
@@ -199,7 +198,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
         SDL_RenderPresent(renderer);
     }
 
-    return ret_code;
+    return QUIT;
 }
 
 editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
@@ -342,7 +341,7 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
         SDL_RenderPresent(renderer);
     }
 
-    return 0;
+    return QUIT;
 }
 
 editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *renderer)
@@ -424,7 +423,7 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
         SDL_RenderPresent(renderer);
     }
 
-    return 0;
+    return QUIT;
 }
 
 void editor_render_tileset_animations(tileset *p_tileset, SDL_Renderer *renderer)

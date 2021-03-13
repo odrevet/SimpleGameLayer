@@ -13,7 +13,9 @@ typedef enum e_editor_state
 {
     STAY = -1,
     QUIT,
-    IN_EDITOR,
+    LAYOUT_EDITOR,
+    TILE_SELECTION,
+    ANIMATED_TILE_SELECTION
 } editor_state;
 
 /*

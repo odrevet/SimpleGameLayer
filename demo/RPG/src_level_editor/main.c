@@ -96,7 +96,7 @@ int main(int argc, char **argv)
       image o_image;
       o_image.p_texture = NULL;
       o_editor.o_level.o_tilemap.o_tileset.p_image = &o_image;
-      
+
       if (!level_load(&o_editor.o_level, load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
       {
         printf("Cannot find map at %s\n", load_path);
@@ -105,12 +105,12 @@ int main(int argc, char **argv)
 
       o_editor.p_tileset = &o_editor.o_level.o_tilemap.o_tileset;
 
-      editor_state ret_code = IN_EDITOR;
+      editor_state ret_code = LAYOUT_EDITOR;
       while (ret_code != QUIT)
       {
         switch (ret_code)
         {
-        case IN_EDITOR:
+        case LAYOUT_EDITOR:
           ret_code = editor_edit_layout(&o_editor, renderer);
           break;
         default:
@@ -125,11 +125,24 @@ int main(int argc, char **argv)
       o_image_tileset.p_texture = NULL;
       o_editor.p_tileset->p_image = &o_image_tileset;
       tileset_init_from_file(o_editor.p_tileset, load_path, renderer);
-      
-      editor_animated_tile_selection(&o_editor, renderer);
+
       editor_tile_selection(&o_editor, renderer);
 
-     
+      editor_state ret_code = ANIMATED_TILE_SELECTION;
+      while (ret_code != QUIT)
+      {
+        switch (ret_code)
+        {
+        case TILE_SELECTION:
+          ret_code = editor_edit_layout(&o_editor, renderer);
+          break;
+        case ANIMATED_TILE_SELECTION:
+          ret_code = editor_animated_tile_selection(&o_editor, renderer);
+          break;
+        default:
+          break;
+        }
+      }
     }
     else
     {
