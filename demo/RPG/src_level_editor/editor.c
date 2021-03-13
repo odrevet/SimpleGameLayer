@@ -406,6 +406,10 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
 
         editor_render_tileset_animations(p_tileset, renderer);
 
+        // display a grid
+        SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+        editor_tileset_render_grid(p_tileset, renderer);
+
         // display a rect above the selected animated tile
         SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
         SDL_Rect rect_tile_animated =
@@ -443,20 +447,22 @@ void editor_render_tileset_animations(tileset *p_tileset, SDL_Renderer *renderer
             image_draw_part(p_tileset->p_image, renderer, (frame_index + 1) * p_tileset->tile_width, y, src);
         }
     }
+}
 
-    // display a grid
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+void editor_tileset_render_grid(tileset *p_tileset, SDL_Renderer *renderer)
+{
     for (int y = 0; y < SCREEN_HEIGHT; y += p_tileset->tile_height)
     {
         for (int x = 0; x < SCREEN_WIDTH; x += p_tileset->tile_width)
         {
+            //draw horizontal line
             SDL_RenderDrawLine(renderer,
                                0,
                                y,
                                SCREEN_WIDTH,
                                y);
 
-            // draw a vertical grid line
+            //draw vertical line
             SDL_RenderDrawLine(renderer,
                                x,
                                0,

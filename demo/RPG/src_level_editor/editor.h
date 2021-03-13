@@ -45,5 +45,6 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer);
 editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer);
 editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *renderer);
 void editor_render_tileset_animations(tileset *p_tileset, SDL_Renderer *renderer);
+void editor_tileset_render_grid(tileset *p_tileset, SDL_Renderer *renderer);
 
 #endif
