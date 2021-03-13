@@ -16,8 +16,15 @@ typedef enum e_editor_state
     IN_EDITOR,
 } editor_state;
 
+/*
+    the editor support .map and .tileset files
+    when editing a .map, p_tileset will point to p_level->o_tileset
+    when editing a .tileset, p_level point to NULL and we alloc some memory to p_tileset
+    we always refer to the editor's p_tileset when we want to access tilemap's tileset so we can share editor_tileset_ functions for both .map and .tileset
+*/
 typedef struct t_editor
 {
+    tileset *p_tileset;
     level o_level;
     char *path_level;
 

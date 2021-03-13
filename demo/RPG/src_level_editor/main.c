@@ -96,11 +96,14 @@ int main(int argc, char **argv)
       image o_image;
       o_image.p_texture = NULL;
       o_editor.o_level.o_tilemap.o_tileset.p_image = &o_image;
+      
       if (!level_load(&o_editor.o_level, load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
       {
         printf("Cannot find map at %s\n", load_path);
         exit(0);
       }
+
+      o_editor.p_tileset = &o_editor.o_level.o_tilemap.o_tileset;
 
       editor_state ret_code = IN_EDITOR;
       while (ret_code != QUIT)
@@ -117,71 +120,16 @@ int main(int argc, char **argv)
     }
     else if (strcmp(extension, ".tileset") == 0)
     {
-      tileset o_tileset;
+      o_editor.p_tileset = alloca(sizeof(tileset));
       image o_image_tileset;
       o_image_tileset.p_texture = NULL;
-      o_tileset.p_image = &o_image_tileset;
-      tileset_init_from_file(&o_tileset, load_path, renderer);
-      bool done = false;
-      bool display_animations = true; // display animations or tiles with id
+      o_editor.p_tileset->p_image = &o_image_tileset;
+      tileset_init_from_file(o_editor.p_tileset, load_path, renderer);
+      
+      editor_animated_tile_selection(&o_editor, renderer);
+      editor_tile_selection(&o_editor, renderer);
 
-      while (!done)
-      {
-        //input
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-
-          if (event.type == SDL_QUIT)
-          {
-            exit(EXIT_SUCCESS);
-          }
-
-          switch (event.type)
-          {
-          case SDL_KEYDOWN:
-            switch (event.key.keysym.sym)
-            {
-            case SDLK_q:
-              done = true;
-              break;
-            case SDLK_a:
-              display_animations = !display_animations;
-              break;
-            default:
-              break;
-            }
-            break;
-          }
-        }
-
-        SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
-        SDL_RenderClear(renderer);
-
-        if (display_animations)
-        {
-          //update animated tile
-          for (int animation_index = 0; animation_index < o_tileset.animation_nb; animation_index++)
-          {
-            animation_update(o_tileset.v_animation + animation_index);
-          }
-          editor_render_tileset_animations(&o_tileset, renderer);
-        }
-        else
-        {
-          //dislpay the tileset
-          SDL_Rect src = {
-              .x = o_editor.tile_select_scroll_index_x * o_tileset.tile_width,
-              .y = o_editor.tile_select_scroll_index_y * o_tileset.tile_height,
-              .w = SCREEN_WIDTH,
-              .h = SCREEN_HEIGHT};
-          image_draw_part(o_tileset.p_image, renderer, 0, 0, &src);
-        }
-
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        editor_tileset_render_grid(&o_tileset, renderer);
-        SDL_RenderPresent(renderer);
-      }
+     
     }
     else
     {

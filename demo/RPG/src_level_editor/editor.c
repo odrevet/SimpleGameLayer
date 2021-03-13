@@ -205,7 +205,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 {
     bool done = false;
-    tileset *p_tileset = &p_editor->o_level.o_tilemap.o_tileset;
+    tileset *p_tileset = p_editor->p_tileset;
     int tileset_nb_tile_y = p_tileset->p_image->height / p_tileset->tile_height;
     int tileset_nb_tile_x = p_tileset->p_image->width / p_tileset->tile_width;
 
@@ -348,8 +348,7 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 {
     bool done = false;
-    tilemap *p_map = &p_editor->o_level.o_tilemap;
-    tileset *p_tileset = &p_map->o_tileset;
+    tileset *p_tileset = p_editor->p_tileset;
 
     while (!done)
     {
@@ -397,7 +396,7 @@ editor_state editor_animated_tile_selection(editor *p_editor, SDL_Renderer *rend
         //update animated tile
         for (int animation_index = 0; animation_index < p_tileset->animation_nb; animation_index++)
         {
-            animation_update(p_map->o_tileset.v_animation + animation_index);
+            animation_update(p_tileset->v_animation + animation_index);
         }
 
         // update display
