@@ -151,8 +151,8 @@ void game_update(game *p_game)
   const int hero_bouding_box_margin_y = 18;
   p_game->o_hero.o_sprite.bounding_box.x = p_game->o_hero.o_sprite.x + hero_bouding_box_margin_x;
   p_game->o_hero.o_sprite.bounding_box.y = p_game->o_hero.o_sprite.y + hero_bouding_box_margin_y;
-  p_game->o_hero.o_sprite.bounding_box.w = sprite_get_width(&p_game->o_hero.o_sprite) - 10;
-  p_game->o_hero.o_sprite.bounding_box.h = sprite_get_height(&p_game->o_hero.o_sprite) - 24;
+  p_game->o_hero.o_sprite.bounding_box.w = p_game->o_hero.o_sprite.p_tileset->tile_width - 10;
+  p_game->o_hero.o_sprite.bounding_box.h = p_game->o_hero.o_sprite.p_tileset->tile_height - 24;
 
   // NPCs bouding box
   const int NPC_bouding_box_margin_x = 0;
@@ -162,8 +162,8 @@ void game_update(game *p_game)
   {
     p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.x = p_game->o_level.p_NPC[NPC_index].o_sprite.x + NPC_bouding_box_margin_x;
     p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.y = p_game->o_level.p_NPC[NPC_index].o_sprite.y + NPC_bouding_box_margin_y;
-    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.w = sprite_get_width(&p_game->o_level.p_NPC[NPC_index].o_sprite) - NPC_bouding_box_margin_x;
-    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.h = sprite_get_height(&p_game->o_level.p_NPC[NPC_index].o_sprite) - NPC_bouding_box_margin_y;
+    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.w = p_game->o_level.p_NPC[NPC_index].o_sprite.p_tileset->tile_width - NPC_bouding_box_margin_x;
+    p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.h = p_game->o_level.p_NPC[NPC_index].o_sprite.p_tileset->tile_height - NPC_bouding_box_margin_y;
   }
 }
 

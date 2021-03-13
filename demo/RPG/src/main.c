@@ -83,8 +83,6 @@ int main(int argc, char **argv)
   o_game.path_tileset = NULL;
 
   o_game.p_tileset_NPC = malloc(sizeof(tileset));
-  o_game.p_tileset_NPC->frame_nb_x = 3;
-  o_game.p_tileset_NPC->frame_nb_y = 4;
   o_game.p_tileset_NPC->p_image = alloca(sizeof(image));
 
   tileset_init_from_file(o_game.p_tileset_NPC, "data/NPC.tileset", renderer);

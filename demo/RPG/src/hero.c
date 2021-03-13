@@ -12,8 +12,6 @@ void hero_init(hero *p_hero, SDL_Renderer *renderer)
     p_hero->o_sprite.animation_current = DOWN;
     p_hero->o_sprite.p_tileset = p_tileset;
 
-    p_tileset->frame_nb_x = 17;
-    p_tileset->frame_nb_y = 8;
     tileset_init_from_file(p_tileset, "data/hero.tileset", renderer);
 }
 
