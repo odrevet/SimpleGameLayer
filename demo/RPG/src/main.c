@@ -19,6 +19,7 @@
 #include "level.h"
 #include "levels/levels.h"
 #include "utils.h"
+#include "event.h"
 
 int WINDOW_WIDTH = 640;
 int WINDOW_HEIGHT = 480;
@@ -120,6 +121,10 @@ int main(int argc, char **argv)
   }
 
   // free memory
+  for (int event_index = 0; event_index < o_game.o_level.event_count; event_index++)
+  {
+    event_free(o_game.o_level.p_event + event_index);
+  }
   game_free(&o_game);
   Mix_CloseAudio();
 

@@ -192,7 +192,6 @@ void level_free(level *p_level)
   map_tiles_free(&p_level->o_tilemap);
 
   free(p_level->p_NPC);
-  //event_free(p_level->p_event);
   free(p_level->p_event);
   free(p_level->path_tile_property);
 
