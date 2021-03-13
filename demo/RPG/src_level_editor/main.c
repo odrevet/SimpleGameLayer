@@ -155,12 +155,12 @@ int main(int argc, char **argv)
           }
         }
 
-        
         SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
         SDL_RenderClear(renderer);
 
         if (display_animations)
-        { //update animated tile
+        {
+          //update animated tile
           for (int animation_index = 0; animation_index < o_tileset.animation_nb; animation_index++)
           {
             animation_update(o_tileset.v_animation + animation_index);
