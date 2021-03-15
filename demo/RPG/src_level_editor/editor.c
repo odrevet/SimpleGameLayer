@@ -301,8 +301,8 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
         SDL_Rect src = {
             .x = p_editor->tile_select_scroll_index_x * p_tileset->tile_width,
             .y = p_editor->tile_select_scroll_index_y * p_tileset->tile_height,
-            .w = SCREEN_WIDTH,
-            .h = SCREEN_HEIGHT};
+            .w = p_tileset->p_image->width < SCREEN_WIDTH ? p_tileset->p_image->width : SCREEN_WIDTH,
+            .h = p_tileset->p_image->height < SCREEN_HEIGHT ? p_tileset->p_image->height : SCREEN_HEIGHT};
         image_draw_part(p_tileset->p_image, renderer, 0, 0, &src);
 
         //display a grid
