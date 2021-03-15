@@ -8,13 +8,8 @@ void tileset_set_frame(tileset *p_tileset,
   animation_set_frame(p_tileset->v_animation[animation_id].v_frame + frame_index, x, y, w, h);
 }
 
-void tileset_init(tileset *p_tileset,
-                  int frame_nb_x,
-                  int frame_nb_y,
-                  int animation_nb)
+void tileset_init(tileset *p_tileset, int animation_nb)
 {
-  p_tileset->frame_nb_x = frame_nb_x;
-  p_tileset->frame_nb_y = frame_nb_y;
   p_tileset->animation_nb = animation_nb;
   p_tileset->v_animation = calloc(animation_nb, sizeof(animation));
 }
@@ -30,16 +25,6 @@ void tileset_update_frame(tileset *p_tileset, int animation_index)
 {
   animation *p_animation = p_tileset->v_animation + animation_index;
   animation_update(p_animation);
-}
-
-int tileset_get_height(tileset *p_tileset)
-{
-  return p_tileset->p_image->height / p_tileset->frame_nb_y;
-}
-
-int tileset_get_width(tileset *p_tileset)
-{
-  return p_tileset->p_image->width / p_tileset->frame_nb_x;
 }
 
 void tileset_free(tileset *p_tileset)

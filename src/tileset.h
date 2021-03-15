@@ -14,8 +14,6 @@ typedef struct t_tileset
    image *p_image;
    animation *v_animation;
    int animation_nb;
-   int frame_nb_x;
-   int frame_nb_y;
    int tile_height;
    int tile_width;
 } tileset;
@@ -27,10 +25,7 @@ void tileset_set_frame(tileset *p_tileset,
 
 tileset *tileset_load_from_image(image *p_tileset);
 
-void tileset_init(tileset *p_tileset,
-                  int frame_nb_x, 
-                  int frame_nb_y,
-                  int animation_nb);
+void tileset_init(tileset *p_tileset, int animation_nb);
 /**
    @brief Draw an animated image
 */
@@ -47,14 +42,6 @@ void tileset_update_frame(tileset *p_tileset, int animation_index);
    @brief Get the tileset height
    @note charset height / frame_nb_y
 */
-
-int tileset_get_height(tileset *p_tileset);
-
-/**
-   @brief Get the tileset width
-   @note charset width / frame_nb_x
-*/
-int tileset_get_width(tileset *p_tileset);
 
 void tileset_free(tileset *p_tileset);
 

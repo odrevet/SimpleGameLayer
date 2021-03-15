@@ -1,17 +1,11 @@
 #include "sprite.h"
 
-void sprite_init(sprite *p_sprite,
-                 int x,
-                 int y,
-                 int frame_nb_x,
-                 int frame_nb_y,
-                 int animation_current,
-                 int animation_nb)
+void sprite_init(sprite *p_sprite, int x, int y, int animation_current, int animation_nb)
 {
   p_sprite->x = x;
   p_sprite->y = y;
   p_sprite->animation_current = animation_current;
-  tileset_init(p_sprite->p_tileset, frame_nb_x, frame_nb_y, animation_nb);
+  tileset_init(p_sprite->p_tileset, animation_nb);
 }
 
 void sprite_draw(sprite *p_sprite, SDL_Renderer *renderer)
@@ -27,16 +21,6 @@ void sprite_draw_with_offset(sprite *p_sprite, SDL_Renderer *renderer, int offse
 void sprite_update_frame(sprite *p_sprite)
 {
   tileset_update_frame(p_sprite->p_tileset, p_sprite->animation_current);
-}
-
-int sprite_get_height(sprite *p_sprite)
-{
-  return tileset_get_height(p_sprite->p_tileset);
-}
-
-int sprite_get_width(sprite *p_sprite)
-{
-  return tileset_get_width(p_sprite->p_tileset);
 }
 
 bool sprite_intersect(const sprite *p_sprite_a, const sprite *p_sprite_b)

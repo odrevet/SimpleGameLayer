@@ -14,13 +14,7 @@ typedef struct t_sprite
    tileset *p_tileset;
 } sprite;
 
-void sprite_init(sprite *p_sprite,
-                 int x,
-                 int y,
-                 int frame_nb_x,
-                 int frame_nb_y,
-                 int animation_current,
-                 int animation_nb);
+void sprite_init(sprite *p_sprite, int x, int y, int animation_current, int animation_nb);
 
 void sprite_draw(sprite *p_sprite, SDL_Renderer *renderer);
 
@@ -32,19 +26,6 @@ void sprite_draw_with_offset(sprite *p_sprite, SDL_Renderer *renderer, int offse
    Put frame_trigger to 0.
 */
 void sprite_update_frame(sprite *p_sprite);
-
-/**
-   @brief Get the sprite height
-   @note charset height / frame_nb_y
-*/
-
-int sprite_get_height(sprite *p_sprite);
-
-/**
-   @brief Get the sprite width
-   @note charset width / frame_nb_x
-*/
-int sprite_get_width(sprite *p_sprite);
 
 bool sprite_intersect(const sprite *p_sprite_a, const sprite *p_sprite_b);
 
