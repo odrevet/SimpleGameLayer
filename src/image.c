@@ -94,5 +94,8 @@ void image_set_tint(image *p_image, int r, int g, int b)
 
 void image_free(image *p_image)
 {
-	SDL_DestroyTexture(p_image->p_texture);
+	if (p_image->p_texture)
+	{
+		SDL_DestroyTexture(p_image->p_texture);
+	}
 }

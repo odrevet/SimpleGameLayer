@@ -22,7 +22,7 @@ typedef struct t_tile
 
 typedef struct t_tilemap
 {
-  tileset o_tileset;
+  tileset *p_tileset;
   int width;
   int height;
   int nb_layer;

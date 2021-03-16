@@ -76,14 +76,12 @@ int main(int argc, char **argv)
   // create a new game
   game o_game;
   level_init(&o_game.o_level);
-  image o_image_tilemap;
-  o_image_tilemap.p_texture = NULL;
-  o_game.o_level.o_tilemap.o_tileset.p_image = &o_image_tilemap;
+  o_game.o_level.o_tilemap.p_tileset = malloc(sizeof(tileset));
+  o_game.o_level.o_tilemap.p_tileset->o_image.p_texture = NULL;
   o_game.path_music = NULL;
   o_game.path_tileset = NULL;
 
   o_game.p_tileset_NPC = malloc(sizeof(tileset));
-  o_game.p_tileset_NPC->p_image = alloca(sizeof(image));
 
   tileset_init_from_file(o_game.p_tileset_NPC, "data/NPC.tileset", renderer);
 
@@ -170,8 +168,8 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
     break;
   }
 
-  if (hero_front_x >= 0 && hero_front_x < p_game->o_level.o_tilemap.width * p_game->o_level.o_tilemap.o_tileset.tile_width &&
-      hero_front_y >= 0 && hero_front_y < p_game->o_level.o_tilemap.height * p_game->o_level.o_tilemap.o_tileset.tile_height)
+  if (hero_front_x >= 0 && hero_front_x < p_game->o_level.o_tilemap.width * p_game->o_level.o_tilemap.p_tileset->tile_width &&
+      hero_front_y >= 0 && hero_front_y < p_game->o_level.o_tilemap.height * p_game->o_level.o_tilemap.p_tileset->tile_height)
   {
     for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count; index_NPC++)
     {
@@ -192,7 +190,7 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
         continue;
       }
       SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
-      SDL_Rect event_rect = {.x = p_event->index_src_x * 16, .y = p_event->index_src_y * 16, .w = p_game->o_level.o_tilemap.o_tileset.tile_width, .h = p_game->o_level.o_tilemap.o_tileset.tile_height};
+      SDL_Rect event_rect = {.x = p_event->index_src_x * 16, .y = p_event->index_src_y * 16, .w = p_game->o_level.o_tilemap.p_tileset->tile_width, .h = p_game->o_level.o_tilemap.p_tileset->tile_height};
       if (SDL_PointInRect(&hero_front, &event_rect))
       {
         event_exec(p_event, p_game, renderer);
@@ -216,8 +214,8 @@ game_state state_in_game(game *p_game, SDL_Renderer *renderer)
                         p_game->o_hero.o_sprite.bounding_box.w / 2;
     int hero_center_y = p_game->o_hero.o_sprite.bounding_box.y +
                         p_game->o_hero.o_sprite.bounding_box.h / 2;
-    int hero_current_tile_index_x = hero_center_x / p_map->o_tileset.tile_width;
-    int hero_current_tile_index_y = hero_center_y / p_map->o_tileset.tile_height;
+    int hero_current_tile_index_x = hero_center_x / p_map->p_tileset->tile_width;
+    int hero_current_tile_index_y = hero_center_y / p_map->p_tileset->tile_height;
 
     // input
     SDL_Event event;

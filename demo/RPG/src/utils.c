@@ -12,7 +12,7 @@ bool tileset_init_from_file(tileset *p_tileset, char *pathfile, SDL_Renderer *re
 
   // tileset
   fscanf(fp, "%s", buffer);
-  image_load(p_tileset->p_image, buffer, renderer, NULL);
+  image_load(&p_tileset->o_image, buffer, renderer, NULL);
 
   // tile size
   fscanf(fp, "%d:%d", &p_tileset->tile_width, &p_tileset->tile_height);
@@ -34,8 +34,8 @@ bool tileset_init_from_file(tileset *p_tileset, char *pathfile, SDL_Renderer *re
       int tile_index;
       fscanf(fp, "%d", &tile_index);
 
-      int x = tile_index % (p_tileset->p_image->width / p_tileset->tile_width);
-      int y = tile_index / (p_tileset->p_image->width / p_tileset->tile_width);
+      int x = tile_index % (p_tileset->o_image.width / p_tileset->tile_width);
+      int y = tile_index / (p_tileset->o_image.width / p_tileset->tile_width);
       animation_set_frame(p_tileset->v_animation[index_tile].v_frame + index_frame,
                           x * p_tileset->tile_width, y * p_tileset->tile_height,
                           p_tileset->tile_width,

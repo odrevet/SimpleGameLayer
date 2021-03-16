@@ -29,8 +29,8 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
   {
     *current_path_tileset = realloc(*current_path_tileset, (strlen(buffer) + 1) * sizeof(char));
     strcpy(*current_path_tileset, buffer);
-    image_free(p_map->o_tileset.p_image);
-    tileset_init_from_file(&p_level->o_tilemap.o_tileset, buffer, renderer);
+    image_free(&p_map->p_tileset->o_image);
+    tileset_init_from_file(p_level->o_tilemap.p_tileset, buffer, renderer);
   }
 
   // music
@@ -91,16 +91,16 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
           p_tile->is_animated = true;
           char *p_tile_idstr = tile_idstr;
           tile_index = atoi(++p_tile_idstr);
-          p_tile->p_animation = p_level->o_tilemap.o_tileset.v_animation + tile_index;
+          p_tile->p_animation = p_level->o_tilemap.p_tileset->v_animation + tile_index;
         }
         else
         {
           p_tile->is_animated = false;
           tile_index = atoi(tile_idstr);
-          p_tile->o_frame.x = tile_index % (p_map->o_tileset.p_image->width / p_map->o_tileset.tile_width) * p_map->o_tileset.tile_width;
-          p_tile->o_frame.y = tile_index / (p_map->o_tileset.p_image->width / p_map->o_tileset.tile_width) * p_map->o_tileset.tile_height;
-          p_tile->o_frame.w = p_map->o_tileset.tile_width;
-          p_tile->o_frame.h = p_map->o_tileset.tile_height;
+          p_tile->o_frame.x = tile_index % (p_map->p_tileset->o_image.width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_width;
+          p_tile->o_frame.y = tile_index / (p_map->p_tileset->o_image.width / p_map->p_tileset->tile_width) * p_map->p_tileset->tile_height;
+          p_tile->o_frame.w = p_map->p_tileset->tile_width;
+          p_tile->o_frame.h = p_map->p_tileset->tile_height;
         }
 
         p_tile->id = tile_index;
@@ -195,9 +195,9 @@ void level_free(level *p_level)
   free(p_level->p_event);
   free(p_level->path_tile_property);
 
-  for (int index_animation = 0; index_animation < p_level->o_tilemap.o_tileset.animation_nb; index_animation++)
+  for (int index_animation = 0; index_animation < p_level->o_tilemap.p_tileset->animation_nb; index_animation++)
   {
-    animation_free(p_level->o_tilemap.o_tileset.v_animation + index_animation);
+    animation_free(p_level->o_tilemap.p_tileset->v_animation + index_animation);
   }
-  free(p_level->o_tilemap.o_tileset.v_animation);
+  free(p_level->o_tilemap.p_tileset->v_animation);
 }

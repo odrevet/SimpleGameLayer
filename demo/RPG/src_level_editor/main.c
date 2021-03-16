@@ -82,6 +82,9 @@ int main(int argc, char **argv)
   o_fontmap.p_image = &o_image_fontmap;
   o_editor.p_fontmap = &o_fontmap;
 
+  o_editor.p_tileset = alloca(sizeof(tileset));
+  o_editor.p_tileset->o_image.p_texture = NULL;
+
   //try to load a map from file
   if (load_path)
   {
@@ -93,17 +96,13 @@ int main(int argc, char **argv)
     if (strcmp(extension, ".map") == 0)
     {
       map_init(&o_editor.o_level.o_tilemap);
-      image o_image;
-      o_image.p_texture = NULL;
-      o_editor.o_level.o_tilemap.o_tileset.p_image = &o_image;
+      o_editor.o_level.o_tilemap.p_tileset = o_editor.p_tileset;
 
       if (!level_load(&o_editor.o_level, load_path, &o_editor.path_tileset, &o_editor.path_music, renderer))
       {
         printf("Cannot find map at %s\n", load_path);
         exit(0);
       }
-
-      o_editor.p_tileset = &o_editor.o_level.o_tilemap.o_tileset;
 
       editor_state ret_code = LAYOUT_EDITOR;
       while (ret_code != QUIT)
@@ -120,12 +119,8 @@ int main(int argc, char **argv)
     }
     else if (strcmp(extension, ".tileset") == 0)
     {
-      o_editor.p_tileset = alloca(sizeof(tileset));
-      image o_image_tileset;
-      o_image_tileset.p_texture = NULL;
-      o_editor.p_tileset->p_image = &o_image_tileset;
-      tileset_init_from_file(o_editor.p_tileset, load_path, renderer);
 
+      tileset_init_from_file(o_editor.p_tileset, load_path, renderer);
       editor_tile_selection(&o_editor, renderer);
 
       editor_state ret_code = ANIMATED_TILE_SELECTION;

@@ -11,11 +11,11 @@
 
 typedef struct t_tileset
 {
-   image *p_image;
-   animation *v_animation;
-   int animation_nb;
    int tile_height;
    int tile_width;
+   image o_image;
+   int animation_nb;
+   animation *v_animation;
 } tileset;
 
 void tileset_set_frame(tileset *p_tileset,

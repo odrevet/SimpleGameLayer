@@ -3,7 +3,6 @@
 void hero_init(hero *p_hero, SDL_Renderer *renderer)
 {
     tileset *p_tileset = malloc(sizeof(tileset));
-    p_tileset->p_image = malloc(sizeof(image));
 
     p_hero->o_sprite.x = 64;
     p_hero->o_sprite.y = 64;
