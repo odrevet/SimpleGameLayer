@@ -76,8 +76,6 @@ int main(int argc, char **argv)
   // create a new game
   game o_game;
   level_init(&o_game.o_level);
-  o_game.o_level.o_tilemap.p_tileset = malloc(sizeof(tileset));
-  o_game.o_level.o_tilemap.p_tileset->o_image.p_texture = NULL;
   o_game.path_music = NULL;
   o_game.path_tileset = NULL;
 
