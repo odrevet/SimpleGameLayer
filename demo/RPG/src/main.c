@@ -81,10 +81,6 @@ int main(int argc, char **argv)
   o_game.path_music = NULL;
   o_game.path_tileset = NULL;
 
-  o_game.p_tileset_NPC = malloc(sizeof(tileset));
-
-  tileset_init_from_file(o_game.p_tileset_NPC, "data/NPC.tileset", renderer);
-
   // hero
   hero_init(&o_game.o_hero, renderer);
 

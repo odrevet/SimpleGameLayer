@@ -29,7 +29,7 @@ typedef struct t_game
   level o_level;
   level_addr p_level_function;
   hero o_hero;
-  tileset *p_tileset_NPC;
+
   fontmap *p_fontmap;
   char *path_tileset;
   char *path_music;

@@ -2,16 +2,18 @@
 
 void level_init(level *p_level)
 {
+  p_level->tileset_count = 0;
+  p_level->p_tileset = NULL;
   p_level->path_tile_property = NULL;
   p_level->p_music = NULL;
   p_level->p_tile_properties = NULL;
   p_level->p_event = NULL;
   p_level->event_count = 0;
-  p_level->p_NPC = NULL;
   p_level->NPC_count = 0;
+  p_level->p_NPC = NULL;
 }
 
-bool level_load(level *p_level, const char *pathfile, char **current_path_tileset, char **current_path_music, SDL_Renderer *renderer)
+bool level_load(level *p_level, const char *pathfile, char **current_path_music, SDL_Renderer *renderer)
 {
   tilemap *p_map = &p_level->o_tilemap;
 
@@ -23,15 +25,33 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_tilese
 
   char buffer[256];
 
+  // free previously loaded tileset
+  // TODO only load tileset not present in next map and free remainings
+  for (int tileset_index = 0; tileset_index < p_level->tileset_count; tileset_index++)
+  {
+    tileset_free(p_level->o_tilemap.p_tileset + tileset_index);
+  }
+  free(p_level->p_tileset);
+
+  fscanf(fp, "%d", &p_level->tileset_count);
+
+  p_level->p_tileset = calloc(p_level->tileset_count, sizeof(tileset));
+  p_level->o_tilemap.p_tileset = p_level->p_tileset;
+  for (int tileset_index = 0; tileset_index < p_level->tileset_count; tileset_index++)
+  {
+    fscanf(fp, "%s", buffer);
+    tileset_init_from_file(p_level->o_tilemap.p_tileset + tileset_index, buffer, renderer);
+  }
+
   // tileset
-  fscanf(fp, "%s", buffer);
+  /*fscanf(fp, "%s", buffer);
   if (*current_path_tileset == NULL || strcmp(buffer, *current_path_tileset) != 0)
   {
     *current_path_tileset = realloc(*current_path_tileset, (strlen(buffer) + 1) * sizeof(char));
     strcpy(*current_path_tileset, buffer);
     image_free(&p_map->p_tileset->o_image);
     tileset_init_from_file(p_level->o_tilemap.p_tileset, buffer, renderer);
-  }
+  }*/
 
   // music
   fscanf(fp, "%s", buffer);
