@@ -7,7 +7,7 @@
 
 #include "../src/level.h"
 
-bool level_save(level *p_level, const char *pathfile, char *path_tileset, char *path_music);
+bool level_save(level *p_level, const char *pathfile, char *path_music);
 
 void map_add_row(tilemap *map);
 

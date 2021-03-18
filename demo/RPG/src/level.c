@@ -4,6 +4,7 @@ void level_init(level *p_level)
 {
   p_level->tileset_count = 0;
   p_level->p_tileset = NULL;
+  p_level->p_tileset_path = NULL;
   p_level->path_tile_property = NULL;
   p_level->p_music = NULL;
   p_level->p_tile_properties = NULL;
@@ -36,22 +37,15 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
   fscanf(fp, "%d", &p_level->tileset_count);
 
   p_level->p_tileset = calloc(p_level->tileset_count, sizeof(tileset));
+  p_level->p_tileset_path = calloc(p_level->tileset_count, sizeof(char*));
   p_level->o_tilemap.p_tileset = p_level->p_tileset;
   for (int tileset_index = 0; tileset_index < p_level->tileset_count; tileset_index++)
   {
     fscanf(fp, "%s", buffer);
+    p_level->p_tileset_path[tileset_index] = calloc(strlen(buffer) + 1, sizeof(char));
+    strcpy(p_level->p_tileset_path[tileset_index], buffer);
     tileset_init_from_file(p_level->o_tilemap.p_tileset + tileset_index, buffer, renderer);
   }
-
-  // tileset
-  /*fscanf(fp, "%s", buffer);
-  if (*current_path_tileset == NULL || strcmp(buffer, *current_path_tileset) != 0)
-  {
-    *current_path_tileset = realloc(*current_path_tileset, (strlen(buffer) + 1) * sizeof(char));
-    strcpy(*current_path_tileset, buffer);
-    image_free(&p_map->p_tileset->o_image);
-    tileset_init_from_file(p_level->o_tilemap.p_tileset, buffer, renderer);
-  }*/
 
   // music
   fscanf(fp, "%s", buffer);

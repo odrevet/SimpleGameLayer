@@ -77,10 +77,23 @@ int main(int argc, char **argv)
   game o_game;
   level_init(&o_game.o_level);
   o_game.path_music = NULL;
-  o_game.path_tileset = NULL;
+
+  // load game's tilesets
+  o_game.tileset_count = 2;
+  o_game.p_tilesets = calloc(o_game.tileset_count, sizeof(tileset));
+  o_game.path_tilesets = calloc(o_game.tileset_count, sizeof(char*));
+
+  o_game.path_tilesets[0] = calloc(strlen("data/hero.tileset") + 1, sizeof(char));
+  strcpy(o_game.path_tilesets[0], "data/hero.tileset");
+  tileset_init_from_file(o_game.p_tilesets + 0, o_game.path_tilesets[0], renderer);
+
+  o_game.path_tilesets[1] = calloc(strlen("data/objects.tileset") + 1, sizeof(char));
+  strcpy(o_game.path_tilesets[1], "data/objects.tileset");
+  tileset_init_from_file(o_game.p_tilesets + 1, o_game.path_tilesets[1], renderer);
 
   // hero
   hero_init(&o_game.o_hero, renderer);
+  o_game.o_hero.o_sprite.p_tileset = o_game.p_tilesets + 0;
 
   // fontmap
   fontmap o_fontmap;

@@ -24,6 +24,7 @@ typedef struct t_level
 {
     int tileset_count;
     tileset *p_tileset;
+    char **p_tileset_path;
 
     tilemap o_tilemap;
     char *path_tile_property;

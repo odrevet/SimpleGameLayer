@@ -31,7 +31,11 @@ typedef struct t_game
   hero o_hero;
 
   fontmap *p_fontmap;
-  char *path_tileset;
+  
+  int tileset_count;
+  char **path_tilesets;
+  tileset *p_tilesets;
+
   char *path_music;
 } game;
 

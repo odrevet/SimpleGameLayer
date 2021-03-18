@@ -42,6 +42,15 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
   {
     sprite_draw_with_offset(v_sprites_to_draw[sprite_index], renderer, p_map->o_camera.x, p_map->o_camera.y);
   }
+
+  //draw HUD
+  for (int hero_health_index = 0; hero_health_index < p_game->o_hero.health; hero_health_index++)
+  {
+    int x = hero_health_index * 16;
+    int y = 0;
+    SDL_Rect src = {.x = 4 * 16, .y = 0, . w = 16, .h = 16};
+    image_draw_part(&p_game->p_tilesets[1].o_image, renderer, x, y, &src);
+  }
 }
 
 bool game_check_NPC_collid(game *p_game)
@@ -172,6 +181,6 @@ void game_free(game *p_game)
   level_free(&p_game->o_level);
   hero_free(&p_game->o_hero);
   image_free(p_game->p_fontmap->p_image);
-  free(p_game->path_tileset);
+  //free(p_game->path_tileset);
   free(p_game->path_music);
 }

@@ -45,7 +45,6 @@ typedef struct t_editor
     int tile_select_scroll_index_y;
 
     fontmap *p_fontmap;
-    char *path_tileset;
     char *path_music;
 } editor;
 

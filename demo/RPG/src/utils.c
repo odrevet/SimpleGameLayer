@@ -5,6 +5,7 @@ bool tileset_init_from_file(tileset *p_tileset, char *pathfile, SDL_Renderer *re
   FILE *fp = fopen(pathfile, "r");
   if (!fp)
   {
+    printf("cannot found tileset '%s'\n", pathfile);
     return false;
   }
 
