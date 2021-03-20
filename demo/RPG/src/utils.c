@@ -47,3 +47,11 @@ bool tileset_init_from_file(tileset *p_tileset, char *pathfile, SDL_Renderer *re
   fclose(fp);
   return true;
 }
+
+void sprite_draw_index(sprite *p_sprite, int index, int offset_x, int offset_y, SDL_Renderer *renderer)
+{
+  int x = index % p_sprite->p_tileset->o_image.width;
+  int y = index / p_sprite->p_tileset->o_image.width;
+  SDL_Rect src = {.x = x * p_sprite->p_tileset->tile_height, .y = y * p_sprite->p_tileset->tile_height, .w = p_sprite->p_tileset->tile_width, .h = p_sprite->p_tileset->tile_height};
+  image_draw_part(&p_sprite->p_tileset->o_image, renderer, p_sprite->x - offset_y, p_sprite->y - offset_y, &src);
+}
