@@ -37,6 +37,25 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
   tilemap *p_map = &p_game->o_level.o_tilemap;
   map_draw(p_map, renderer);
 
+  //draw chests
+  for (int chest_index = 0; chest_index < p_game->o_level.chest_count; chest_index++)
+  {
+    chest *p_chest = p_game->o_level.p_chest + chest_index;
+    int x = p_chest->o_sprite.x - p_map->o_camera.x;
+    int y = p_chest->o_sprite.y - p_map->o_camera.y;
+
+    if (p_chest->is_open)
+    {
+      SDL_Rect src = {.x = 1 * 16, .y = 0, .w = 16, .h = 16};
+      image_draw_part(&p_game->p_tilesets[1].o_image, renderer, x, y, &src);
+    }
+    else
+    {
+      SDL_Rect src = {.x = 0 * 16, .y = 0, .w = 16, .h = 16};
+      image_draw_part(&p_game->p_tilesets[1].o_image, renderer, x, y, &src);
+    }
+  }
+
   //draw sprites
   for (int sprite_index = 0; sprite_index < nb_sprites_to_draw; sprite_index++)
   {
@@ -48,9 +67,21 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
   {
     int x = hero_health_index * 16;
     int y = 0;
-    SDL_Rect src = {.x = 4 * 16, .y = 0, . w = 16, .h = 16};
+    SDL_Rect src = {.x = 4 * 16, .y = 0, .w = 16, .h = 16};
     image_draw_part(&p_game->p_tilesets[1].o_image, renderer, x, y, &src);
   }
+}
+
+bool game_set_chest_is_open(game *p_game, chest *p_chest)
+{
+  for (int chest_id_index = 0; chest_id_index < p_game->opened_chest_id_count; chest_id_index++)
+  {
+    if (p_game->p_opened_chest_id[chest_id_index] == p_chest->id)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 bool game_check_NPC_collid(game *p_game)
@@ -63,6 +94,23 @@ bool game_check_NPC_collid(game *p_game)
   {
     NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
     if (SDL_HasIntersection(&p_NPC->o_sprite.bounding_box, &hero_bounding_box))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool game_check_chest_collid(game *p_game)
+{
+  SDL_Rect hero_bounding_box = p_game->o_hero.o_sprite.bounding_box;
+  hero_bounding_box.x += p_game->o_hero.o_sprite.vel_x;
+  hero_bounding_box.y += p_game->o_hero.o_sprite.vel_y;
+
+  for (int index_chest = 0; index_chest < p_game->o_level.chest_count; index_chest++)
+  {
+    chest *p_chest = p_game->o_level.p_chest + index_chest;
+    if (SDL_HasIntersection(&p_chest->o_sprite.bounding_box, &hero_bounding_box))
     {
       return true;
     }
@@ -147,8 +195,8 @@ void game_update(game *p_game)
       z++;
     } while (z < p_map->nb_layer && walkable == true);
 
-    // update hero position if map walkable and no collision with NPCs
-    if (walkable && !game_check_NPC_collid(p_game))
+    // update hero position if map walkable and no collisions
+    if (walkable && !game_check_NPC_collid(p_game) && !game_check_chest_collid(p_game))
     {
       p_hero_sprite->x += p_hero_sprite->vel_x;
       p_hero_sprite->y += p_hero_sprite->vel_y;
@@ -166,8 +214,7 @@ void game_update(game *p_game)
   // NPCs bouding box
   const int NPC_bouding_box_margin_x = 0;
   const int NPC_bouding_box_margin_y = 12;
-  for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count;
-       NPC_index++)
+  for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count; NPC_index++)
   {
     p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.x = p_game->o_level.p_NPC[NPC_index].o_sprite.x + NPC_bouding_box_margin_x;
     p_game->o_level.p_NPC[NPC_index].o_sprite.bounding_box.y = p_game->o_level.p_NPC[NPC_index].o_sprite.y + NPC_bouding_box_margin_y;
@@ -181,6 +228,5 @@ void game_free(game *p_game)
   level_free(&p_game->o_level);
   hero_free(&p_game->o_hero);
   image_free(p_game->p_fontmap->p_image);
-  //free(p_game->path_tileset);
   free(p_game->path_music);
 }

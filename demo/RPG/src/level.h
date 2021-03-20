@@ -19,6 +19,7 @@
 // forward declaration
 typedef struct t_warp warp;
 typedef struct t_event event;
+typedef struct t_chest chest;
 
 typedef struct t_level
 {
@@ -36,6 +37,10 @@ typedef struct t_level
 
     int event_count;
     event *p_event;
+
+    int chest_count;
+    chest *p_chest;
+
 } level;
 
 void level_init(level *p_level);

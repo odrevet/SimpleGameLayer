@@ -77,11 +77,13 @@ int main(int argc, char **argv)
   game o_game;
   level_init(&o_game.o_level);
   o_game.path_music = NULL;
+  o_game.opened_chest_id_count = 0;
+  o_game.p_opened_chest_id = NULL;
 
   // load game's tilesets
   o_game.tileset_count = 2;
   o_game.p_tilesets = calloc(o_game.tileset_count, sizeof(tileset));
-  o_game.path_tilesets = calloc(o_game.tileset_count, sizeof(char*));
+  o_game.path_tilesets = calloc(o_game.tileset_count, sizeof(char *));
 
   o_game.path_tilesets[0] = calloc(strlen("data/hero.tileset") + 1, sizeof(char));
   strcpy(o_game.path_tilesets[0], "data/hero.tileset");
@@ -178,10 +180,12 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
   if (hero_front_x >= 0 && hero_front_x < p_game->o_level.o_tilemap.width * p_game->o_level.o_tilemap.p_tileset->tile_width &&
       hero_front_y >= 0 && hero_front_y < p_game->o_level.o_tilemap.height * p_game->o_level.o_tilemap.p_tileset->tile_height)
   {
+    SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
+
+    // NPCs
     for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count; index_NPC++)
     {
       NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
-      SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
       if (SDL_PointInRect(&hero_front, &p_NPC->o_sprite.bounding_box) && p_NPC->p_event)
       {
         event_exec(p_NPC->p_event, p_game, renderer);
@@ -189,7 +193,24 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
       }
     }
 
-    for (int index_event = 0; index_event < p_game->o_level.NPC_count; index_event++)
+    // chests
+    for (int index_chest = 0; index_chest < p_game->o_level.chest_count; index_chest++)
+    {
+      chest *p_chest = p_game->o_level.p_chest + index_chest;
+      if (SDL_PointInRect(&hero_front, &p_chest->o_sprite.bounding_box) && p_chest->p_event && !p_chest->is_open)
+      {
+        p_chest->is_open = true;
+        p_game->opened_chest_id_count++;
+        p_game->p_opened_chest_id = realloc(p_game->p_opened_chest_id, p_game->opened_chest_id_count * sizeof(int));
+        p_game->p_opened_chest_id[p_game->opened_chest_id_count - 1] = p_chest->id;
+
+        event_exec(p_chest->p_event, p_game, renderer);
+        break;
+      }
+    }
+
+    // level events
+    for (int index_event = 0; index_event < p_game->o_level.event_count; index_event++)
     {
       event *p_event = p_game->o_level.p_event + index_event;
       if (p_event->o_event_trigger != ON_BUTTON_PRESS)
@@ -197,7 +218,10 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
         continue;
       }
       SDL_Point hero_front = {.x = hero_front_x, .y = hero_front_y};
-      SDL_Rect event_rect = {.x = p_event->index_src_x * 16, .y = p_event->index_src_y * 16, .w = p_game->o_level.o_tilemap.p_tileset->tile_width, .h = p_game->o_level.o_tilemap.p_tileset->tile_height};
+      SDL_Rect event_rect = {.x = p_event->index_src_x * 16,
+                             .y = p_event->index_src_y * 16,
+                             .w = p_game->o_level.o_tilemap.p_tileset->tile_width,
+                             .h = p_game->o_level.o_tilemap.p_tileset->tile_height};
       if (SDL_PointInRect(&hero_front, &event_rect))
       {
         event_exec(p_event, p_game, renderer);

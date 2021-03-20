@@ -6,11 +6,8 @@
 #include "utils.h"
 
 // forward declaration
-typedef struct t_NPC NPC;
 typedef struct t_game game;
 typedef struct t_event event;
-
-typedef void (*on_action)(NPC *, game *, SDL_Renderer *);
 
 typedef struct t_NPC
 {

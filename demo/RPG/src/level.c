@@ -12,6 +12,8 @@ void level_init(level *p_level)
   p_level->event_count = 0;
   p_level->NPC_count = 0;
   p_level->p_NPC = NULL;
+  p_level->chest_count = 0;
+  p_level->p_chest = 0;
 }
 
 bool level_load(level *p_level, const char *pathfile, char **current_path_music, SDL_Renderer *renderer)
