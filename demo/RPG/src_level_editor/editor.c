@@ -307,24 +307,7 @@ editor_state editor_tile_selection(editor *p_editor, SDL_Renderer *renderer)
 
         //display a grid
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        for (int y = 0; y < SCREEN_HEIGHT; y += p_tileset->tile_height)
-        {
-            for (int x = 0; x < SCREEN_WIDTH; x += p_tileset->tile_width)
-            {
-                SDL_RenderDrawLine(renderer,
-                                   0,
-                                   y,
-                                   SCREEN_WIDTH,
-                                   y);
-
-                //draw a vertical grid line
-                SDL_RenderDrawLine(renderer,
-                                   x,
-                                   0,
-                                   x,
-                                   SCREEN_HEIGHT);
-            }
-        }
+        editor_tileset_render_grid(p_tileset, renderer);
 
         //display a rect above the focused tile in the tileset
         SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
