@@ -93,7 +93,7 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   SDL_Rect bounding_box_0 = {.x = p_chest[0].o_sprite.x, .y = p_chest[0].o_sprite.y, .w = 16, .h = 16};
   p_chest[0].o_sprite.bounding_box = bounding_box_0;
 
-  p_chest[1].id = 0;
+  p_chest[1].id = 1;
   p_chest[1].p_event = p_event + 5;
   p_chest[1].o_sprite.x = 15 * p_game->o_level.o_tilemap.p_tileset->tile_width;
   p_chest[1].o_sprite.y = 13 * p_game->o_level.o_tilemap.p_tileset->tile_height;
