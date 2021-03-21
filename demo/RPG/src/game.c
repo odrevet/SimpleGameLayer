@@ -41,7 +41,12 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
   for (int chest_index = 0; chest_index < p_game->o_level.chest_count; chest_index++)
   {
     chest *p_chest = p_game->o_level.p_chest + chest_index;
-    sprite_draw_index(&p_chest->o_sprite, p_chest->is_open ? 1 : 0, p_map->o_camera.x, p_map->o_camera.y, renderer);
+    //sprite_draw_index(&p_chest->o_sprite, p_chest->is_open ? 1 : 0, p_map->o_camera.x, p_map->o_camera.y, renderer);
+    image_draw_part(&p_chest->o_sprite.p_tileset->o_image,
+                    renderer,
+                    p_chest->o_sprite.x - p_map->o_camera.x,
+                    p_chest->o_sprite.y - p_map->o_camera.y,
+                    p_chest->o_sprite.p_tileset->v_animation[0].v_frame + (p_chest->is_open ? 1 : 0));
   }
 
   //draw sprites
