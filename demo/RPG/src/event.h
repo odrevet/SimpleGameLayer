@@ -16,7 +16,8 @@ typedef enum e_event_type
 {
     EVENT_TYPE_FUNCTION = 0,
     EVENT_TYPE_TEXT,
-    EVENT_TYPE_WARP
+    EVENT_TYPE_WARP,
+    EVENT_TYPE_MONEY
 } event_type;
 
 typedef void (*event_callback)(game *, SDL_Renderer *);
@@ -42,6 +43,7 @@ void event_init(event *p_event, event_trigger event_trigger, event_type event_ty
 void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 void event_free(event *p_event);
 
 #endif

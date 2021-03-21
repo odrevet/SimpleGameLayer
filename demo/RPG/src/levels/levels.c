@@ -24,7 +24,9 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   event_init(p_event + 2, ON_TILE_ENTER, EVENT_TYPE_FUNCTION, level_overworld_event_callback, 0, 5);
   event_init(p_event + 3, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "WELCOME TO THE RPG DEMO\nHAVE FUN!", -1, -1);
   event_init(p_event + 4, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "THERE IS SOMETHING IN THE\nWATER!", -1, -1);
-  event_init(p_event + 5, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "EMPTY!", -1, -1);
+  int *amount = malloc(sizeof(int));
+  *amount = 30;
+  event_init(p_event + 5, ON_BUTTON_PRESS, EVENT_TYPE_MONEY, amount, -1, -1);
 
   p_game->o_level.p_event = p_event;
 

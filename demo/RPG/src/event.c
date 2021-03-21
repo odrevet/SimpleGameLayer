@@ -27,6 +27,9 @@ void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
   case EVENT_TYPE_WARP:
     event_warp_exec(p_event, p_game, renderer);
     break;
+  case EVENT_TYPE_MONEY:
+    event_money_exec(p_event, p_game, renderer);
+    break;
 
   default:
     break;
@@ -36,6 +39,16 @@ void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 {
   dialog_box_show(p_game, (char *)p_event->p_param, renderer);
+}
+
+void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
+{
+  int *amount = (int*)p_event->p_param;
+  p_game->o_hero.money += *amount;
+
+  char message[32];
+  snprintf(message, 32, "YOU GOT %d GOLD COINS!", *amount);
+  dialog_box_show(p_game, (char *)message, renderer);
 }
 
 void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)

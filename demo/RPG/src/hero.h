@@ -17,6 +17,7 @@ typedef struct t_hero
 {
     sprite o_sprite;
     int health;
+    int money;
 } hero;
 
 void hero_init(hero *p_hero, SDL_Renderer *renderer);
