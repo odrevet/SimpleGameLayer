@@ -221,4 +221,12 @@ void game_free(game *p_game)
   hero_free(&p_game->o_hero);
   image_free(p_game->p_fontmap->p_image);
   free(p_game->path_music);
+
+  for(int tileset_index = 0; tileset_index < p_game->tileset_count; tileset_index++)
+  {
+    tileset_free(p_game->p_tilesets + tileset_index);
+    free(p_game->path_tilesets[tileset_index]);
+  }
+  free(p_game->p_tilesets);
+  free(p_game->path_tilesets);
 }
