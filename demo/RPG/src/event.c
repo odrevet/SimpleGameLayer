@@ -1,5 +1,15 @@
 #include "event.h"
 
+void event_init(event *p_event, event_trigger event_trigger, event_type event_type, void *p_param, int index_x, int index_y)
+{
+  p_event->p_param = p_param;
+  p_event->has_triggered = false;
+  p_event->o_event_trigger = event_trigger;
+  p_event->o_event_type = event_type;
+  p_event->index_src_x = index_x;
+  p_event->index_src_y = index_y;
+}
+
 void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 {
   p_event->has_triggered = true;

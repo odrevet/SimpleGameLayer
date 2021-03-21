@@ -38,12 +38,10 @@ typedef struct t_event
     void *p_param;
 } event;
 
+void event_init(event *p_event, event_trigger event_trigger, event_type event_type, void *p_param, int index_x, int index_y);
 void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-
 void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-
 void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-
 void event_free(event *p_event);
 
 #endif

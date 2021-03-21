@@ -11,50 +11,21 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   level_load(&p_game->o_level, "data/overworld.map", &p_game->path_music, renderer);
 
   // events
-  const int event_count = 6;
-  event *p_event = calloc(event_count, sizeof(event));
+  p_game->o_level.event_count = 6;
+  event *p_event = calloc(p_game->o_level.event_count, sizeof(event));
 
   event_param_warp *p_event_param_warp = malloc(sizeof(event_param_warp));
   p_event_param_warp->index_x = 3;
   p_event_param_warp->index_y = 3;
   p_event_param_warp->p_level_addr = level_cave;
   p_event[0].p_param = p_event_param_warp;
-  p_event[0].o_event_trigger = ON_TILE_ENTER;
-  p_event[0].o_event_type = EVENT_TYPE_WARP;
-  p_event[0].has_triggered = false;
-  p_event[0].index_src_x = 2;
-  p_event[0].index_src_y = 2;
+  event_init(p_event + 0, ON_TILE_ENTER, EVENT_TYPE_WARP, p_event_param_warp, 2, 2);
+  event_init(p_event + 1, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "TO TOWN", 1, 7);
+  event_init(p_event + 2, ON_TILE_ENTER, EVENT_TYPE_FUNCTION, level_overworld_event_callback, 0, 5);
+  event_init(p_event + 3, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "WELCOME TO THE RPG DEMO\nHAVE FUN!", -1, -1);
+  event_init(p_event + 4, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "THERE IS SOMETHING IN THE\nWATER!", -1, -1);
+  event_init(p_event + 5, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "EMPTY!", -1, -1);
 
-  p_event[1].p_param = "TO TOWN";
-  p_event[1].o_event_trigger = ON_BUTTON_PRESS;
-  p_event[1].o_event_type = EVENT_TYPE_TEXT;
-  p_event[1].has_triggered = false;
-  p_event[1].index_src_x = 1;
-  p_event[1].index_src_y = 7;
-
-  p_event[2].p_param = level_overworld_event_callback;
-  p_event[2].o_event_trigger = ON_TILE_ENTER;
-  p_event[2].o_event_type = EVENT_TYPE_FUNCTION;
-  p_event[2].has_triggered = false;
-  p_event[2].index_src_x = 0;
-  p_event[2].index_src_y = 5;
-
-  p_event[3].p_param = "WELCOME TO THE RPG DEMO\nHAVE FUN!";
-  p_event[3].o_event_trigger = ON_BUTTON_PRESS;
-  p_event[3].o_event_type = EVENT_TYPE_TEXT;
-  p_event[3].has_triggered = false;
-
-  p_event[4].p_param = "THERE IS SOMETHING IN THE\nWATER!";
-  p_event[4].o_event_trigger = ON_BUTTON_PRESS;
-  p_event[4].o_event_type = EVENT_TYPE_TEXT;
-  p_event[4].has_triggered = false;
-
-  p_event[5].p_param = "EMPTY...";
-  p_event[5].o_event_trigger = ON_BUTTON_PRESS;
-  p_event[5].o_event_type = EVENT_TYPE_TEXT;
-  p_event[5].has_triggered = false;
-
-  p_game->o_level.event_count = event_count;
   p_game->o_level.p_event = p_event;
 
   // NPCs
@@ -114,19 +85,15 @@ void level_cave(game *p_game, SDL_Renderer *renderer)
   level_load(&p_game->o_level, "data/cave.map", &p_game->path_music, renderer);
 
   // Events
-  const int event_count = 1;
-  event *p_event = calloc(event_count, sizeof(event));
+  p_game->o_level.event_count = 1;
+  event *p_event = calloc(p_game->o_level.event_count, sizeof(event));
 
   event_param_warp *p_event_param_warp = malloc(sizeof(event_param_warp));
   p_event_param_warp->index_x = 2;
   p_event_param_warp->index_y = 2;
   p_event_param_warp->p_level_addr = level_overworld;
-  p_event[0].p_param = p_event_param_warp;
-  p_event[0].o_event_trigger = ON_TILE_ENTER;
-  p_event[0].o_event_type = EVENT_TYPE_WARP;
-  p_event[0].has_triggered = false;
-  p_event[0].index_src_x = 3;
-  p_event[0].index_src_y = 5;
-  p_game->o_level.event_count = event_count;
+
+  event_init(p_event + 0, ON_TILE_ENTER, EVENT_TYPE_WARP, p_event_param_warp, 3, 5);
+
   p_game->o_level.p_event = p_event;
 }
