@@ -29,7 +29,11 @@ bool tileset_init_from_file(tileset *p_tileset, char *pathfile, SDL_Renderer *re
   {
     int nb_frame;
     fscanf(fp, "%d", &nb_frame);
-    animation_init(p_tileset->v_animation + index_tile, true, nb_frame, 10, 0);
+
+    int frame_delay;
+    fscanf(fp, "%d", &frame_delay);
+
+    animation_init(p_tileset->v_animation + index_tile, true, nb_frame, frame_delay, 0);
     for (int index_frame = 0; index_frame < nb_frame; index_frame++)
     {
       int tile_index;

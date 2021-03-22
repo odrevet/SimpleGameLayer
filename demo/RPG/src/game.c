@@ -54,7 +54,8 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
     sprite_draw_with_offset(v_sprites_to_draw[sprite_index], renderer, p_map->o_camera.x, p_map->o_camera.y);
   }
 
-  //draw HUD
+  //// draw HUD
+  // health
   for (int hero_health_index = 0; hero_health_index < p_game->o_hero.health; hero_health_index++)
   {
     int x = hero_health_index * 16;
@@ -62,6 +63,11 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
     SDL_Rect src = {.x = 4 * 16, .y = 0, .w = 16, .h = 16};
     image_draw_part(&p_game->p_tilesets[1].o_image, renderer, x, y, &src);
   }
+
+  // money
+  SDL_Rect src = {.x = 0, .y = 4 * 16, .w = 16, .h = 16};
+  image_draw_part(&p_game->p_tilesets[1].o_image, renderer, 0, 20, &src);
+  fontmap_printf(p_game->p_fontmap, 16, 24, renderer, "%d", p_game->o_hero.money);
 }
 
 bool game_set_chest_is_open(game *p_game, chest *p_chest)
@@ -222,7 +228,7 @@ void game_free(game *p_game)
   image_free(p_game->p_fontmap->p_image);
   free(p_game->path_music);
 
-  for(int tileset_index = 0; tileset_index < p_game->tileset_count; tileset_index++)
+  for (int tileset_index = 0; tileset_index < p_game->tileset_count; tileset_index++)
   {
     tileset_free(p_game->p_tilesets + tileset_index);
     free(p_game->path_tilesets[tileset_index]);
