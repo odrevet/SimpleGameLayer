@@ -63,7 +63,7 @@ Ids of tiles separated by a space character
 ```
 Path to tileset image file
 Number of animations
-Number of frames List Tile id for each frame
+Number of frames List Animation speed in frame Tile id for each frame
 ```
 
 ### .tiles
@@ -89,10 +89,23 @@ Load and animate NPCs
 
 ## Graphics
 
-Graphics from open game art
+Graphics by ArMM1998 from open game art
 
-## Music
+Licensed under the CC0 1.0 Universal (CC0 1.0) license 
 
-* https://modarchive.org/index.php?request=view_by_moduleid&query=96987
+https://opengameart.org/content/zelda-like-tilesets-and-sprites
 
-* https://modarchive.org/index.php?request=view_by_moduleid&query=35443
+## Musics
+
+* AFTERNOON by GLYPH 
+  
+Licensed under the Mod Archive Distribution license
+
+https://modarchive.org/index.php?request=view_by_moduleid&query=96987
+
+
+* Cavern by melf/westower
+  
+Licensed under the Mod Archive Distribution license
+
+https://modarchive.org/index.php?request=view_by_moduleid&query=35443
