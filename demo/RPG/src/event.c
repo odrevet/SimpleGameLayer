@@ -43,7 +43,7 @@ void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 
 void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 {
-  int *amount = (int*)p_event->p_param;
+  int *amount = (int *)p_event->p_param;
   p_game->o_hero.money += *amount;
 
   char message[32];
@@ -77,6 +77,9 @@ void event_free(event *p_event)
   {
   case EVENT_TYPE_WARP:
     free((event_param_warp *)p_event->p_param);
+    break;
+  case EVENT_TYPE_MONEY:
+    free((int *)p_event->p_param);
     break;
   default:
     break;
