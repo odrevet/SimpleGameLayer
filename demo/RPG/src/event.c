@@ -69,6 +69,7 @@ void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
     level_init(&p_game->o_level);
     p_game->p_level_function(p_game, renderer);
   }
+    game_center_camera_on_hero(p_game);
 }
 
 void event_free(event *p_event)
