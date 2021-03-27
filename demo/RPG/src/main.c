@@ -76,6 +76,9 @@ int main(int argc, char **argv)
   // create a new game
   game o_game;
   level_init(&o_game.o_level);
+  o_game.o_level.tileset_count = 0;
+  o_game.o_level.p_tileset = NULL;
+  o_game.o_level.p_tileset_path = NULL;
   o_game.path_music = NULL;
   o_game.opened_chest_id_count = 0;
   o_game.p_opened_chest_id = NULL;
@@ -137,8 +140,7 @@ int main(int argc, char **argv)
   return EXIT_SUCCESS;
 }
 
-void game_check_auto_event(game *p_game, int hero_current_tile_index_x,
-                           int hero_current_tile_index_y, SDL_Renderer *renderer)
+void game_check_auto_event(game *p_game, int hero_current_tile_index_x, int hero_current_tile_index_y, SDL_Renderer *renderer)
 {
   for (int index_event = 0; index_event < p_game->o_level.event_count;
        index_event++)
@@ -155,8 +157,7 @@ void game_check_auto_event(game *p_game, int hero_current_tile_index_x,
   }
 }
 
-void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_center_y,
-                                      SDL_Renderer *renderer)
+void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_center_y, SDL_Renderer *renderer)
 {
   int hero_front_x = hero_center_x;
   int hero_front_y = hero_center_y;

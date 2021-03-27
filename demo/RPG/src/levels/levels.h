@@ -16,5 +16,6 @@
 
 void level_overworld(game *p_game, SDL_Renderer *renderer);
 void level_cave(game *p_game, SDL_Renderer *renderer);
+void level_town(game *p_game, SDL_Renderer *renderer);
 
 #endif

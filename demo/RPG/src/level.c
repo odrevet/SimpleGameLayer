@@ -2,9 +2,6 @@
 
 void level_init(level *p_level)
 {
-  p_level->tileset_count = 0;
-  p_level->p_tileset = NULL;
-  p_level->p_tileset_path = NULL;
   p_level->path_tile_property = NULL;
   p_level->p_music = NULL;
   p_level->p_tile_properties = NULL;
@@ -28,26 +25,70 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
 
   char buffer[256];
 
-  // free previously loaded tileset
-  // TODO only load tileset not present in next map and free remainings
-  for (int tileset_index = 0; tileset_index < p_level->tileset_count; tileset_index++)
-  {
-    tileset_free(p_level->o_tilemap.p_tileset + tileset_index);
-  }
-  free(p_level->p_tileset);
+  // to be assigned to level
+  int tileset_count;
+  char **p_tileset_path;
+  tileset *p_tileset;
 
-  fscanf(fp, "%d", &p_level->tileset_count);
+  fscanf(fp, "%d", &tileset_count);
 
-  p_level->p_tileset = calloc(p_level->tileset_count, sizeof(tileset));
-  p_level->p_tileset_path = calloc(p_level->tileset_count, sizeof(char*));
-  p_level->o_tilemap.p_tileset = p_level->p_tileset;
-  for (int tileset_index = 0; tileset_index < p_level->tileset_count; tileset_index++)
+  p_tileset_path = calloc(tileset_count, sizeof(char *));
+  p_tileset = calloc(tileset_count, sizeof(tileset));
+
+  // read tileset paths
+  for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
   {
     fscanf(fp, "%s", buffer);
-    p_level->p_tileset_path[tileset_index] = calloc(strlen(buffer) + 1, sizeof(char));
-    strcpy(p_level->p_tileset_path[tileset_index], buffer);
-    tileset_init_from_file(p_level->o_tilemap.p_tileset + tileset_index, buffer, renderer);
+    p_tileset_path[tileset_index] = calloc(strlen(buffer) + 1, sizeof(char));
+    strcpy(p_tileset_path[tileset_index], buffer);
   }
+
+  printf("l-------------------------------------\n");
+
+  // intersection of path of tileset alderly loaded
+  bool alderly_loaded;
+  for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
+  {
+    alderly_loaded = false;
+
+    int level_tileset_index;
+    for (level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
+    {
+      printf("cmp %s with %s\n", p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]);
+      if (strcmp(p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]) == 0)
+      {
+        alderly_loaded = true;
+        break;
+      }
+    }
+
+    if (alderly_loaded == false)
+    {
+      printf("load tileset from %s\n", p_tileset_path[tileset_index]);
+      tileset_init_from_file(p_tileset + tileset_index, p_tileset_path[tileset_index], renderer);
+    }
+    else
+    {
+      printf("COPY TILESET #%d\n", level_tileset_index);
+      p_tileset[tileset_index] = p_level->p_tileset[level_tileset_index];
+    }
+  }
+
+  // TODO free images of tilesets we dont need anymore
+  /*for (int level_tileset_path_index = 0; level_tileset_path_index < p_level->tileset_count; level_tileset_path_index++)
+  {
+    free(p_level->p_tileset_path[level_tileset_path_index]);
+  }
+  free(p_level->p_tileset_path);
+  free(p_level->p_tileset);*/
+
+  // assign to level
+  p_level->tileset_count = tileset_count;
+  p_level->p_tileset_path = p_tileset_path;
+  p_level->p_tileset = p_tileset;
+
+  // assign to tilemap
+  p_level->o_tilemap.p_tileset = p_level->p_tileset;
 
   // music
   fscanf(fp, "%s", buffer);
@@ -194,6 +235,7 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
 
 void level_free(level *p_level)
 {
+
   //free tiles properties
   for (int index_layer = 0; index_layer < p_level->o_tilemap.nb_layer; index_layer++)
   {
@@ -210,10 +252,4 @@ void level_free(level *p_level)
   free(p_level->p_NPC);
   free(p_level->p_event);
   free(p_level->path_tile_property);
-
-  for (int index_animation = 0; index_animation < p_level->o_tilemap.p_tileset->animation_nb; index_animation++)
-  {
-    animation_free(p_level->o_tilemap.p_tileset->v_animation + index_animation);
-  }
-  free(p_level->o_tilemap.p_tileset->v_animation);
 }
