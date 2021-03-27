@@ -2,27 +2,8 @@
 
 void image_load(image *p_image, const char *full_path, SDL_Renderer *renderer, SDL_Color *p_transparency)
 {
-  SDL_Surface *surface = IMG_Load(full_path);
-
-  if (!surface)
-  {
-    printf("Error while loading %s: %s\n", full_path, IMG_GetError());
-  }
-  else
-  {
-    p_image->width = surface->w;
-    p_image->height = surface->h;
-    
-    //transparency
-    if (p_transparency)
-    {
-      SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, p_transparency->r, p_transparency->g, p_transparency->b));
-    }
-
-    p_image->p_texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-    SDL_FreeSurface(surface);
-  }
+  p_image->p_texture = IMG_LoadTexture(renderer, full_path);
+  SDL_QueryTexture(p_image->p_texture, NULL, NULL, &p_image->width, &p_image->height);
   p_image->flip = false;
 }
 

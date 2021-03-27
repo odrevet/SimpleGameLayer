@@ -44,10 +44,7 @@ bool image_draw_resize(image *p_image, SDL_Renderer *renderer, int x, int y, int
     @param the y coord to draw to
     @param the source rectangle in the image
 */
-bool image_draw_part(image *p_image,
-		     SDL_Renderer* renderer,
-		     int x, int y,
-		     SDL_Rect *src);
+bool image_draw_part(image *p_image, SDL_Renderer* renderer, int x, int y, SDL_Rect *src);
 
 void image_set_tint(image* p_image, int r, int g, int b);
 
