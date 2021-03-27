@@ -13,7 +13,7 @@ bool tileset_init_from_file(tileset *p_tileset, char *pathfile, SDL_Renderer *re
 
   // tileset
   fscanf(fp, "%s", buffer);
-  image_load(&p_tileset->o_image, buffer, renderer, NULL);
+  image_load(&p_tileset->o_image, buffer, renderer);
 
   // tile size
   fscanf(fp, "%d:%d", &p_tileset->tile_width, &p_tileset->tile_height);

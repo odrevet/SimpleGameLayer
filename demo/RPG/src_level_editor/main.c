@@ -78,7 +78,7 @@ int main(int argc, char **argv)
   o_fontmap.character_size = 7;
   o_fontmap.layout = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!-";
   image o_image_fontmap;
-  image_load(&o_image_fontmap, "gfx/font.png", renderer, NULL);
+  image_load(&o_image_fontmap, "gfx/font.png", renderer);
   o_fontmap.p_image = &o_image_fontmap;
   o_editor.p_fontmap = &o_fontmap;
 

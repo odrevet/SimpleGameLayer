@@ -115,7 +115,7 @@ int main(int argc, char **argv)
   o_fontmap.character_size = 7;
   o_fontmap.layout = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!-";
   image o_image;
-  image_load(&o_image, "res/font.png", renderer, NULL);
+  image_load(&o_image, "res/font.png", renderer);
   o_fontmap.p_image = &o_image;
 
   menu o_menu;

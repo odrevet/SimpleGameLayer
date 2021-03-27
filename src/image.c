@@ -1,6 +1,6 @@
 #include "image.h"
 
-void image_load(image *p_image, const char *full_path, SDL_Renderer *renderer, SDL_Color *p_transparency)
+void image_load(image *p_image, const char *full_path, SDL_Renderer *renderer)
 {
   p_image->p_texture = IMG_LoadTexture(renderer, full_path);
   SDL_QueryTexture(p_image->p_texture, NULL, NULL, &p_image->width, &p_image->height);

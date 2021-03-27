@@ -32,7 +32,7 @@ void place_init_from_file(place *p_place, hotspot_on_click* callbacks_user[], ch
   {
     char image_path[256];
     fscanf(fp, "%s", image_path);
-    image_load(p_place->v_image, image_path, renderer, NULL);
+    image_load(p_place->v_image, image_path, renderer);
   }
 
   int hotspot_count;

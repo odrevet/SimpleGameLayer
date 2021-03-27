@@ -68,9 +68,8 @@ int main(int argc, char **argv)
   fontmap o_fontmap;
   o_fontmap.character_size = 7;
   o_fontmap.layout = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!-";
-  o_fontmap.p_image = malloc(sizeof(image));
-  SDL_Color color_transparancy = {255, 0, 255};
-  image_load(o_fontmap.p_image, "res/font.png", renderer, &color_transparancy);
+  o_fontmap.p_image = alloca(sizeof(image));
+  image_load(o_fontmap.p_image, "res/font.png", renderer);
   o_game.p_fontmap = &o_fontmap;
 
   // assign user callbacks
@@ -92,9 +91,6 @@ int main(int argc, char **argv)
       break;
     }
   }
-
-  //free memory
-  free(o_fontmap.p_image);
 
   Mix_CloseAudio();
   SDL_Quit();

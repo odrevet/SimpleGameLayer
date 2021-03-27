@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 	// number of characters in the layout
 	o_fontmap.layout = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!-";
 	image image_fontmap;
-	image_load(&image_fontmap, "res/font.png", renderer, NULL);
+	image_load(&image_fontmap, "res/font.png", renderer);
 	o_fontmap.p_image = &image_fontmap;
 	o_game.p_fontmap = &o_fontmap;
 
@@ -98,10 +98,10 @@ int main(int argc, char **argv)
 game_state state_in_game(SDL_Renderer *renderer, game *p_game)
 {
 	image o_image_block;
-	image_load(&o_image_block, "res/gfx.png", renderer, NULL);
+	image_load(&o_image_block, "res/gfx.png", renderer);
 
 	image o_image_background;
-	image_load(&o_image_background, "res/bg.png", renderer, NULL);
+	image_load(&o_image_background, "res/bg.png", renderer);
 
 	bool done = false;
 	game_state ret_code = GAME_OVER;

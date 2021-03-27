@@ -20,10 +20,9 @@ typedef struct t_image {
 /**
     @param Full path of the file to load
     @param the sdl2 renderer
-    @return A fully initialized image structure
     the returned image is allocated and should be free using image_free
 */
-void image_load(image *p_image, const char *full_path, SDL_Renderer *renderer, SDL_Color *p_transparency);
+void image_load(image *p_image, const char *full_path, SDL_Renderer *renderer);
 
 /**
     @brief Draw an image

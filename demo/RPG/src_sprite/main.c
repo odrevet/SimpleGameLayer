@@ -69,7 +69,7 @@ int main(int argc, char **argv)
   game o_game;
 
   tileset o_tileset;
-  image_load(&o_tileset.o_image, "gfx/NPC_test.png", renderer, NULL);
+  image_load(&o_tileset.o_image, "gfx/NPC_test.png", renderer);
   tileset_init(&o_tileset, 4);
 
   sprite o_sprite;
