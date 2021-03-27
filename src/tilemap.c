@@ -41,11 +41,7 @@ void map_draw(tilemap *p_map, SDL_Renderer *renderer)
   }
 }
 
-void map_draw_tile(tilemap *p_map,
-                   tile *p_tile,
-                   int x,
-                   int y,
-                   SDL_Renderer *renderer)
+void map_draw_tile(tilemap *p_map, tile *p_tile, int x, int y, SDL_Renderer *renderer)
 {
   SDL_Rect src;
 
