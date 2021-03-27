@@ -43,8 +43,6 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
     strcpy(p_tileset_path[tileset_index], buffer);
   }
 
-  printf("l-------------------------------------\n");
-
   // intersection of path of tileset alderly loaded
   bool alderly_loaded;
   for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
@@ -54,7 +52,6 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
     int level_tileset_index;
     for (level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
     {
-      printf("cmp %s with %s\n", p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]);
       if (strcmp(p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]) == 0)
       {
         alderly_loaded = true;
@@ -64,23 +61,43 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
 
     if (alderly_loaded == false)
     {
-      printf("load tileset from %s\n", p_tileset_path[tileset_index]);
       tileset_init_from_file(p_tileset + tileset_index, p_tileset_path[tileset_index], renderer);
     }
     else
     {
-      printf("COPY TILESET #%d\n", level_tileset_index);
       p_tileset[tileset_index] = p_level->p_tileset[level_tileset_index];
     }
   }
 
-  // TODO free images of tilesets we dont need anymore
+  // free tilesets we dont need anymore
+  bool unused;
+  for (int level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
+  {
+    unused = true;
+
+    int tileset_index;
+    for (tileset_index = 0; tileset_index < tileset_count; tileset_index++)
+    {
+      if (strcmp(p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]) == 0)
+      {
+        unused = false;
+        break;
+      }
+    }
+
+    if (unused)
+    {
+      tileset_free(p_level->p_tileset + level_tileset_index);
+    }
+  }
+  free(p_level->p_tileset);
+
+  // free previous level tileset path
   for (int level_tileset_path_index = 0; level_tileset_path_index < p_level->tileset_count; level_tileset_path_index++)
   {
     free(p_level->p_tileset_path[level_tileset_path_index]);
   }
   free(p_level->p_tileset_path);
-  free(p_level->p_tileset);
 
   // assign to level
   p_level->tileset_count = tileset_count;
