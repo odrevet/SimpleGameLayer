@@ -75,12 +75,12 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
   }
 
   // TODO free images of tilesets we dont need anymore
-  /*for (int level_tileset_path_index = 0; level_tileset_path_index < p_level->tileset_count; level_tileset_path_index++)
+  for (int level_tileset_path_index = 0; level_tileset_path_index < p_level->tileset_count; level_tileset_path_index++)
   {
     free(p_level->p_tileset_path[level_tileset_path_index]);
   }
   free(p_level->p_tileset_path);
-  free(p_level->p_tileset);*/
+  free(p_level->p_tileset);
 
   // assign to level
   p_level->tileset_count = tileset_count;
