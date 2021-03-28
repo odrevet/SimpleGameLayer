@@ -44,17 +44,21 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
   }
 
   // intersection of path of tileset alderly loaded
-  bool alderly_loaded;
+  int p_level_tileset_to_keep_indexes[p_level->tileset_count];
+  int level_tileset_to_keep_indexes_count = 0;
+
   for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
   {
-    alderly_loaded = false;
-
+    bool alderly_loaded = false;
     int level_tileset_index;
+
     for (level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
     {
       if (strcmp(p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]) == 0)
       {
         alderly_loaded = true;
+        p_level_tileset_to_keep_indexes[level_tileset_to_keep_indexes_count] = level_tileset_index;
+        level_tileset_to_keep_indexes_count++;
         break;
       }
     }
@@ -70,22 +74,19 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
   }
 
   // free tilesets we dont need anymore
-  bool unused;
   for (int level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
   {
-    unused = true;
-
-    int tileset_index;
-    for (tileset_index = 0; tileset_index < tileset_count; tileset_index++)
+    bool keep = false;
+    for (int tileset_index = 0; tileset_index < level_tileset_to_keep_indexes_count; tileset_index++)
     {
-      if (strcmp(p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]) == 0)
+      if(p_level_tileset_to_keep_indexes[tileset_index] == level_tileset_index)
       {
-        unused = false;
+        keep = true;
         break;
       }
     }
 
-    if (unused)
+    if (!keep)
     {
       tileset_free(p_level->p_tileset + level_tileset_index);
     }
