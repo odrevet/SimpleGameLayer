@@ -12,14 +12,14 @@
 #include <init.h>
 #include <sound.h>
 
-#include "NPC.h"
 #include "dialog_box.h"
-#include "game.h"
-#include "hero.h"
-#include "level.h"
-#include "levels/levels.h"
-#include "utils.h"
 #include "event.h"
+#include "utils.h"
+#include "NPC.h"
+#include "level.h"
+#include "hero.h"
+#include "game.h"
+#include "levels/levels.h"
 
 int WINDOW_WIDTH = 640;
 int WINDOW_HEIGHT = 480;
@@ -151,7 +151,7 @@ void game_check_auto_event(game *p_game, int hero_current_tile_index_x, int hero
         p_event->o_event_trigger == ON_TILE_ENTER &&
         !p_event->has_triggered)
     {
-      event_exec(p_event, p_game, renderer);
+      //event_exec(p_event, p_game, renderer);
       break;
     }
   }
@@ -189,7 +189,7 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
       NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
       if (SDL_PointInRect(&hero_front, &p_NPC->o_sprite.bounding_box) && p_NPC->p_event)
       {
-        event_exec(p_NPC->p_event, p_game, renderer);
+        //event_exec(p_NPC->p_event, p_game, renderer);
         break;
       }
     }
@@ -205,7 +205,7 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
         p_game->p_opened_chest_id = realloc(p_game->p_opened_chest_id, p_game->opened_chest_id_count * sizeof(int));
         p_game->p_opened_chest_id[p_game->opened_chest_id_count - 1] = p_chest->id;
 
-        event_exec(p_chest->p_event, p_game, renderer);
+        //event_exec(p_chest->p_event, p_game, renderer);
         break;
       }
     }
@@ -225,7 +225,7 @@ void game_check_on_bouton_press_event(game *p_game, int hero_center_x, int hero_
                              .h = p_game->o_level.o_tilemap.p_tileset->tile_height};
       if (SDL_PointInRect(&hero_front, &event_rect))
       {
-        event_exec(p_event, p_game, renderer);
+        //event_exec(p_event, p_game, renderer);
         break;
       }
     }

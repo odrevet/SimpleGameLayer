@@ -3,8 +3,8 @@
 
 typedef struct t_tile_property {
   int id;
-  bool is_animated;
   bool walkable;
+  bool is_animated;
 }tile_property;
 
 #endif

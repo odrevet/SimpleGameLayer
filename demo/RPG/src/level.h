@@ -10,16 +10,14 @@
 #include <sound.h>
 #include <fontmap.h>
 #include <tilemap.h>
+#include <tileset.h>
 #include <animation.h>
 
-#include "tile_property.h"
-#include "NPC.h"
+#include "event.h"
 #include "utils.h"
-
-// forward declaration
-typedef struct t_warp warp;
-typedef struct t_event event;
-typedef struct t_chest chest;
+#include "NPC.h"
+#include "chest.h"
+#include "tile_property.h"
 
 typedef struct t_level
 {
@@ -44,10 +42,14 @@ typedef struct t_level
 } level;
 
 void level_init(level *p_level);
+bool level_check_NPC_collid(level *p_level, SDL_Rect *p_bounding_box);
+bool level_check_chest_collid(level *p_level, SDL_Rect *p_bounding_box);
 bool level_load(level *p_level, const char *pathfile, char **current_path_music, SDL_Renderer *renderer);
 tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int *nb_tile_property, tile_property *v_tile_property);
 
+bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer);
+
 //Do not free tileset as it may be needed again between loading another level with the same tileset
-void level_free(level *p_level);
+void level_free_partial(level *p_level);
 
 #endif

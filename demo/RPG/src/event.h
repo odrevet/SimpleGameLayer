@@ -3,7 +3,7 @@
 
 #include <SDL.h>
 
-#include "game.h"
+//#include "game.h"
 #include "dialog_box.h"
 
 typedef enum e_event_trigger
@@ -20,7 +20,7 @@ typedef enum e_event_type
     EVENT_TYPE_MONEY
 } event_type;
 
-typedef void (*event_callback)(game *, SDL_Renderer *);
+typedef void (*event_callback)(void *, SDL_Renderer *);
 
 typedef struct t_event_param_warp
 {
@@ -40,10 +40,10 @@ typedef struct t_event
 } event;
 
 void event_init(event *p_event, event_trigger event_trigger, event_type event_type, void *p_param, int index_x, int index_y);
-void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+//void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+//void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+//void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+//void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 void event_free(event *p_event);
 
 #endif

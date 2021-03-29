@@ -1,16 +1,16 @@
 #include "dialog_box.h"
 
-void dialog_box_show(game *p_game, char *text, SDL_Renderer *renderer)
+void dialog_box_show(fontmap *p_fontmap, char *text, int screen_height, int screen_width, SDL_Renderer *renderer)
 {
   dialog o_dialog;
-  o_dialog.p_fontmap = p_game->p_fontmap;
+  o_dialog.p_fontmap = p_fontmap;
 
   SDL_Color color_border = {.r = 0, .g = 0, .b = 0};
   SDL_Color color_background = {.r = 25, .g = 25, .b = 255, .a = 100};
   style o_style = {.x = 10,
-                   .y = SCREEN_HEIGHT / 2,
-                   .h = SCREEN_HEIGHT / 2,
-                   .w = SCREEN_WIDTH - 20,
+                   .y = screen_height / 2,
+                   .h = screen_height / 2,
+                   .w = screen_width - 20,
                    .border = color_border,
                    .bgcolor = color_background,
                    .padding = 5};
@@ -59,7 +59,7 @@ void dialog_box_show(game *p_game, char *text, SDL_Renderer *renderer)
     }
 
     dialog_draw(&o_dialog, renderer);
-    game_draw(p_game, renderer);
+    //game_draw(p_game, renderer);
   }
 
   free(o_dialog.text);

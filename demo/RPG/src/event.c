@@ -9,7 +9,7 @@ void event_init(event *p_event, event_trigger event_trigger, event_type event_ty
   p_event->index_src_x = index_x;
   p_event->index_src_y = index_y;
 }
-
+/*
 void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 {
   p_event->has_triggered = true;
@@ -38,7 +38,7 @@ void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 
 void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 {
-  dialog_box_show(p_game, (char *)p_event->p_param, renderer);
+  dialog_box_show(p_game->p_fontmap, (char *)p_event->p_param, SCREEN_HEIGHT, SCREEN_WIDTH, renderer);
 }
 
 void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
@@ -48,7 +48,7 @@ void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 
   char message[32];
   snprintf(message, 32, "YOU GOT %d GOLD COINS!", *amount);
-  dialog_box_show(p_game, (char *)message, renderer);
+  dialog_box_show(p_game->p_fontmap, (char *)message,  SCREEN_HEIGHT, SCREEN_WIDTH, renderer);
 }
 
 void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
@@ -65,13 +65,13 @@ void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
     {
       event_free(p_game->o_level.p_event + event_index);
     }
-    level_free(&p_game->o_level);
+    level_free_partial(&p_game->o_level);
     level_init(&p_game->o_level);
     p_game->p_level_function(p_game, renderer);
   }
     game_center_camera_on_hero(p_game);
 }
-
+*/
 void event_free(event *p_event)
 {
   switch (p_event->o_event_type)

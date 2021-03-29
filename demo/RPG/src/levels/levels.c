@@ -83,7 +83,7 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 
   for (int chest_index = 0; chest_index < p_game->o_level.chest_count; chest_index++)
   {
-    p_chest[chest_index].is_open = game_set_chest_is_open(p_game, p_chest + chest_index);
+    p_chest[chest_index].is_open = game_get_chest_is_open(p_game, p_chest[chest_index].id);
   }
 
   p_game->o_level.p_chest = p_chest;

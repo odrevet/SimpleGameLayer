@@ -70,45 +70,11 @@ void game_draw(game *p_game, SDL_Renderer *renderer)
   fontmap_printf(p_game->p_fontmap, 16, 24, renderer, "%d", p_game->o_hero.money);
 }
 
-bool game_set_chest_is_open(game *p_game, chest *p_chest)
+bool game_get_chest_is_open(game *p_game, int chest_id)
 {
   for (int chest_id_index = 0; chest_id_index < p_game->opened_chest_id_count; chest_id_index++)
   {
-    if (p_game->p_opened_chest_id[chest_id_index] == p_chest->id)
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool game_check_NPC_collid(game *p_game)
-{
-  SDL_Rect hero_bounding_box = p_game->o_hero.o_sprite.bounding_box;
-  hero_bounding_box.x += p_game->o_hero.o_sprite.vel_x;
-  hero_bounding_box.y += p_game->o_hero.o_sprite.vel_y;
-
-  for (int index_NPC = 0; index_NPC < p_game->o_level.NPC_count; index_NPC++)
-  {
-    NPC *p_NPC = p_game->o_level.p_NPC + index_NPC;
-    if (SDL_HasIntersection(&p_NPC->o_sprite.bounding_box, &hero_bounding_box))
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
-bool game_check_chest_collid(game *p_game)
-{
-  SDL_Rect hero_bounding_box = p_game->o_hero.o_sprite.bounding_box;
-  hero_bounding_box.x += p_game->o_hero.o_sprite.vel_x;
-  hero_bounding_box.y += p_game->o_hero.o_sprite.vel_y;
-
-  for (int index_chest = 0; index_chest < p_game->o_level.chest_count; index_chest++)
-  {
-    chest *p_chest = p_game->o_level.p_chest + index_chest;
-    if (SDL_HasIntersection(&p_chest->o_sprite.bounding_box, &hero_bounding_box))
+    if (p_game->p_opened_chest_id[chest_id_index] == chest_id)
     {
       return true;
     }
@@ -193,8 +159,12 @@ void game_update(game *p_game)
       z++;
     } while (z < p_map->nb_layer && walkable == true);
 
+    // update hero bounding box
+    p_game->o_hero.o_sprite.bounding_box.x += p_game->o_hero.o_sprite.vel_x;
+    p_game->o_hero.o_sprite.bounding_box.y += p_game->o_hero.o_sprite.vel_y;
+
     // update hero position if map walkable and no collisions
-    if (walkable && !game_check_NPC_collid(p_game) && !game_check_chest_collid(p_game))
+    if (walkable && !level_check_NPC_collid(&p_game->o_level, &p_game->o_hero.o_sprite.bounding_box) && !level_check_chest_collid(&p_game->o_level, &p_game->o_hero.o_sprite.bounding_box))
     {
       p_hero_sprite->x += p_hero_sprite->vel_x;
       p_hero_sprite->y += p_hero_sprite->vel_y;
@@ -223,7 +193,7 @@ void game_update(game *p_game)
 
 void game_free(game *p_game)
 {
-  level_free(&p_game->o_level);
+  level_free_partial(&p_game->o_level);
   hero_free(&p_game->o_hero);
   image_free(p_game->p_fontmap->p_image);
   free(p_game->path_music);

@@ -3,11 +3,8 @@
 
 #include <sprite.h>
 
+#include "event.h"
 #include "utils.h"
-
-// forward declaration
-typedef struct t_game game;
-typedef struct t_event event;
 
 typedef struct t_NPC
 {
@@ -15,6 +12,6 @@ typedef struct t_NPC
     event *p_event;
 } NPC;
 
-void NPC_init(NPC *p_NPC, tileset *p_tileset_NPC, SDL_Renderer *renderer);
+void NPC_init(NPC *p_NPC, tileset *p_tileset, SDL_Renderer *renderer);
 
 #endif
