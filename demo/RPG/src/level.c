@@ -105,7 +105,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
     bool keep = false;
     for (int tileset_index = 0; tileset_index < level_tileset_to_keep_indexes_count; tileset_index++)
     {
-      if(p_level_tileset_to_keep_indexes[tileset_index] == level_tileset_index)
+      if (p_level_tileset_to_keep_indexes[tileset_index] == level_tileset_index)
       {
         keep = true;
         break;
@@ -291,7 +291,7 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
 
   fscanf(fp, "%d", &p_level->event_count);
   p_level->p_event = calloc(p_level->event_count, sizeof(event));
-/*  for (int event_index = 0; event_index < p_level->event_count; event_index++)
+  for (int event_index = 0; event_index < p_level->event_count; event_index++)
   {
     fscanf(fp, "%s", buffer);
     if (strcmp(buffer, "on_tile_enter") == 0)
@@ -304,8 +304,8 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
     }
 
     fscanf(fp, "%d %d", &p_level->p_event->index_src_x, &p_level->p_event->index_src_y);
-    p_level->p_event[event_index].o_sprite.x *= p_level->o_tilemap.p_tileset->tile_width;
-    p_level->p_event[event_index].o_sprite.y *= p_level->o_tilemap.p_tileset->tile_height;
+    p_level->p_event[event_index].index_src_x *= p_level->o_tilemap.p_tileset->tile_width;
+    p_level->p_event[event_index].index_src_y *= p_level->o_tilemap.p_tileset->tile_height;
 
     fscanf(fp, "%s", buffer);
     if (strcmp(buffer, "warp") == 0)
@@ -333,9 +333,9 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
     int event_index;
     fscanf(fp, "%d", &event_index);
     p_level->p_NPC[NPC_index].p_event = p_level->p_event + event_index;
-    fscanf(fp, "%d %d", &p_level->p_NPC->o_sprite.x, &p_level->p_NPC->o_sprite.y);
-    p_level->p_NPC[NPC_index].o_sprite.x *=  p_level->o_tilemap.p_tileset->tile_width;
-    p_level->p_NPC[NPC_index].o_sprite.y *=  p_level->o_tilemap.p_tileset->tile_height;
+    fscanf(fp, "%f %f", &p_level->p_NPC->o_sprite.x, &p_level->p_NPC->o_sprite.y);
+    p_level->p_NPC[NPC_index].o_sprite.x *= p_level->o_tilemap.p_tileset->tile_width;
+    p_level->p_NPC[NPC_index].o_sprite.y *= p_level->o_tilemap.p_tileset->tile_height;
   }
 
   fscanf(fp, "%d", &p_level->chest_count);
@@ -345,13 +345,12 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
     int event_index;
     fscanf(fp, "%d", &event_index);
     p_level->p_chest[chest_index].p_event = p_level->p_event + event_index;
-    fscanf(fp, "%d %d", &p_level->p_chest->o_sprite.x, &p_level->p_chest->o_sprite.y);
+    fscanf(fp, "%f %f", &p_level->p_chest->o_sprite.x, &p_level->p_chest->o_sprite.y);
     p_level->p_chest[chest_index].o_sprite.x *= p_level->o_tilemap.p_tileset->tile_width;
     p_level->p_chest[chest_index].o_sprite.y *= p_level->o_tilemap.p_tileset->tile_height;
   }
-*/
-  fclose(fp);
 
+  fclose(fp);
 }
 
 void level_free_partial(level *p_level)

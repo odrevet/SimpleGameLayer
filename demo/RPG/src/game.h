@@ -46,5 +46,9 @@ void game_draw(game *p_game, SDL_Renderer *renderer);
 bool game_get_chest_is_open(game *p_game, int chest_id);
 void game_center_camera_on_hero(game *p_game);
 void game_update(game *p_game);
+void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
+void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 void game_free(game *p_game);
 #endif

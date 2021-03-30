@@ -1,10 +1,9 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#include <SDL.h>
+#include <stdbool.h>
 
-//#include "game.h"
-#include "dialog_box.h"
+#include <SDL.h>
 
 typedef enum e_event_trigger
 {
@@ -40,10 +39,6 @@ typedef struct t_event
 } event;
 
 void event_init(event *p_event, event_trigger event_trigger, event_type event_type, void *p_param, int index_x, int index_y);
-//void event_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-//void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-//void event_text_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
-//void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer);
 void event_free(event *p_event);
 
 #endif

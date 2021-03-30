@@ -1,6 +1,6 @@
 #include "dialog_box.h"
 
-void dialog_box_show(fontmap *p_fontmap, char *text, int screen_height, int screen_width, SDL_Renderer *renderer)
+void dialog_box_show(fontmap *p_fontmap, char *text, int screen_height, int screen_width, draw_callback *p_draw_callback, void *param, SDL_Renderer *renderer)
 {
   dialog o_dialog;
   o_dialog.p_fontmap = p_fontmap;
@@ -19,6 +19,8 @@ void dialog_box_show(fontmap *p_fontmap, char *text, int screen_height, int scre
   int index_text = 0;
   int text_size = strlen(text);
   o_dialog.text = calloc(text_size, sizeof(char));
+
+  draw_callback p_callback = (draw_callback)p_draw_callback;
 
   bool done = false;
   while (!done)
@@ -59,7 +61,7 @@ void dialog_box_show(fontmap *p_fontmap, char *text, int screen_height, int scre
     }
 
     dialog_draw(&o_dialog, renderer);
-    //game_draw(p_game, renderer);
+    p_callback(param, renderer);
   }
 
   free(o_dialog.text);
