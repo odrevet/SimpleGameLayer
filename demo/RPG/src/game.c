@@ -229,7 +229,7 @@ void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 
   char message[32];
   snprintf(message, 32, "YOU GOT %d GOLD COINS!", *amount);
-  dialog_box_show(p_game->p_fontmap, (char *)message,  SCREEN_HEIGHT, SCREEN_WIDTH, game_draw, p_game, renderer);
+  dialog_box_show(p_game->p_fontmap, (char *)message, SCREEN_HEIGHT, SCREEN_WIDTH, game_draw, p_game, renderer);
 }
 
 void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
@@ -250,7 +250,7 @@ void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
     level_init(&p_game->o_level);
     p_game->p_level_function(p_game, renderer);
   }
-    game_center_camera_on_hero(p_game);
+  game_center_camera_on_hero(p_game);
 }
 
 void game_free(game *p_game)

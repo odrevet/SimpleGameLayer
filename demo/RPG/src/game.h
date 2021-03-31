@@ -31,7 +31,7 @@ typedef struct t_game
   hero o_hero;
 
   fontmap *p_fontmap;
-  
+
   int opened_chest_id_count;
   int *p_opened_chest_id;
 

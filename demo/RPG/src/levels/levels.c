@@ -19,12 +19,12 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
   p_event_param_warp->p_level_addr = level_cave;
   p_event[0].p_param = p_event_param_warp;
   event_init(p_event + 0, ON_TILE_ENTER, EVENT_TYPE_WARP, p_event_param_warp, 2, 2);
-  
+
   event_init(p_event + 1, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "TO TOWN", 1, 7);
   event_init(p_event + 2, ON_TILE_ENTER, EVENT_TYPE_FUNCTION, level_overworld_event_callback, 0, 5);
   event_init(p_event + 3, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "WELCOME TO THE RPG DEMO\nHAVE FUN!", -1, -1);
   event_init(p_event + 4, ON_BUTTON_PRESS, EVENT_TYPE_TEXT, "THERE IS SOMETHING IN THE\nWATER!", -1, -1);
-  
+
   int *amount = malloc(sizeof(int));
   *amount = 30;
   event_init(p_event + 5, ON_BUTTON_PRESS, EVENT_TYPE_MONEY, amount, -1, -1);

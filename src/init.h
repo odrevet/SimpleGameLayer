@@ -18,8 +18,5 @@ void init(int flags);
    @param height
    @param flags
  */
-SDL_Window *create_window(char *name,
-                          int *width,
-                          int *height,
-                          int flags);
+SDL_Window *create_window(char *name, int *width, int *height, int flags);
 #endif

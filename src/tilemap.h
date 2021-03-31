@@ -14,7 +14,8 @@ typedef struct t_tile
 {
   int id;
   bool is_animated;
-  union{
+  union
+  {
     SDL_Rect o_frame;
     animation *p_animation;
   };
