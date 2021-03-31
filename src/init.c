@@ -14,11 +14,7 @@ void init(int flags)
 
 SDL_Window *create_window(char *name, int *width, int *height, int flags)
 {
-  SDL_Window *window = SDL_CreateWindow(name,
-                                        SDL_WINDOWPOS_UNDEFINED,
-                                        SDL_WINDOWPOS_UNDEFINED,
-                                        *width, *height,
-                                        flags);
+  SDL_Window *window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, *width, *height, flags);
 
   // Declare display mode structure to be filled in.
   SDL_DisplayMode dm;

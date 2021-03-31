@@ -30,13 +30,7 @@ bool image_draw_part(image *p_image, SDL_Renderer *renderer, int x, int y, SDL_R
 
   if (p_image->flip)
   {
-    retcode = SDL_RenderCopyEx(renderer,
-                               p_image->p_texture,
-                               src,
-                               &dest,
-                               0,
-                               NULL,
-                               true);
+    retcode = SDL_RenderCopyEx(renderer, p_image->p_texture, src, &dest, 0, NULL, true);
   }
   else
   {
