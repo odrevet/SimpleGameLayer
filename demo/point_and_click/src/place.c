@@ -79,7 +79,7 @@ void place_init_from_file(place *p_place, hotspot_on_click* callbacks_user[], ch
     }
     else if (strcmp(type, "F") == 0)
     {
-      p_hotspot->type = HS_LINK;
+      p_hotspot->type = HS_FUNCTION;
 
       int index;
       fscanf(fp, "%d", &index);
