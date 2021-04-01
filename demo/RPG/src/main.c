@@ -83,6 +83,10 @@ int main(int argc, char **argv)
   o_game.opened_chest_id_count = 0;
   o_game.p_opened_chest_id = NULL;
 
+  o_game.o_level.callbacks[0] = level_overworld;
+  o_game.o_level.callbacks[1] = level_cave;
+  o_game.o_level.callbacks[2] = level_town;
+
   // load game's tilesets
   o_game.tileset_count = 2;
   o_game.p_tilesets = calloc(o_game.tileset_count, sizeof(tileset));

@@ -39,7 +39,7 @@ bool level_check_chest_collid(level *p_level, SDL_Rect *p_bounding_box)
   return false;
 }
 
-bool level_load(level *p_level, const char *pathfile, char **current_path_music, SDL_Renderer *renderer)
+bool level_map_init_from_file(level *p_level, const char *pathfile, char **current_path_music, SDL_Renderer *renderer)
 {
   tilemap *p_map = &p_level->o_tilemap;
 
@@ -158,7 +158,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
   // allocate tile properties
   tile_property *v_tile_property = NULL;
   int nb_tile_property;
-  v_tile_property = level_parse_tiles_file(p_level, buffer, &nb_tile_property, v_tile_property);
+  v_tile_property = level_tile_props_init_from_file(p_level, buffer, &nb_tile_property, v_tile_property);
 
   p_level->p_tile_properties = calloc(p_map->nb_layer, sizeof(tile_property **));
   for (int index_layer = 0; index_layer < p_map->nb_layer; index_layer++)
@@ -228,7 +228,7 @@ bool level_load(level *p_level, const char *pathfile, char **current_path_music,
   return true;
 }
 
-tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int *nb_tile_property, tile_property *v_tile_property)
+tile_property *level_tile_props_init_from_file(level *p_level, const char *pathfile, int *nb_tile_property, tile_property *v_tile_property)
 {
   FILE *fp = fopen(pathfile, "r");
   if (!fp)
@@ -279,7 +279,6 @@ tile_property *level_parse_tiles_file(level *p_level, const char *pathfile, int 
 
 bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer)
 {
-
   FILE *fp = fopen(pathfile, "r");
   if (!fp)
   {
@@ -289,6 +288,7 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
 
   char buffer[256];
 
+  // Events
   fscanf(fp, "%d", &p_level->event_count);
   p_level->p_event = calloc(p_level->event_count, sizeof(event));
   for (int event_index = 0; event_index < p_level->event_count; event_index++)
@@ -296,36 +296,55 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
     fscanf(fp, "%s", buffer);
     if (strcmp(buffer, "on_tile_enter") == 0)
     {
-      p_level->p_event->o_event_trigger = ON_TILE_ENTER;
+      p_level->p_event[event_index].o_event_trigger = ON_TILE_ENTER;
     }
     else if (strcmp(buffer, "on_button_press") == 0)
     {
-      p_level->p_event->o_event_trigger = ON_BUTTON_PRESS;
+      p_level->p_event[event_index].o_event_trigger = ON_BUTTON_PRESS;
+    }
+    else
+    {
+      printf("UNKNOWN EVENT TYPE %s\n", buffer);
     }
 
-    fscanf(fp, "%d %d", &p_level->p_event->index_src_x, &p_level->p_event->index_src_y);
-    p_level->p_event[event_index].index_src_x *= p_level->o_tilemap.p_tileset->tile_width;
-    p_level->p_event[event_index].index_src_y *= p_level->o_tilemap.p_tileset->tile_height;
+    fscanf(fp, "%d %d", &p_level->p_event[event_index].index_src_x, &p_level->p_event[event_index].index_src_y);
 
     fscanf(fp, "%s", buffer);
     if (strcmp(buffer, "warp") == 0)
     {
-      p_level->p_event->o_event_type = EVENT_TYPE_WARP;
+      p_level->p_event[event_index].o_event_type = EVENT_TYPE_WARP;
+      int dest_x, dest_y, function_index;
+      fscanf(fp, "%d %d %d", &dest_x, &dest_y, &function_index);
+      event_param_warp *p_event_param_warp = malloc(sizeof(event_param_warp));
+      p_event_param_warp->index_x = dest_x;
+      p_event_param_warp->index_y = dest_y;
+      p_event_param_warp->p_level_addr = *(p_level->callbacks + function_index);
+      p_level->p_event[event_index].p_param = p_event_param_warp;
     }
     else if (strcmp(buffer, "text") == 0)
     {
-      p_level->p_event->o_event_type = EVENT_TYPE_TEXT;
+      p_level->p_event[event_index].o_event_type = EVENT_TYPE_TEXT;
+      fscanf(fp, " \"%[^\"]\"", buffer);
+      p_level->p_event[event_index].p_param = calloc(strlen(buffer) + 1, sizeof(char));
+      strcpy(p_level->p_event[event_index].p_param, buffer);
     }
     else if (strcmp(buffer, "money") == 0)
     {
-      p_level->p_event->o_event_type = EVENT_TYPE_MONEY;
+      p_level->p_event[event_index].o_event_type = EVENT_TYPE_MONEY;
+      int *amount = malloc(sizeof(int));
+      fscanf(fp, "%d", amount);
+      p_level->p_event[event_index].p_param = amount;
     }
     else if (strcmp(buffer, "function") == 0)
     {
-      p_level->p_event->o_event_type = EVENT_TYPE_FUNCTION;
+      p_level->p_event[event_index].o_event_type = EVENT_TYPE_FUNCTION;
+      int function_index;
+      fscanf(fp, "%d", &function_index);
+      p_level->p_event[event_index].p_param = *(p_level->callbacks + function_index);
     }
   }
 
+  // NPCs
   fscanf(fp, "%d", &p_level->NPC_count);
   p_level->p_NPC = calloc(p_level->NPC_count, sizeof(NPC));
   for (int NPC_index = 0; NPC_index < p_level->NPC_count; NPC_index++)
@@ -333,19 +352,20 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
     int event_index;
     fscanf(fp, "%d", &event_index);
     p_level->p_NPC[NPC_index].p_event = p_level->p_event + event_index;
-    fscanf(fp, "%f %f", &p_level->p_NPC->o_sprite.x, &p_level->p_NPC->o_sprite.y);
+    fscanf(fp, "%f %f", &p_level->p_NPC[NPC_index].o_sprite.x, &p_level->p_NPC[NPC_index].o_sprite.y);
     p_level->p_NPC[NPC_index].o_sprite.x *= p_level->o_tilemap.p_tileset->tile_width;
     p_level->p_NPC[NPC_index].o_sprite.y *= p_level->o_tilemap.p_tileset->tile_height;
   }
 
+  // Chests
   fscanf(fp, "%d", &p_level->chest_count);
-  p_level->p_event = calloc(p_level->chest_count, sizeof(chest));
+  p_level->p_chest = calloc(p_level->chest_count, sizeof(chest));
   for (int chest_index = 0; chest_index < p_level->chest_count; chest_index++)
   {
     int event_index;
     fscanf(fp, "%d", &event_index);
     p_level->p_chest[chest_index].p_event = p_level->p_event + event_index;
-    fscanf(fp, "%f %f", &p_level->p_chest->o_sprite.x, &p_level->p_chest->o_sprite.y);
+    fscanf(fp, "%f %f", &p_level->p_chest[chest_index].o_sprite.x, &p_level->p_chest[chest_index].o_sprite.y);
     p_level->p_chest[chest_index].o_sprite.x *= p_level->o_tilemap.p_tileset->tile_width;
     p_level->p_chest[chest_index].o_sprite.y *= p_level->o_tilemap.p_tileset->tile_height;
   }
