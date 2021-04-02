@@ -2,8 +2,8 @@
 
 void level_overworld(game *p_game, SDL_Renderer *renderer)
 {
-  level_map_init_from_file(&p_game->o_level, "data/overworld.map", &p_game->path_music, renderer);
-  level_init_from_file(&p_game->o_level, "data/overworld.level", renderer);
+  level_map_init_from_file(&p_game->o_level, "data/overworld.map", renderer);
+  level_init_from_file(&p_game->o_level, "data/overworld.level", &p_game->path_music, renderer);
 
   for (int chest_index = 0; chest_index < p_game->o_level.chest_count; chest_index++)
   {
@@ -15,13 +15,13 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 
   for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count; NPC_index++)
   {
-    NPC_init(p_game->o_level.p_NPC + NPC_index, p_game->o_level.p_tileset + 1, renderer);
+    NPC_init(p_game->o_level.p_NPC + NPC_index, p_game->o_level.p_tileset + 0, renderer);
   }
 }
 
 void level_cave(game *p_game, SDL_Renderer *renderer)
 {
-  level_map_init_from_file(&p_game->o_level, "data/cave.map", &p_game->path_music, renderer);
+  level_map_init_from_file(&p_game->o_level, "data/cave.map", renderer);
 
   // Events
   p_game->o_level.event_count = 1;
@@ -39,7 +39,7 @@ void level_cave(game *p_game, SDL_Renderer *renderer)
 
 void level_town(game *p_game, SDL_Renderer *renderer)
 {
-  level_map_init_from_file(&p_game->o_level, "data/town.map", &p_game->path_music, renderer);
+  level_map_init_from_file(&p_game->o_level, "data/town.map", renderer);
 
   // Events
   p_game->o_level.event_count = 1;

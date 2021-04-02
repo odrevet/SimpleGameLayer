@@ -116,6 +116,26 @@ int main(int argc, char **argv)
   // load the initial level
   level_overworld(&o_game, renderer);
 
+  /*
+    event o_initial_warp;
+  event_param_warp *initial_warp_param = alloca(sizeof(event_param_warp));
+  o_initial_warp.p_param = initial_warp_param;
+
+  FILE *fp = fopen("data/init", "r");
+  if (!fp)
+  {
+    printf("Cannot found init file");
+    exit(0);
+  }
+
+  int function_index;
+  fscanf(fp, "%d %d %d", &initial_warp_param->index_x, &initial_warp_param->index_y, &function_index);
+  initial_warp_param->p_level_addr = *(o_game.o_level.callbacks + function_index);
+  event_warp_exec(&o_initial_warp, &o_game, renderer);
+
+  fclose(fp);
+  */
+
   game_center_camera_on_hero(&o_game);
 
   // game states

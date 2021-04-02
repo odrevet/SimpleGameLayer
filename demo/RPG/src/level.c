@@ -39,7 +39,7 @@ bool level_check_chest_collid(level *p_level, SDL_Rect *p_bounding_box)
   return false;
 }
 
-bool level_map_init_from_file(level *p_level, const char *pathfile, char **current_path_music, SDL_Renderer *renderer)
+bool level_map_init_from_file(level *p_level, const char *pathfile, SDL_Renderer *renderer)
 {
   tilemap *p_map = &p_level->o_tilemap;
 
@@ -51,98 +51,10 @@ bool level_map_init_from_file(level *p_level, const char *pathfile, char **curre
 
   char buffer[256];
 
-  // to be assigned to level
-  int tileset_count;
-  char **p_tileset_path;
-  tileset *p_tileset;
-
-  fscanf(fp, "%d", &tileset_count);
-
-  p_tileset_path = calloc(tileset_count, sizeof(char *));
-  p_tileset = calloc(tileset_count, sizeof(tileset));
-
-  // read tileset paths
-  for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
-  {
-    fscanf(fp, "%s", buffer);
-    p_tileset_path[tileset_index] = calloc(strlen(buffer) + 1, sizeof(char));
-    strcpy(p_tileset_path[tileset_index], buffer);
-  }
-
-  // intersection of path of tileset alderly loaded
-  int p_level_tileset_to_keep_indexes[p_level->tileset_count];
-  int level_tileset_to_keep_indexes_count = 0;
-
-  for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
-  {
-    bool alderly_loaded = false;
-    int level_tileset_index;
-
-    for (level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
-    {
-      if (strcmp(p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]) == 0)
-      {
-        alderly_loaded = true;
-        p_level_tileset_to_keep_indexes[level_tileset_to_keep_indexes_count] = level_tileset_index;
-        level_tileset_to_keep_indexes_count++;
-        break;
-      }
-    }
-
-    if (alderly_loaded == false)
-    {
-      tileset_init_from_file(p_tileset + tileset_index, p_tileset_path[tileset_index], renderer);
-    }
-    else
-    {
-      p_tileset[tileset_index] = p_level->p_tileset[level_tileset_index];
-    }
-  }
-
-  // free tilesets we dont need anymore
-  for (int level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
-  {
-    bool keep = false;
-    for (int tileset_index = 0; tileset_index < level_tileset_to_keep_indexes_count; tileset_index++)
-    {
-      if (p_level_tileset_to_keep_indexes[tileset_index] == level_tileset_index)
-      {
-        keep = true;
-        break;
-      }
-    }
-
-    if (!keep)
-    {
-      tileset_free(p_level->p_tileset + level_tileset_index);
-    }
-  }
-  free(p_level->p_tileset);
-
-  // free previous level tileset path
-  for (int level_tileset_path_index = 0; level_tileset_path_index < p_level->tileset_count; level_tileset_path_index++)
-  {
-    free(p_level->p_tileset_path[level_tileset_path_index]);
-  }
-  free(p_level->p_tileset_path);
-
-  // assign to level
-  p_level->tileset_count = tileset_count;
-  p_level->p_tileset_path = p_tileset_path;
-  p_level->p_tileset = p_tileset;
-
-  // assign to tilemap
-  p_level->o_tilemap.p_tileset = p_level->p_tileset;
-
-  // music
+  // tileset 
   fscanf(fp, "%s", buffer);
-  if (*current_path_music == NULL || strcmp(buffer, *current_path_music) != 0)
-  {
-    *current_path_music = realloc(*current_path_music, (strlen(buffer) + 1) * sizeof(char));
-    strcpy(*current_path_music, buffer);
-    p_level->p_music = music_load(*current_path_music);
-    music_play(p_level->p_music);
-  }
+  p_map->p_tileset = malloc(sizeof(tileset)); //FREE
+  tileset_init_from_file(p_map->p_tileset, buffer, renderer);
 
   // tile properties path
   fscanf(fp, "%s", buffer);
@@ -277,7 +189,7 @@ tile_property *level_tile_props_init_from_file(level *p_level, const char *pathf
   return v_tile_property;
 }
 
-bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer)
+bool level_init_from_file(level *p_level, char *pathfile, char **current_path_music, SDL_Renderer *renderer)
 {
   FILE *fp = fopen(pathfile, "r");
   if (!fp)
@@ -288,6 +200,96 @@ bool level_init_from_file(level *p_level, char *pathfile, SDL_Renderer *renderer
 
   char buffer[256];
 
+  // to be assigned to level
+  int tileset_count;
+  char **p_tileset_path;
+  tileset *p_tileset;
+
+  fscanf(fp, "%d", &tileset_count);
+
+  p_tileset_path = calloc(tileset_count, sizeof(char *));
+  p_tileset = calloc(tileset_count, sizeof(tileset));
+
+  // read tileset paths
+  for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
+  {
+    fscanf(fp, "%s", buffer);
+    p_tileset_path[tileset_index] = calloc(strlen(buffer) + 1, sizeof(char));
+    strcpy(p_tileset_path[tileset_index], buffer);
+  }
+
+  // intersection of path of tileset alderly loaded
+  int p_level_tileset_to_keep_indexes[p_level->tileset_count];
+  int level_tileset_to_keep_indexes_count = 0;
+
+  for (int tileset_index = 0; tileset_index < tileset_count; tileset_index++)
+  {
+    bool alderly_loaded = false;
+    int level_tileset_index;
+
+    for (level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
+    {
+      if (strcmp(p_tileset_path[tileset_index], p_level->p_tileset_path[level_tileset_index]) == 0)
+      {
+        alderly_loaded = true;
+        p_level_tileset_to_keep_indexes[level_tileset_to_keep_indexes_count] = level_tileset_index;
+        level_tileset_to_keep_indexes_count++;
+        break;
+      }
+    }
+
+    if (alderly_loaded == false)
+    {
+      tileset_init_from_file(p_tileset + tileset_index, p_tileset_path[tileset_index], renderer);
+    }
+    else
+    {
+      p_tileset[tileset_index] = p_level->p_tileset[level_tileset_index];
+    }
+  }
+
+  // free tilesets we dont need anymore
+  for (int level_tileset_index = 0; level_tileset_index < p_level->tileset_count; level_tileset_index++)
+  {
+    bool keep = false;
+    for (int tileset_index = 0; tileset_index < level_tileset_to_keep_indexes_count; tileset_index++)
+    {
+      if (p_level_tileset_to_keep_indexes[tileset_index] == level_tileset_index)
+      {
+        keep = true;
+        break;
+      }
+    }
+
+    if (!keep)
+    {
+      tileset_free(p_level->p_tileset + level_tileset_index);
+    }
+  }
+  free(p_level->p_tileset);
+
+  // free previous level tileset path
+  for (int level_tileset_path_index = 0; level_tileset_path_index < p_level->tileset_count; level_tileset_path_index++)
+  {
+    free(p_level->p_tileset_path[level_tileset_path_index]);
+  }
+  free(p_level->p_tileset_path);
+
+  // assign to level
+  p_level->tileset_count = tileset_count;
+  p_level->p_tileset_path = p_tileset_path;
+  p_level->p_tileset = p_tileset;
+
+  // music
+  fscanf(fp, "%s", buffer);
+  if (*current_path_music == NULL || strcmp(buffer, *current_path_music) != 0)
+  {
+    *current_path_music = realloc(*current_path_music, (strlen(buffer) + 1) * sizeof(char));
+    strcpy(*current_path_music, buffer);
+    p_level->p_music = music_load(*current_path_music);
+    music_play(p_level->p_music);
+  }
+  
   // Events
   fscanf(fp, "%d", &p_level->event_count);
   p_level->p_event = calloc(p_level->event_count, sizeof(event));

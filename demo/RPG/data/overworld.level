@@ -1,3 +1,6 @@
+1
+data/NPC.tileset
+data/overworld.mod
 7
 on_tile_enter 2 2 warp 3 3 1
 on_button_press 1 7 text "TO TOWN"
