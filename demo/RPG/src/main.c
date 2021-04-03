@@ -80,6 +80,7 @@ int main(int argc, char **argv)
   o_game.o_level.tileset_count = 0;
   o_game.o_level.p_tileset = NULL;
   o_game.o_level.p_tileset_path = NULL;
+  o_game.o_level.p_tilemap_tileset_path = NULL;
   o_game.path_music = NULL;
   o_game.opened_chest_id_count = 0;
   o_game.p_opened_chest_id = NULL;

@@ -270,4 +270,5 @@ void game_free(game *p_game)
   }
   free(p_game->p_tilesets);
   free(p_game->path_tilesets);
+  free(p_game->o_level.p_tilemap_tileset_path);
 }

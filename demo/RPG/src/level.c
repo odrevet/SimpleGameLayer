@@ -3,7 +3,6 @@
 void level_init(level *p_level)
 {
   p_level->path_tile_property = NULL;
-  p_level->p_tilemap_tileset_path = NULL;
   p_level->p_music = NULL;
   p_level->p_tile_properties = NULL;
   p_level->p_event = NULL;
@@ -52,12 +51,20 @@ bool level_map_init_from_file(level *p_level, const char *pathfile, SDL_Renderer
 
   char buffer[256];
 
-  // tileset TODO check with p_tilemap_tileset_path if alderly loaded
+  // tileset check with p_tilemap_tileset_path if alderly loaded
   fscanf(fp, "%s", buffer);
-  p_map->p_tileset = malloc(sizeof(tileset)); //TODO FREE
-  tileset_init_from_file(p_map->p_tileset, buffer, renderer);
-  p_level->p_tilemap_tileset_path = realloc(p_level->p_tilemap_tileset_path, (strlen(buffer) + 1) * sizeof(char)); //TODO FREE
-  strcpy(p_level->p_tilemap_tileset_path, buffer);
+  if (!p_level->p_tilemap_tileset_path || strcmp(buffer, p_level->p_tilemap_tileset_path) != 0)
+  {
+    if (p_map->p_tileset)
+    {
+      tileset_free(p_map->p_tileset);
+    }
+    free(p_map->p_tileset);
+    p_map->p_tileset = malloc(sizeof(tileset));
+    tileset_init_from_file(p_map->p_tileset, buffer, renderer);
+    p_level->p_tilemap_tileset_path = realloc(p_level->p_tilemap_tileset_path, (strlen(buffer) + 1) * sizeof(char));
+    strcpy(p_level->p_tilemap_tileset_path, buffer);
+  }
 
   // tile properties path
   fscanf(fp, "%s", buffer);
@@ -380,7 +387,6 @@ bool level_init_from_file(level *p_level, char *pathfile, char **current_path_mu
 
 void level_free_partial(level *p_level)
 {
-
   //free tiles properties
   if (p_level->p_tile_properties)
   {
