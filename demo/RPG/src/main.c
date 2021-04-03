@@ -76,6 +76,7 @@ int main(int argc, char **argv)
   // create a new game
   game o_game;
   level_init(&o_game.o_level);
+  map_init(&o_game.o_level.o_tilemap);
   o_game.o_level.tileset_count = 0;
   o_game.o_level.p_tileset = NULL;
   o_game.o_level.p_tileset_path = NULL;
@@ -114,12 +115,9 @@ int main(int argc, char **argv)
   o_game.p_fontmap = &o_fontmap;
 
   // load the initial level
-  level_overworld(&o_game, renderer);
-
-  /*
-    event o_initial_warp;
-  event_param_warp *initial_warp_param = alloca(sizeof(event_param_warp));
-  o_initial_warp.p_param = initial_warp_param;
+  event o_initial_warp;
+  event_param_warp o_initial_warp_param;
+  o_initial_warp.p_param = &o_initial_warp_param;
 
   FILE *fp = fopen("data/init", "r");
   if (!fp)
@@ -129,12 +127,11 @@ int main(int argc, char **argv)
   }
 
   int function_index;
-  fscanf(fp, "%d %d %d", &initial_warp_param->index_x, &initial_warp_param->index_y, &function_index);
-  initial_warp_param->p_level_addr = *(o_game.o_level.callbacks + function_index);
+  fscanf(fp, "%d %d %d", &o_initial_warp_param.index_x, &o_initial_warp_param.index_y, &function_index);
+  o_initial_warp_param.p_level_addr = *(o_game.o_level.callbacks + function_index);
   event_warp_exec(&o_initial_warp, &o_game, renderer);
 
   fclose(fp);
-  */
 
   game_center_camera_on_hero(&o_game);
 

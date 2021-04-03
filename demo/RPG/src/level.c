@@ -51,7 +51,7 @@ bool level_map_init_from_file(level *p_level, const char *pathfile, SDL_Renderer
 
   char buffer[256];
 
-  // tileset 
+  // tileset
   fscanf(fp, "%s", buffer);
   p_map->p_tileset = malloc(sizeof(tileset)); //FREE
   tileset_init_from_file(p_map->p_tileset, buffer, renderer);
@@ -289,7 +289,7 @@ bool level_init_from_file(level *p_level, char *pathfile, char **current_path_mu
     p_level->p_music = music_load(*current_path_music);
     music_play(p_level->p_music);
   }
-  
+
   // Events
   fscanf(fp, "%d", &p_level->event_count);
   p_level->p_event = calloc(p_level->event_count, sizeof(event));
@@ -379,17 +379,23 @@ void level_free_partial(level *p_level)
 {
 
   //free tiles properties
-  for (int index_layer = 0; index_layer < p_level->o_tilemap.nb_layer; index_layer++)
+  if (p_level->p_tile_properties)
   {
-    for (int index_height = 0; index_height < p_level->o_tilemap.height; index_height++)
+    for (int index_layer = 0; index_layer < p_level->o_tilemap.nb_layer; index_layer++)
     {
-      free(p_level->p_tile_properties[index_layer][index_height]);
+      for (int index_height = 0; index_height < p_level->o_tilemap.height; index_height++)
+      {
+        free(p_level->p_tile_properties[index_layer][index_height]);
+      }
+      free(p_level->p_tile_properties[index_layer]);
     }
-    free(p_level->p_tile_properties[index_layer]);
-  }
 
-  free(p_level->p_tile_properties);
-  map_tiles_free(&p_level->o_tilemap);
+    free(p_level->p_tile_properties);
+  }
+  if (p_level->o_tilemap.p_tiles)
+  {
+    map_tiles_free(&p_level->o_tilemap);
+  }
 
   free(p_level->p_NPC);
   free(p_level->p_event);
