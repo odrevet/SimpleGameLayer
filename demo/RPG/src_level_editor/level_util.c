@@ -1,6 +1,6 @@
 #include "level_util.h"
 
-bool level_save(level *p_level, const char *pathfile, char *path_music)
+bool level_map_save(level *p_level, const char *pathfile)
 {
     FILE *fp = fopen(pathfile, "w");
     if (!fp)
@@ -11,13 +11,7 @@ bool level_save(level *p_level, const char *pathfile, char *path_music)
 
     tilemap *p_map = &p_level->o_tilemap;
 
-    fprintf(fp, "%d\n", p_level->tileset_count);
-    for (int tileset_index = 0; tileset_index < p_level->tileset_count; tileset_index++)
-    {
-        fprintf(fp, "%s\n", p_level->p_tileset_path[tileset_index]);
-    }
-
-    fprintf(fp, "%s\n", path_music);
+    fprintf(fp, "%s\n", p_level->p_tilemap_tileset_path);
     fprintf(fp, "%s\n", p_level->path_tile_property);
     fprintf(fp, "%d:%d:%d\n", p_map->width, p_map->height, p_map->nb_layer);
 

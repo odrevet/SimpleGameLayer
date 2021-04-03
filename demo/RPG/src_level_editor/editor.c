@@ -46,7 +46,7 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     done = true;
                     break;
                 case SDLK_s:
-                    level_save(&p_editor->o_level, p_editor->path_level, p_editor->path_music);
+                    level_map_save(&p_editor->o_level, p_editor->path_level);
                     break;
                 case SDLK_t:
                     editor_tile_selection(p_editor, renderer);
