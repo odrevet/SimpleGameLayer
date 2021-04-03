@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     {
       map_init(&o_editor.o_level.o_tilemap);
 
-      if (!level_load(&o_editor.o_level, load_path, &o_editor.path_music, renderer))
+      if (!level_map_init_from_file(&o_editor.o_level, load_path, renderer))
       {
         printf("Cannot find map at %s\n", load_path);
         exit(0);
