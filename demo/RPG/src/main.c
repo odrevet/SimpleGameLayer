@@ -114,7 +114,7 @@ int main(int argc, char **argv)
   o_fontmap.p_image = &o_image_fontmap;
   o_game.p_fontmap = &o_fontmap;
 
-  // load the initial level
+  // load the initial level by exec a warp event
   event o_initial_warp;
   event_param_warp o_initial_warp_param;
   o_initial_warp.p_param = &o_initial_warp_param;
@@ -132,8 +132,6 @@ int main(int argc, char **argv)
   event_warp_exec(&o_initial_warp, &o_game, renderer);
 
   fclose(fp);
-
-  game_center_camera_on_hero(&o_game);
 
   // game states
   game_state ret_code = IN_GAME;
