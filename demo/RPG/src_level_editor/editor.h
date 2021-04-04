@@ -37,8 +37,10 @@ typedef struct t_editor
 
     // selected tile in the map
     int layer;
-    int map_tile_index_x;
-    int map_tile_index_y;
+    //int map_tile_index_x;  // to be removed
+    //int map_tile_index_y;  // to be removed
+    SDL_Rect map_tile_index;
+    bool multiple_select;
 
     // scroll location in the tile selector
     int tile_select_scroll_index_x;

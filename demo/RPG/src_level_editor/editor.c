@@ -6,8 +6,10 @@ void editor_init(editor *p_editor)
     p_editor->tileset_selected_index = 0;
     p_editor->tileset_selected_animated_index = 0;
     p_editor->layer = 0;
-    p_editor->map_tile_index_x = 0;
-    p_editor->map_tile_index_y = 0;
+    p_editor->map_tile_index.x = 0;
+    p_editor->map_tile_index.y = 0;
+    p_editor->map_tile_index.w = 0;
+    p_editor->map_tile_index.h = 0;
     p_editor->path_level = NULL;
     p_editor->p_tileset = NULL;
     p_editor->path_music = NULL;
@@ -67,6 +69,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->layer++;
                     }
                     break;
+                case SDLK_m:
+                    p_editor->multiple_select = !p_editor->multiple_select;
+                    break;
                 case SDLK_c:
                     map_add_col(p_map);
                     break;
@@ -74,21 +79,21 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     map_add_row(p_map);
                     break;
                 case SDLK_d:
-                    map_shift_down(p_map, p_editor->map_tile_index_y);
+                    map_shift_down(p_map, p_editor->map_tile_index.y);
                     break;
                 case SDLK_p:
-                    map_shift_right(p_map, p_editor->map_tile_index_y);
+                    map_shift_right(p_map, p_editor->map_tile_index.y);
                     break;
                 case SDLK_i:
-                    p_editor->tileset_selected_index = p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id;
+                    p_editor->tileset_selected_index = p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].id;
                     break;
                 case SDLK_LEFT:
-                    if (p_editor->map_tile_index_x > 0)
+                    if (p_editor->map_tile_index.x > 0)
                     {
-                        p_editor->map_tile_index_x--;
+                        p_editor->map_tile_index.x--;
 
                         //update scroll position
-                        if (p_editor->map_tile_index_x - scroll_index_x + 1 == 0)
+                        if (p_editor->map_tile_index.x - scroll_index_x + 1 == 0)
                         {
                             scroll_index_x--;
                             p_map->o_camera.x -= p_map->p_tileset->tile_width;
@@ -97,12 +102,12 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 
                     break;
                 case SDLK_RIGHT:
-                    if (p_editor->map_tile_index_x < p_map->width - 1)
+                    if (p_editor->map_tile_index.x < p_map->width - 1)
                     {
-                        p_editor->map_tile_index_x++;
+                        p_editor->map_tile_index.x++;
 
                         //update scroll position
-                        if (p_editor->map_tile_index_x >= SCREEN_WIDTH / p_map->p_tileset->tile_width + scroll_index_x)
+                        if (p_editor->map_tile_index.x >= SCREEN_WIDTH / p_map->p_tileset->tile_width + scroll_index_x)
                         {
                             scroll_index_x++;
                             p_map->o_camera.x += p_map->p_tileset->tile_width;
@@ -110,12 +115,12 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     }
                     break;
                 case SDLK_UP:
-                    if (p_editor->map_tile_index_y > 0)
+                    if (p_editor->map_tile_index.y > 0)
                     {
-                        p_editor->map_tile_index_y--;
+                        p_editor->map_tile_index.y--;
 
                         //update scroll position
-                        if (p_editor->map_tile_index_y - scroll_index_y + 1 == 0)
+                        if (p_editor->map_tile_index.y - scroll_index_y + 1 == 0)
                         {
                             scroll_index_y--;
                             p_map->o_camera.y -= p_map->p_tileset->tile_height;
@@ -124,11 +129,11 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 
                     break;
                 case SDLK_DOWN:
-                    if (p_editor->map_tile_index_y < p_map->height - 1)
+                    if (p_editor->map_tile_index.y < p_map->height - 1)
                     {
-                        p_editor->map_tile_index_y++;
+                        p_editor->map_tile_index.y++;
                         //update scroll position
-                        if (p_editor->map_tile_index_y >= SCREEN_HEIGHT / p_map->p_tileset->tile_height + scroll_index_y)
+                        if (p_editor->map_tile_index.y >= SCREEN_HEIGHT / p_map->p_tileset->tile_height + scroll_index_y)
                         {
                             scroll_index_y++;
                             p_map->o_camera.y += p_map->p_tileset->tile_height;
@@ -139,15 +144,15 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                 case SDLK_RETURN:
                     if (p_editor->tileset_selected_is_animated)
                     {
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated = true;
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = p_editor->tileset_selected_animated_index;
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].p_animation = p_editor->o_level.o_tilemap.p_tileset->v_animation + p_editor->tileset_selected_animated_index;
+                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].is_animated = true;
+                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].id = p_editor->tileset_selected_animated_index;
+                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].p_animation = p_editor->o_level.o_tilemap.p_tileset->v_animation + p_editor->tileset_selected_animated_index;
                     }
                     else
                     {
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = p_editor->tileset_selected_index;
-                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated = false;
-                        animation_set_frame(&p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame,
+                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].id = p_editor->tileset_selected_index;
+                        p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].is_animated = false;
+                        animation_set_frame(&p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].o_frame,
                                             (p_editor->tileset_selected_index % tileset_nb_tile_x) * p_editor->o_level.o_tilemap.p_tileset->tile_width,
                                             (p_editor->tileset_selected_index / tileset_nb_tile_x) * p_editor->o_level.o_tilemap.p_tileset->tile_width,
                                             p_editor->o_level.o_tilemap.p_tileset->tile_height,
@@ -155,9 +160,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     }
                     break;
                 case SDLK_BACKSPACE:
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id = -1;
-                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated = false;
-                    animation_set_frame(&p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].o_frame, 0, 0, 0, 0);
+                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].id = -1;
+                    p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].is_animated = false;
+                    animation_set_frame(&p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].o_frame, 0, 0, 0, 0);
                     break;
                 default:
                     break;
@@ -181,8 +186,8 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
         // display a rect above the focused tile
         SDL_SetRenderDrawColor(renderer, 250, 100, 100, 200);
         SDL_Rect rect_tile_chipset =
-            {.x = p_editor->map_tile_index_x * p_map->p_tileset->tile_width - p_map->o_camera.x,
-             .y = p_editor->map_tile_index_y * p_map->p_tileset->tile_height - p_map->o_camera.y,
+            {.x = p_editor->map_tile_index.x * p_map->p_tileset->tile_width - p_map->o_camera.x,
+             .y = p_editor->map_tile_index.y * p_map->p_tileset->tile_height - p_map->o_camera.y,
              .h = p_map->p_tileset->tile_height,
              .w = p_map->p_tileset->tile_width};
         SDL_RenderDrawRect(renderer, &rect_tile_chipset);
@@ -190,10 +195,10 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
         // HUD
         fontmap_printf(p_editor->p_fontmap, 0, 0, renderer, "L %d X %d Y %d ID %d %s",
                        p_editor->layer,
-                       p_editor->map_tile_index_x,
-                       p_editor->map_tile_index_y,
-                       p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].id,
-                       p_map->p_tiles[p_editor->layer][p_editor->map_tile_index_y][p_editor->map_tile_index_x].is_animated ? "ANIMATED" : "");
+                       p_editor->map_tile_index.x,
+                       p_editor->map_tile_index.y,
+                       p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].id,
+                       p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].is_animated ? "ANIMATED" : "");
 
         SDL_RenderPresent(renderer);
     }
