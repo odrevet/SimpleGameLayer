@@ -46,7 +46,6 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
     bool done = false;
 
     tilemap *p_map = &p_editor->o_level.o_tilemap;
-    int tileset_nb_tile_x = p_map->p_tileset->o_image.width / p_map->p_tileset->tile_width;
 
     int scroll_index_x = 0;
     int scroll_index_y = 0;

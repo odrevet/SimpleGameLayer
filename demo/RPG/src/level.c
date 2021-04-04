@@ -383,6 +383,7 @@ bool level_init_from_file(level *p_level, char *pathfile, char **current_path_mu
   }
 
   fclose(fp);
+  return true;
 }
 
 void level_free_partial(level *p_level)
