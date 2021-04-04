@@ -5,12 +5,12 @@ void editor_init(editor *p_editor)
     p_editor->tileset_selected_is_animated = false;
     p_editor->tileset_selected_index = 0;
     p_editor->tileset_selected_animated_index = 0;
-    p_editor->multiple_select= false;
+    p_editor->multiple_select = false;
     p_editor->layer = 0;
     p_editor->map_tile_index.x = 0;
     p_editor->map_tile_index.y = 0;
-    p_editor->map_tile_index.w = 0;
-    p_editor->map_tile_index.h = 0;
+    p_editor->map_tile_index.w = 1;
+    p_editor->map_tile_index.h = 1;
     p_editor->path_level = NULL;
     p_editor->p_tileset = NULL;
     p_editor->path_music = NULL;
@@ -95,6 +95,8 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     break;
                 case SDLK_m:
                     p_editor->multiple_select = !p_editor->multiple_select;
+                    p_editor->map_tile_index.h = 1;
+                    p_editor->map_tile_index.w = 1;
                     break;
                 case SDLK_c:
                     map_add_col(p_map);
@@ -135,8 +137,6 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                         else
                         {
                             p_editor->map_tile_index.x++;
-                            p_editor->map_tile_index.h = 0;
-                            p_editor->map_tile_index.w = 0;
                         }
                         //update scroll position
                         if (p_editor->map_tile_index.x >= SCREEN_WIDTH / p_map->p_tileset->tile_width + scroll_index_x)
@@ -170,8 +170,6 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                         else
                         {
                             p_editor->map_tile_index.y++;
-                            p_editor->map_tile_index.h = 0;
-                            p_editor->map_tile_index.w = 0;
                         }
 
                         //update scroll position
@@ -186,9 +184,9 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                 case SDLK_RETURN:
                     if (p_editor->multiple_select)
                     {
-                        for (int index_x = p_editor->map_tile_index.x; index_x <= p_editor->map_tile_index.x + p_editor->map_tile_index.w; index_x++)
+                        for (int index_x = p_editor->map_tile_index.x; index_x < p_editor->map_tile_index.x + p_editor->map_tile_index.w; index_x++)
                         {
-                            for (int index_y = p_editor->map_tile_index.y; index_y <= p_editor->map_tile_index.y + p_editor->map_tile_index.h; index_y++)
+                            for (int index_y = p_editor->map_tile_index.y; index_y < p_editor->map_tile_index.y + p_editor->map_tile_index.h; index_y++)
                             {
                                 set_tile(p_editor, index_x, index_y);
                             }
@@ -228,8 +226,8 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
         SDL_Rect rect_tile_chipset =
             {.x = p_editor->map_tile_index.x * p_map->p_tileset->tile_width - p_map->o_camera.x,
              .y = p_editor->map_tile_index.y * p_map->p_tileset->tile_height - p_map->o_camera.y,
-             .h = p_map->p_tileset->tile_height,
-             .w = p_map->p_tileset->tile_width};
+             .h = p_editor->map_tile_index.h * p_map->p_tileset->tile_height,
+             .w = p_editor->map_tile_index.w * p_map->p_tileset->tile_width};
         SDL_RenderDrawRect(renderer, &rect_tile_chipset);
 
         // HUD
