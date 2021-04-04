@@ -108,18 +108,27 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     p_editor->tileset_selected_index = p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].id;
                     break;
                 case SDLK_LEFT:
-                    if (p_editor->map_tile_index.x > 0)
+                    if (event.key.keysym.mod & KMOD_SHIFT)
                     {
-                        p_editor->map_tile_index.x--;
-
-                        //update scroll position
-                        if (p_editor->map_tile_index.x - scroll_index_x + 1 == 0)
+                        if (p_editor->map_tile_index.w > 1)
                         {
-                            scroll_index_x--;
-                            p_map->o_camera.x -= p_map->p_tileset->tile_width;
+                            p_editor->map_tile_index.w--;
                         }
                     }
+                    else
+                    {
+                        if (p_editor->map_tile_index.x > 0)
+                        {
+                            p_editor->map_tile_index.x--;
 
+                            //update scroll position
+                            if (p_editor->map_tile_index.x - scroll_index_x + 1 == 0)
+                            {
+                                scroll_index_x--;
+                                p_map->o_camera.x -= p_map->p_tileset->tile_width;
+                            }
+                        }
+                    }
                     break;
                 case SDLK_RIGHT:
                     if (p_editor->map_tile_index.x < p_map->width - 1)
@@ -141,18 +150,27 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     }
                     break;
                 case SDLK_UP:
-                    if (p_editor->map_tile_index.y > 0)
+                    if (event.key.keysym.mod & KMOD_SHIFT)
                     {
-                        p_editor->map_tile_index.y--;
-
-                        //update scroll position
-                        if (p_editor->map_tile_index.y - scroll_index_y + 1 == 0)
+                        if (p_editor->map_tile_index.h > 1)
                         {
-                            scroll_index_y--;
-                            p_map->o_camera.y -= p_map->p_tileset->tile_height;
+                            p_editor->map_tile_index.h--;
                         }
                     }
+                    else
+                    {
+                        if (p_editor->map_tile_index.y > 0)
+                        {
+                            p_editor->map_tile_index.y--;
 
+                            //update scroll position
+                            if (p_editor->map_tile_index.y - scroll_index_y + 1 == 0)
+                            {
+                                scroll_index_y--;
+                                p_map->o_camera.y -= p_map->p_tileset->tile_height;
+                            }
+                        }
+                    }
                     break;
                 case SDLK_DOWN:
                     if (p_editor->map_tile_index.y < p_map->height - 1)
