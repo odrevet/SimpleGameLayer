@@ -47,6 +47,14 @@ void fontmap_print(fontmap *p_fontmap,
     case ' ':
       rect_dest.x += FONTMAP_SIZE + 1;
       break;
+    case '\\':
+      if (show + 1 < strlen(text) && text[show + 1] == 'n')
+      {
+        rect_dest.y += FONTMAP_SIZE + 1;
+        rect_dest.x = x;
+        show++;
+      }
+      break;
     default:
       rect_src.x = index * FONTMAP_SIZE;
       image_draw_part(p_fontmap->p_image, renderer, rect_dest.x, rect_dest.y, &rect_src);
