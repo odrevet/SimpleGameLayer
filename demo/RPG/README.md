@@ -33,6 +33,7 @@ Command line argument:
 Controles:
 
 * arrow key: move
+* shift: select several tile in layout editor 
 * t: tile selection
 * a: animated tile selection
 * enter: past selected tile
