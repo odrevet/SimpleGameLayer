@@ -5,7 +5,6 @@ void editor_init(editor *p_editor)
     p_editor->tileset_selected_is_animated = false;
     p_editor->tileset_selected_index = 0;
     p_editor->tileset_selected_animated_index = 0;
-    p_editor->multiple_select = false;
     p_editor->layer = 0;
     p_editor->map_tile_index.x = 0;
     p_editor->map_tile_index.y = 0;
@@ -93,11 +92,6 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                         p_editor->layer++;
                     }
                     break;
-                case SDLK_m:
-                    p_editor->multiple_select = !p_editor->multiple_select;
-                    p_editor->map_tile_index.h = 1;
-                    p_editor->map_tile_index.w = 1;
-                    break;
                 case SDLK_c:
                     map_add_col(p_map);
                     break;
@@ -182,25 +176,22 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
 
                     break;
                 case SDLK_RETURN:
-                    if (p_editor->multiple_select)
+                    for (int index_x = p_editor->map_tile_index.x; index_x < p_editor->map_tile_index.x + p_editor->map_tile_index.w; index_x++)
                     {
-                        for (int index_x = p_editor->map_tile_index.x; index_x < p_editor->map_tile_index.x + p_editor->map_tile_index.w; index_x++)
+                        for (int index_y = p_editor->map_tile_index.y; index_y < p_editor->map_tile_index.y + p_editor->map_tile_index.h; index_y++)
                         {
-                            for (int index_y = p_editor->map_tile_index.y; index_y < p_editor->map_tile_index.y + p_editor->map_tile_index.h; index_y++)
-                            {
-                                set_tile(p_editor, index_x, index_y);
-                            }
+                            set_tile(p_editor, index_x, index_y);
                         }
-                    }
-                    else
-                    {
-                        set_tile(p_editor, p_editor->map_tile_index.x, p_editor->map_tile_index.y);
                     }
                     break;
                 case SDLK_BACKSPACE:
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].id = -1;
                     p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].is_animated = false;
                     animation_set_frame(&p_map->p_tiles[p_editor->layer][p_editor->map_tile_index.y][p_editor->map_tile_index.x].o_frame, 0, 0, 0, 0);
+                    break;
+                case SDLK_ESCAPE:
+                    p_editor->map_tile_index.w = 1;
+                    p_editor->map_tile_index.h = 1;
                     break;
                 default:
                     break;
