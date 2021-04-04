@@ -180,7 +180,10 @@ editor_state editor_edit_layout(editor *p_editor, SDL_Renderer *renderer)
                     {
                         for (int index_y = p_editor->map_tile_index.y; index_y < p_editor->map_tile_index.y + p_editor->map_tile_index.h; index_y++)
                         {
-                            set_tile(p_editor, index_x, index_y);
+                            if (index_x < p_editor->o_level.o_tilemap.width && index_y < p_editor->o_level.o_tilemap.height)
+                            {
+                                set_tile(p_editor, index_x, index_y);
+                            }
                         }
                     }
                     break;
