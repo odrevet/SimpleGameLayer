@@ -81,6 +81,8 @@ int main(int argc, char **argv)
   image_load(&o_image_fontmap, "gfx/font.png", renderer);
   o_fontmap.p_image = &o_image_fontmap;
   o_editor.p_fontmap = &o_fontmap;
+  level_init(&o_editor.o_level);
+   o_editor.o_level.p_tilemap_tileset_path = NULL;
 
   //try to load a map from file
   if (load_path)
