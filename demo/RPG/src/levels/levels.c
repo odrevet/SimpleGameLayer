@@ -7,7 +7,6 @@ void level_overworld(game *p_game, SDL_Renderer *renderer)
 
 void level_cave(game *p_game, SDL_Renderer *renderer)
 {
-  level_map_init_from_file(&p_game->o_level, "data/cave.map", renderer);
   level_init_from_file(&p_game->o_level, "data/cave.level", &p_game->path_music, renderer);
 
   // Events
