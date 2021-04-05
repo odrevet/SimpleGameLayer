@@ -229,7 +229,10 @@ void event_money_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
 
   char message[32];
   snprintf(message, 32, "YOU GOT %d GOLD COINS!", *amount);
-  dialog_box_show(p_game->p_fontmap, (char *)message, SCREEN_HEIGHT, SCREEN_WIDTH, game_draw, p_game, renderer);
+
+  event o_event;
+  event_init(&o_event, ON_TILE_ENTER, EVENT_TYPE_TEXT, message, -1, -1);
+  event_text_exec(&o_event, p_game, renderer);
 }
 
 void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
