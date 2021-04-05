@@ -26,10 +26,13 @@ typedef struct t_level
     char **p_tileset_path;
     
     char *p_tilemap_tileset_path;
-
+    char *current_path_map;
+    
     tilemap o_tilemap;
+    
     char *path_tile_property;
     tile_property ***p_tile_properties;
+    
     Mix_Music *p_music;
 
     int NPC_count;

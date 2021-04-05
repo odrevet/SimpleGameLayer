@@ -2,7 +2,6 @@
 
 void level_overworld(game *p_game, SDL_Renderer *renderer)
 {
-  level_map_init_from_file(&p_game->o_level, "data/overworld.map", renderer);
   level_init_from_file(&p_game->o_level, "data/overworld.level", &p_game->path_music, renderer);
 }
 

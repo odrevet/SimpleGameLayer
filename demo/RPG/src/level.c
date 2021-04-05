@@ -11,6 +11,7 @@ void level_init(level *p_level)
   p_level->p_NPC = NULL;
   p_level->chest_count = 0;
   p_level->p_chest = 0;
+  p_level->current_path_map = NULL;
 }
 
 bool level_check_NPC_collid(level *p_level, SDL_Rect *p_bounding_box)
@@ -209,6 +210,15 @@ bool level_init_from_file(level *p_level, char *pathfile, char **current_path_mu
   }
 
   char buffer[256];
+
+  // map
+  fscanf(fp, "%s", buffer);
+  if (p_level->current_path_map == NULL || strcmp(buffer, p_level->current_path_map) != 0)
+  {
+    p_level->current_path_map = realloc(p_level->current_path_map, (strlen(buffer) + 1) * sizeof(char));
+    strcpy(p_level->current_path_map, buffer);
+    level_map_init_from_file(p_level, p_level->current_path_map, renderer);
+  }
 
   // to be assigned to level
   int tileset_count;
