@@ -252,7 +252,22 @@ void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
     level_free_partial(&p_game->o_level);
     level_init(&p_game->o_level);
     p_game->p_level_function(p_game, renderer);
-    
+    //initialize NPC and chest
+    for (int chest_index = 0; chest_index < p_game->o_level.chest_count; chest_index++)
+    {
+      // chest tileset is the second tileset in the game
+      chest_init(p_game->o_level.p_chest + chest_index, p_game->p_tilesets + 1, renderer);
+      p_game->o_level.p_chest[chest_index].is_open = game_get_chest_is_open(p_game, p_game->o_level.p_chest[chest_index].id);
+      SDL_Rect bounding_box = {.x = p_game->o_level.p_chest[chest_index].o_sprite.x, .y = p_game->o_level.p_chest[chest_index].o_sprite.y, .w = 16, .h = 16};
+      p_game->o_level.p_chest[chest_index].o_sprite.bounding_box = bounding_box;
+    }
+
+    for (int NPC_index = 0; NPC_index < p_game->o_level.NPC_count; NPC_index++)
+    {
+      //NPC tileset is the first tileset in the level
+      NPC_init(p_game->o_level.p_NPC + NPC_index, p_game->o_level.p_tileset + 0, renderer);
+    }
+
     //initialize NPC and chest
     for (int chest_index = 0; chest_index < p_game->o_level.chest_count; chest_index++)
     {
