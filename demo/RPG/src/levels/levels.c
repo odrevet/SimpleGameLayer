@@ -43,8 +43,8 @@ void level_town(game *p_game, SDL_Renderer *renderer)
   event_init(p_event + 0, ON_TILE_ENTER, EVENT_TYPE_WARP, p_event_param_warp, 19, 8);
 
   event_param_warp *p_event_param_warp_house = malloc(sizeof(event_param_warp));
-  p_event_param_warp_house->index_x = 7;
-  p_event_param_warp_house->index_y = 8;
+  p_event_param_warp_house->index_x = 4;
+  p_event_param_warp_house->index_y = 7;
   p_event_param_warp_house->p_level_addr = level_house;
   event_init(p_event + 1, ON_TILE_ENTER, EVENT_TYPE_WARP, p_event_param_warp_house, 14, 5);
 
