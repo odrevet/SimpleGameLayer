@@ -50,6 +50,8 @@ Controles:
 
 ### .map
 
+Space are rendered as □
+
 ```
 Path to .tileset file
 Path to music file
@@ -64,7 +66,7 @@ Ids of tiles separated by a space character
 ```
 Path to tileset image file
 Number of animations
-Number of frames List Animation speed in frame Tile id for each frame
+Number of frames □ List Animation speed in frame □ Tile id for each frame
 ```
 
 ### .tiles
@@ -72,8 +74,24 @@ Number of frames List Animation speed in frame Tile id for each frame
 The tiles file define the frames for the animated tiles and the properties associated for each tile id. In the RPG demo, there are only one property per tile which define if the hero can walk on the tile (1) or not (0).
 
 ```
-Number of tile properties Number of properties per tile
+Number of tile properties □ Number of properties per tile
 List of Tile id Properties
+```
+
+### .level
+
+A level contains a map with events, NPC and chest
+
+```
+Path to map file
+Number of tilesets
+Path to tilesets (One per line)
+Number of event
+event (one per line) on_tile_enter or on_button_press □ x □ y □ warp or text or money or function □ parameters of event differant for each type
+Number of NPC
+One NPC per line x □ y □ event index
+Number of chest
+One chest per line x □ y □ event index
 ```
 
 # Sprite
