@@ -36,7 +36,7 @@ void level_town(game *p_game, SDL_Renderer *renderer)
   p_event_param_warp->index_y = 8;
   p_event_param_warp->p_level_addr = level_overworld;
 
-  event_init(p_event + 0, ON_TILE_ENTER, EVENT_TYPE_WARP, p_event_param_warp, 18, 7);
+  event_init(p_event + 0, ON_TILE_ENTER, EVENT_TYPE_WARP, p_event_param_warp, 19, 8);
 
   p_game->o_level.p_event = p_event;
 }
