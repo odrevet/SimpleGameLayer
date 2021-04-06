@@ -88,6 +88,7 @@ int main(int argc, char **argv)
   o_game.o_level.callbacks[0] = level_overworld;
   o_game.o_level.callbacks[1] = level_cave;
   o_game.o_level.callbacks[2] = level_town;
+  o_game.o_level.callbacks[3] = level_house;
 
   // load game's tilesets
   o_game.tileset_count = 2;
