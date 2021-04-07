@@ -1,6 +1,7 @@
 data/cave.map
 0
 data/cave.mod
-0
+1
+on_tile_enter 3 5 warp 2 2 data/overworld.level
 0
 0

@@ -25,7 +25,7 @@ typedef struct t_event_param_warp
 {
     int index_x;
     int index_y;
-    event_callback p_level_addr;
+    char *p_level_filepath;
 } event_param_warp;
 
 typedef struct t_event

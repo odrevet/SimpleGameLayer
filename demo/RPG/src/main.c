@@ -85,10 +85,10 @@ int main(int argc, char **argv)
   o_game.opened_chest_id_count = 0;
   o_game.p_opened_chest_id = NULL;
 
-  o_game.o_level.callbacks[0] = level_overworld;
+  o_game.o_level.callbacks[0] = NULL;
   o_game.o_level.callbacks[1] = level_cave;
   o_game.o_level.callbacks[2] = level_town;
-  o_game.o_level.callbacks[3] = level_house;
+  o_game.o_level.callbacks[3] = NULL;
 
   // load game's tilesets
   o_game.tileset_count = 2;
@@ -128,9 +128,9 @@ int main(int argc, char **argv)
     exit(0);
   }
 
-  int function_index;
-  fscanf(fp, "%d %d %d", &o_initial_warp_param.index_x, &o_initial_warp_param.index_y, &function_index);
-  o_initial_warp_param.p_level_addr = *(o_game.o_level.callbacks + function_index);
+  char buffer[256];
+  fscanf(fp, "%d %d %s", &o_initial_warp_param.index_x, &o_initial_warp_param.index_y, buffer);
+  o_initial_warp_param.p_level_filepath = buffer;
   event_warp_exec(&o_initial_warp, &o_game, renderer);
 
   fclose(fp);

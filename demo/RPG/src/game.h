@@ -27,7 +27,8 @@ typedef void (*level_addr)(game *, SDL_Renderer *);
 typedef struct t_game
 {
   level o_level;
-  level_addr p_level_function;
+  char *level_filepath;
+  
   hero o_hero;
 
   fontmap *p_fontmap;

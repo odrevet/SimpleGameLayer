@@ -335,12 +335,13 @@ bool level_init_from_file(level *p_level, char *pathfile, char **current_path_mu
     if (strcmp(buffer, "warp") == 0)
     {
       p_level->p_event[event_index].o_event_type = EVENT_TYPE_WARP;
-      int dest_x, dest_y, function_index;
-      fscanf(fp, "%d %d %d", &dest_x, &dest_y, &function_index);
+      int dest_x, dest_y;
+      fscanf(fp, "%d %d %s", &dest_x, &dest_y, buffer);
       event_param_warp *p_event_param_warp = malloc(sizeof(event_param_warp));
       p_event_param_warp->index_x = dest_x;
       p_event_param_warp->index_y = dest_y;
-      p_event_param_warp->p_level_addr = *(p_level->callbacks + function_index);
+      p_event_param_warp->p_level_filepath = calloc(strlen(buffer) + 1, sizeof(char));
+      strcpy(p_event_param_warp->p_level_filepath, buffer);
       p_level->p_event[event_index].p_param = p_event_param_warp;
     }
     else if (strcmp(buffer, "text") == 0)
