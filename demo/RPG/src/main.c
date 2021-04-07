@@ -85,10 +85,8 @@ int main(int argc, char **argv)
   o_game.opened_chest_id_count = 0;
   o_game.p_opened_chest_id = NULL;
 
-  o_game.o_level.callbacks[0] = NULL;
-  o_game.o_level.callbacks[1] = level_cave;
-  o_game.o_level.callbacks[2] = level_town;
-  o_game.o_level.callbacks[3] = NULL;
+  // assign here level callbacks if any
+  //o_game.o_level.callbacks[0] = ...;
 
   // load game's tilesets
   o_game.tileset_count = 2;
