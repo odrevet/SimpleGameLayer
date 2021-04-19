@@ -3,6 +3,6 @@ data/house.map
 data/NPC.tileset
 data/overworld.mod
 1
-on_tile_enter 4 9 warp 14 6 data/town.level
+on_tile_enter 4 9 warp 14 5 data/town.level
 0
 0

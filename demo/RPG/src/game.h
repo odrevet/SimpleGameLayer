@@ -43,6 +43,7 @@ typedef struct t_game
   char *path_music;
 } game;
 
+void game_init(game* p_game);
 void game_draw(game *p_game, SDL_Renderer *renderer);
 bool game_get_chest_is_open(game *p_game, int chest_id);
 void game_center_camera_on_hero(game *p_game);

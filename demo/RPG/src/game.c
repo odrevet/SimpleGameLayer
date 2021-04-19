@@ -1,5 +1,17 @@
 #include "game.h"
 
+void game_init(game *p_game)
+{
+  p_game->level_filepath = NULL;
+  p_game->o_level.tileset_count = 0;
+  p_game->o_level.p_tileset = NULL;
+  p_game->o_level.p_tileset_path = NULL;
+  p_game->o_level.p_tilemap_tileset_path = NULL;
+  p_game->path_music = NULL;
+  p_game->opened_chest_id_count = 0;
+  p_game->p_opened_chest_id = NULL;
+}
+
 int compar_sprite_depth(const void *a, const void *b)
 {
   sprite *sprite_a = *(sprite **)a;
@@ -242,18 +254,21 @@ void event_warp_exec(event *p_event, game *p_game, SDL_Renderer *renderer)
   int warp_to_index_x = p_event_param_warp->index_x;
   int warp_to_index_y = p_event_param_warp->index_y;
 
-  if (p_event_param_warp->p_level_filepath)
+  if (p_event_param_warp->p_level_filepath &&
+      (!p_game->level_filepath ||
+       (p_game->level_filepath && strcmp(p_game->level_filepath, p_event_param_warp->p_level_filepath) != 0)))
+
   {
-    char level_pathfile[256];
-    strcpy(level_pathfile, p_event_param_warp->p_level_filepath);
+    p_game->level_filepath = realloc(p_game->level_filepath, strlen(p_event_param_warp->p_level_filepath) * sizeof(char) + 1);
+    strcpy(p_game->level_filepath, p_event_param_warp->p_level_filepath);
+
     for (int event_index = 0; event_index < p_game->o_level.event_count; event_index++)
     {
       event_free(p_game->o_level.p_event + event_index);
     }
     level_free_partial(&p_game->o_level);
     level_init(&p_game->o_level);
-
-    level_init_from_file(&p_game->o_level, level_pathfile, &p_game->path_music, renderer);
+    level_init_from_file(&p_game->o_level, p_game->level_filepath, &p_game->path_music, renderer);
 
     //initialize NPC and chest
     for (int chest_index = 0; chest_index < p_game->o_level.chest_count; chest_index++)
@@ -292,4 +307,5 @@ void game_free(game *p_game)
   free(p_game->p_tilesets);
   free(p_game->path_tilesets);
   free(p_game->o_level.p_tilemap_tileset_path);
+  free(p_game->level_filepath);
 }

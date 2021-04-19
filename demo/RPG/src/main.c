@@ -77,13 +77,7 @@ int main(int argc, char **argv)
   game o_game;
   level_init(&o_game.o_level);
   map_init(&o_game.o_level.o_tilemap);
-  o_game.o_level.tileset_count = 0;
-  o_game.o_level.p_tileset = NULL;
-  o_game.o_level.p_tileset_path = NULL;
-  o_game.o_level.p_tilemap_tileset_path = NULL;
-  o_game.path_music = NULL;
-  o_game.opened_chest_id_count = 0;
-  o_game.p_opened_chest_id = NULL;
+  game_init(&o_game);
 
   // assign here level callbacks if any
   //o_game.o_level.callbacks[0] = ...;

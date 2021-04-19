@@ -1,5 +1,6 @@
 #include "levels.h"
 
+/*
 void level_town(game *p_game, SDL_Renderer *renderer)
 {
   level_map_init_from_file(&p_game->o_level, "data/town.map", renderer);
@@ -22,3 +23,4 @@ void level_town(game *p_game, SDL_Renderer *renderer)
 
   p_game->o_level.p_event = p_event;
 }
+*/
