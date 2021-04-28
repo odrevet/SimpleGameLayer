@@ -14,5 +14,5 @@ on_tile_enter 0 8  warp 18 7 data/town.level
 3 5 4
 4 15 10
 2
-5 3 3
-5 15 13
+5 0 3 3
+5 1 4 3

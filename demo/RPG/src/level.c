@@ -388,7 +388,7 @@ bool level_init_from_file(level *p_level, char *pathfile, char **current_path_mu
     int event_index;
     fscanf(fp, "%d", &event_index);
     p_level->p_chest[chest_index].p_event = p_level->p_event + event_index;
-    fscanf(fp, "%f %f", &p_level->p_chest[chest_index].o_sprite.x, &p_level->p_chest[chest_index].o_sprite.y);
+    fscanf(fp, "%d %f %f", &p_level->p_chest[chest_index].id, &p_level->p_chest[chest_index].o_sprite.x, &p_level->p_chest[chest_index].o_sprite.y);
     p_level->p_chest[chest_index].o_sprite.x *= p_level->o_tilemap.p_tileset->tile_width;
     p_level->p_chest[chest_index].o_sprite.y *= p_level->o_tilemap.p_tileset->tile_height;
   }
